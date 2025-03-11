@@ -166,7 +166,13 @@
                         </div>
                         <div class="form-group">
                             <button class="btn btn-success">Update</button>
-                            <a href="{{ route('dependents.index') }}" class="btn btn-light">Back to List</a>
+                            @if ($employeeId)
+                                <a href="{{ route('employees.details', ['id' => $employeeId, 'clientId' => $clientId]) }}"
+                                    class="btn btn-light">Back to List</a>
+                            @else
+                                <a href="{{ route('dependents.index') }}" class="btn btn-light">Back to List</a>
+                            @endif
+
                         </div>
                     </form>
                 </div>

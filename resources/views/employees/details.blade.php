@@ -77,7 +77,7 @@
                 <div class="card-header" id="dependents-header" style="cursor:pointer;" title="Click to show">
                     <div class="card-title">{{ $employee->employee_name }} Dependents</div>
                     <div class="card-tools">
-                        <a href="{{ route('dependents.create', ['employeeId' => $employee->id]) }}"
+                        <a href="{{ route('dependents.create', ['employeeId' => $employee->id, 'clientId' => $clientId]) }}"
                             class="btn btn-primary"><i class="bi bi-pencil-fill"></i> Add
                             Dependent</a>
                     </div>
@@ -102,12 +102,12 @@
                                         <td>{{ ucfirst($dependent->gender) }}</td>
                                         <td>{{ $dependent->date_of_birth }}</td>
                                         <td>
-                                            <a href="{{ route('dependents.edit', ['id' => $dependent->id, 'employeeId' => $employee->id]) }}"
+                                            <a href="{{ route('dependents.edit', ['id' => $dependent->id, 'employeeId' => $employee->id, 'clientId' => $clientId]) }}"
                                                 class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i> Edit</a>
-                                            <a href="{{ route('dependents.details', ['id' => $dependent->id, 'employeeId' => $employee->id]) }}"
+                                            <a href="{{ route('dependents.details', ['id' => $dependent->id, 'employeeId' => $employee->id, 'clientId' => $clientId]) }}"
                                                 class="btn btn-primary btn-sm"><i class="bi bi-book"></i> Details</a>
                                             <form
-                                                action="{{ route('dependents.destroy', ['id' => $dependent->id, 'employeeId' => $employee->id]) }}"
+                                                action="{{ route('dependents.destroy', ['id' => $dependent->id, 'employeeId' => $employee->id, 'clientId' => $clientId]) }}"
                                                 method="POST" style="display:inline;">
                                                 @csrf
                                                 <button type="submit" class="btn btn-danger btn-sm"

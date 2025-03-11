@@ -164,16 +164,41 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('clients.index') }}" class="nav-link">
+                                    <a href="{{ route('insurers.index') }}" class="nav-link">
                                         <i class="nav-icon bi bi-people-fill"></i>
                                         <p>Insurer</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('insurer-assignments.index') }}" class="nav-link">
+                                        <i class="nav-icon bi bi-people-fill"></i>
+                                        <p>
+                                            Assign Users
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon bi bi-journals"></i>
+                                <p>
+                                    Policy Management
+                                    <i class="nav-arrow bi bi-chevron-right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('clients.index') }}" class="nav-link">
+                                        <i class="nav-icon bi bi-journal-text"></i>
+                                        <p>Policies</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ route('employees.index') }}" class="nav-link">
                                         <i class="nav-icon bi bi-people-fill"></i>
                                         <p>
-                                            Assign Users
+                                            Assign Policies
                                         </p>
                                     </a>
                                 </li>

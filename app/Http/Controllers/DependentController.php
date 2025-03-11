@@ -20,17 +20,18 @@ class DependentController extends Controller
         ]);
     }
 
-    public function create($employeeId = null)
+    public function create($employeeId = null, $clientId = null)
     {
         $employees = Employee::all();
         return view('dependents.create', [
             'title' => 'Create Dependent',
             'employees' => $employees,
             'employeeId' => $employeeId,
+            'clientId' => $clientId,
         ]);
     }
 
-    public function store(Request $request, $employeeId = null)
+    public function store(Request $request, $employeeId = null, $clientId = null)
     {
         $request->validate([
             'employee_id' => 'required|exists:employees,id',
@@ -64,7 +65,7 @@ class DependentController extends Controller
             ]);
 
             if ($employeeId) {
-                return redirect()->route('employees.details', ['id' => $employeeId])->with('msg', 'Dependent created successfully.')
+                return redirect()->route('employees.details', ['id' => $employeeId, 'clientId' => $clientId])->with('msg', 'Dependent created successfully.')
                     ->with('flag', 'success');
             } else {
                 return redirect()->route('dependents.index')->with('msg', 'Dependent created successfully.')
@@ -76,7 +77,7 @@ class DependentController extends Controller
         }
     }
 
-    public function edit($id, $employeeId)
+    public function edit($id, $employeeId = null, $clientId = null)
     {
         $dependent = Dependent::findOrFail($id);
         $employees = Employee::all();
@@ -85,10 +86,11 @@ class DependentController extends Controller
             'dependent' => $dependent,
             'employees' => $employees,
             'employeeId' => $employeeId,
+            'clientId' => $clientId,
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, $employeeId = null, $clientId = null)
     {
         $dependent = Dependent::findOrFail($id);
 
@@ -122,22 +124,27 @@ class DependentController extends Controller
                 'updated_by' => Auth::user()->name,
             ]);
 
-            return redirect()->route('dependents.index')->with('msg', 'Dependent updated successfully.')
-                ->with('flag', 'success');
+            if ($employeeId) {
+                return redirect()->route('employees.details', ['id' => $employeeId, 'clientId' => $clientId])->with('msg', 'Dependent updated successfully.')
+                    ->with('flag', 'success');
+            } else {
+                return redirect()->route('dependents.index')->with('msg', 'Dependent updated successfully.')
+                    ->with('flag', 'success');
+            }
         } catch (Exception $e) {
             return redirect()->back()->with('msg', 'An error occurred while updating the dependent: ' . $e->getMessage())
                 ->with('flag', 'danger');
         }
     }
 
-    public function destroy($id, $employeeId)
+    public function destroy($id, $employeeId = null, $clientId = null)
     {
         try {
             $dependent = Dependent::findOrFail($id);
             $dependent->delete();
 
             if ($employeeId) {
-                return redirect()->route('employees.details', ['id' => $employeeId])->with('msg', 'Dependent deleted successfully.')
+                return redirect()->route('employees.details', ['id' => $employeeId, 'clientId' => $clientId])->with('msg', 'Dependent deleted successfully.')
                     ->with('flag', 'success');
             } else {
                 return redirect()->route('dependents.index')->with('msg', 'Dependent deleted successfully.')
@@ -149,13 +156,14 @@ class DependentController extends Controller
         }
     }
 
-    public function details($id, $employeeId = null)
+    public function details($id, $employeeId = null, $clientId = null)
     {
         $dependent = Dependent::findOrFail($id);
         return view('dependents.details', [
             'title' => 'Dependent Details',
             'dependent' => $dependent,
-            'employeeId' => $employeeId
+            'employeeId' => $employeeId,
+            'clientId' => $clientId,
         ]);
     }
 

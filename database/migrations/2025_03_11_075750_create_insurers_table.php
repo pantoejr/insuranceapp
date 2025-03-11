@@ -13,6 +13,19 @@ return new class extends Migration
     {
         Schema::create('insurers', function (Blueprint $table) {
             $table->id();
+            $table->string('company_name', 150);
+            $table->string('registration_number')->nullable(true);
+            $table->string('address')->nullable(true);
+            $table->string('email');
+            $table->string('phone');
+            $table->string('key_contact_person')->nullable(true);
+            $table->string('key_contact_email')->nullable(true);
+            $table->string('description')->nullable(true);
+            $table->string('website_url')->nullable(true);
+            $table->string('logo')->nullable(true);
+            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->string('created_by')->nullable(true);
+            $table->string('updated_by')->nullable(true);
             $table->timestamps();
         });
     }
