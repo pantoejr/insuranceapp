@@ -1,13 +1,15 @@
 @extends('layouts.app')
+
 @section('content')
     <div class="row">
         <div class="col-md-12">
-            <div class="card card-dark card-outline mb-4">
-                <div class="card-header">
+            <div class="card shadow-sm mb-4" style="border:none;">
+                <div class="card-header" style="border:none;">
                     <div class="card-title">Edit Employee</div>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('employees.update', $employee->id) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('employees.update', ['client' => $client->id, 'employee' => $employee->id]) }}"
+                        method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('POST')
                         <center>
@@ -32,23 +34,8 @@
                             <div class="col-lg-6">
                                 <div class="form-group mb-3">
                                     <label for="client_id" class="form-label">Client</label>
-                                    @if ($clientId)
-                                        <input type="hidden" name="client_id" value="{{ $clientId }}">
-                                        <p>Default Client Selected</p>
-                                    @else
-                                        <select class="form-control @error('client_id') is-invalid @enderror" id="client_id"
-                                            name="client_id" required>
-                                            @foreach ($clients as $client)
-                                                <option value="{{ $client->id }}"
-                                                    {{ old('client_id', $employee->client_id) == $client->id ? 'selected' : '' }}>
-                                                    {{ $client->full_name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('client_id')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    @endif
+                                    <input type="hidden" name="client_id" value="{{ $client->id }}">
+                                    <p>{{ $client->full_name }}</p>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -56,9 +43,7 @@
                                     <label for="employee_name" class="form-label">Employee Name</label>
                                     <input type="text" class="form-control @error('employee_name') is-invalid @enderror"
                                         id="employee_name" value="{{ old('employee_name', $employee->employee_name) }}"
-                                        placeholder="Enter employee name" required
-                                        @error('employee_name') aria-describedby="employee_name-error" @enderror
-                                        name="employee_name">
+                                        placeholder="Enter employee name" required name="employee_name">
                                     @error('employee_name')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -71,8 +56,7 @@
                                     <label for="email" class="form-label">Email</label>
                                     <input type="email" class="form-control @error('email') is-invalid @enderror"
                                         id="email" value="{{ old('email', $employee->email) }}"
-                                        placeholder="Enter email" required
-                                        @error('email') aria-describedby="email-error" @enderror name="email">
+                                        placeholder="Enter email" required name="email">
                                     @error('email')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -166,12 +150,8 @@
                         </div>
                         <div class="form-group">
                             <button class="btn btn-success">Update</button>
-                            @if ($clientId)
-                                <a href="{{ route('clients.details', ['id' => $clientId]) }}" class="btn btn-light">Back
-                                    to List</a>
-                            @else
-                                <a href="{{ route('employees.index') }}" class="btn btn-light">Back to List</a>
-                            @endif
+                            <a href="{{ route('clients.details', ['id' => $client->id]) }}" class="btn btn-light">Back to
+                                List</a>
                         </div>
                     </form>
                 </div>

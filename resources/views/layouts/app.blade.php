@@ -19,7 +19,7 @@
 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
     <div class="app-wrapper">
-        <nav class="app-header navbar navbar-expand bg-body">
+        <nav class="app-header navbar navbar-expand bg-body" style="border:none;">
             <div class="container-fluid">
                 <ul class="navbar-nav">
                     <li class="nav-item">
@@ -35,12 +35,12 @@
                 </ul>
             </div>
         </nav>
-        <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
-            <div class="sidebar-brand">
+        <aside class="app-sidebar shadow" data-bs-theme="dark" style="background-color: #00005f;">
+            <div class="sidebar-brand" style="background-color: #00004f; border:none;">
                 <a href="./index.html" class="brand-link">
-                    {{-- <img src="../../dist/assets/img/AdminLTELogo.png" alt="AdminLTE Logo"
-                        class="brand-image opacity-75 shadow" /> --}}
-                    <span class="brand-text fw-light">Insurance App</span>
+                    <img src="{{ asset('assets/images/VfPHgMS4ndKGxFSTrjGZDZqL5kpgXpnj2hTAZ8vn.png') }}"
+                        alt="AdminLTE Logo" class="brand-image opacity-75 shadow" />
+                    {{-- <span class="brand-text fw-light">Insurance App</span> --}}
                 </a>
             </div>
             <div class="sidebar-wrapper">
@@ -114,70 +114,16 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon bi bi-person-fill"></i>
-                                <p>
-                                    Client Management
-                                    <i class="nav-arrow bi bi-chevron-right"></i>
-                                </p>
+                            <a href="{{ route('clients.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-people-fill"></i>
+                                <p>Clients</p>
                             </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('clients.index') }}" class="nav-link">
-                                        <i class="nav-icon bi bi-people-fill"></i>
-                                        <p>Clients</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('employees.index') }}" class="nav-link">
-                                        <i class="nav-icon bi bi-people-fill"></i>
-                                        <p>
-                                            Employees
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('dependents.index') }}" class="nav-link">
-                                        <i class="nav-icon bi bi-people-fill"></i>
-                                        <p>
-                                            Dependents
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('attachments.index') }}" class="nav-link">
-                                        <i class="nav-icon bi bi-folder-fill"></i>
-                                        <p>
-                                            Attachments
-                                        </p>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon bi bi-menu-button-wide-fill"></i>
-                                <p>
-                                    Insurance
-                                    <i class="nav-arrow bi bi-chevron-right"></i>
-                                </p>
+                            <a href="{{ route('insurers.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-people-fill"></i>
+                                <p>Insurer</p>
                             </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('insurers.index') }}" class="nav-link">
-                                        <i class="nav-icon bi bi-people-fill"></i>
-                                        <p>Insurer</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('insurer-assignments.index') }}" class="nav-link">
-                                        <i class="nav-icon bi bi-people-fill"></i>
-                                        <p>
-                                            Assign Users
-                                        </p>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
@@ -189,13 +135,13 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('clients.index') }}" class="nav-link">
+                                    <a href="{{ route('policies.index') }}" class="nav-link">
                                         <i class="nav-icon bi bi-journal-text"></i>
                                         <p>Policies</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('employees.index') }}" class="nav-link">
+                                    <a href="{{ route('insurer-policies.index') }}" class="nav-link">
                                         <i class="nav-icon bi bi-people-fill"></i>
                                         <p>
                                             Assign Policies

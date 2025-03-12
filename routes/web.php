@@ -9,6 +9,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InsurerAssignmentController;
 use App\Http\Controllers\InsurerController;
+use App\Http\Controllers\InsurerPolicyController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\RoleController;
@@ -85,24 +86,28 @@ Route::controller(ClientController::class)->group(function () {
     Route::post('/clients/{id}/add-attachment', 'addAttachment')->name('clients.addAttachment');
 });
 
-Route::controller(EmployeeController::class)->group(function () {
-    Route::get('/employees', 'index')->name('employees.index');
-    Route::get('/employees/create/{clientId?}', 'create')->name('employees.create');
-    Route::post('/employees/store/{clientId?}', 'store')->name('employees.store');
-    Route::get('/employees/edit/{id}/{clientId?}', 'edit')->name('employees.edit');
-    Route::post('/employees/edit/{id}/{clientId?}', 'update')->name('employees.update');
-    Route::post('/employees/delete/{id}/{clientId?}', 'destroy')->name('employees.destroy');
-    Route::get('/employees/details/{id}/{clientId?}', 'details')->name('employees.details');
+Route::prefix('clients/{client}')->group(function () {
+    Route::controller(EmployeeController::class)->group(function () {
+        Route::get('/employees', 'index')->name('employees.index');
+        Route::get('/employees/create', 'create')->name('employees.create');
+        Route::post('/employees/store', 'store')->name('employees.store');
+        Route::get('/employees/edit/{employee}', 'edit')->name('employees.edit');
+        Route::post('/employees/edit/{employee}', 'update')->name('employees.update');
+        Route::post('/employees/delete/{employee}', 'destroy')->name('employees.destroy');
+        Route::get('/employees/details/{employee}', 'details')->name('employees.details');
+    });
 });
 
-Route::controller(DependentController::class)->group(function () {
-    Route::get('/dependents', 'index')->name('dependents.index');
-    Route::get('/dependents/create/{employeeId?}/{clientId?}', 'create')->name('dependents.create');
-    Route::post('/dependents/store/{employeeId?}/{clientId?}', 'store')->name('dependents.store');
-    Route::get('/dependents/edit/{id}/{employeeId?}/{clientId?}', 'edit')->name('dependents.edit');
-    Route::post('/dependents/edit/{id}/{employeeId?}/{clientId?}', 'update')->name('dependents.update');
-    Route::post('/dependents/delete/{id}/{employeeId?}/{clientId?}', 'destroy')->name('dependents.destroy');
-    Route::get('/dependents/details/{id}/{employeeId?}/{clientId?}', 'details')->name('dependents.details');
+Route::prefix('employees/{employee}')->group(function () {
+    Route::controller(DependentController::class)->group(function () {
+        Route::get('/dependents', 'index')->name('dependents.index');
+        Route::get('/dependents/create', 'create')->name('dependents.create');
+        Route::post('/dependents/store', 'store')->name('dependents.store');
+        Route::get('/dependents/edit/{dependent}', 'edit')->name('dependents.edit');
+        Route::post('/dependents/edit/{dependent}', 'update')->name('dependents.update');
+        Route::post('/dependents/delete/{dependent}', 'destroy')->name('dependents.destroy');
+        Route::get('/dependents/details/{dependent}', 'details')->name('dependents.details');
+    });
 });
 
 Route::controller(AttachmentController::class)->group(function () {
@@ -144,4 +149,13 @@ Route::controller(PolicyController::class)->group(function () {
     Route::post('/policies/edit/{id}', 'update')->name('policies.update');
     Route::post('/policies/delete/{id}', 'destroy')->name('policies.destroy');
     Route::get('/policies/details/{id}', 'details')->name('policies.details');
+});
+
+Route::controller(InsurerPolicyController::class)->group(function () {
+    Route::get('/insurer-policies', 'index')->name('insurer-policies.index');
+    Route::get('/insurer-policies/create', 'create')->name('insurer-policies.create');
+    Route::post('/insurer-policies/store', 'store')->name('insurer-policies.store');
+    Route::get('/insurer-policies/edit/{id}', 'edit')->name('insurer-policies.edit');
+    Route::post('/insurer-policies/edit/{id}', 'update')->name('insurer-policies.update');
+    Route::post('/insurer-policies/delete/{id}', 'destroy')->name('insurer-policies.destroy');
 });

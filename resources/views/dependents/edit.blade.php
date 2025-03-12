@@ -3,13 +3,14 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
-            <div class="card card-dark card-outline mb-4">
-                <div class="card-header">
-                    <div class="card-title">{{ $title }}</div>
+            <div class="card shadow-sm mb-4" style="border:none;">
+                <div class="card-header" style="border:none;">
+                    <div class="card-title">Edit Dependent</div>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('dependents.update', $dependent->id) }}" method="POST"
-                        enctype="multipart/form-data">
+                    <form
+                        action="{{ route('dependents.update', ['employee' => $employee->id, 'dependent' => $dependent->id]) }}"
+                        method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('POST')
                         <center>
@@ -34,18 +35,10 @@
                             <div class="col-lg-6">
                                 <div class="form-group mb-3">
                                     <label for="employee_id" class="form-label">Employee</label>
-                                    <select class="form-control @error('employee_id') is-invalid @enderror" id="employee_id"
-                                        name="employee_id" required>
-                                        @foreach ($employees as $employee)
-                                            <option value="{{ $employee->id }}"
-                                                {{ old('employee_id', $dependent->employee_id) == $employee->id ? 'selected' : '' }}>
-                                                {{ $employee->employee_name . ' (' . $employee->client->full_name . ')' }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('employee_id')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                    <input type="hidden" name="employee_id" value="{{ $employee->id }}">
+                                    <input type="text"
+                                        value="{{ $employee->employee_name }} - ({{ $employee->client->full_name }})"
+                                        class="form-control" readonly />
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -53,9 +46,7 @@
                                     <label for="dependent_name" class="form-label">Dependent Name</label>
                                     <input type="text" class="form-control @error('dependent_name') is-invalid @enderror"
                                         id="dependent_name" value="{{ old('dependent_name', $dependent->dependent_name) }}"
-                                        placeholder="Enter dependent name" required
-                                        @error('dependent_name') aria-describedby="dependent_name-error" @enderror
-                                        name="dependent_name">
+                                        placeholder="Enter dependent name" required name="dependent_name">
                                     @error('dependent_name')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -63,42 +54,6 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                        id="email" value="{{ old('email', $dependent->email) }}"
-                                        placeholder="Enter email" required
-                                        @error('email') aria-describedby="email-error" @enderror name="email">
-                                    @error('email')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group mb-3">
-                                    <label for="phone" class="form-label">Phone</label>
-                                    <input type="text" class="form-control @error('phone') is-invalid @enderror"
-                                        id="phone" value="{{ old('phone', $dependent->phone) }}"
-                                        placeholder="Enter phone" name="phone">
-                                    @error('phone')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col-lg-6">
-                                <div class="form-group mb-3">
-                                    <label for="relationship" class="form-label">Relationship</label>
-                                    <input type="text" class="form-control @error('relationship') is-invalid @enderror"
-                                        id="relationship" value="{{ old('relationship', $dependent->relationship) }}"
-                                        placeholder="Enter relationship" name="relationship">
-                                    @error('relationship')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
                             <div class="col-lg-6">
                                 <div class="form-group mb-3">
                                     <label for="gender" class="form-label">Gender</label>
@@ -110,11 +65,19 @@
                                         <option value="female"
                                             {{ old('gender', $dependent->gender) == 'female' ? 'selected' : '' }}>Female
                                         </option>
-                                        <option value="other"
-                                            {{ old('gender', $dependent->gender) == 'other' ? 'selected' : '' }}>Other
-                                        </option>
                                     </select>
                                     @error('gender')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                        id="email" value="{{ old('email', $dependent->email) }}"
+                                        placeholder="Enter email" required name="email">
+                                    @error('email')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -123,15 +86,28 @@
                         <div class="row mb-2">
                             <div class="col-lg-6">
                                 <div class="form-group mb-3">
-                                    <label for="address" class="form-label">Address</label>
-                                    <input type="text" class="form-control @error('address') is-invalid @enderror"
-                                        id="address" value="{{ old('address', $dependent->address) }}"
-                                        placeholder="Enter address" name="address">
-                                    @error('address')
+                                    <label for="phone" class="form-label">Phone</label>
+                                    <input type="text" class="form-control @error('phone') is-invalid @enderror"
+                                        id="phone" value="{{ old('phone', $dependent->phone) }}"
+                                        placeholder="Enter phone" name="phone">
+                                    @error('phone')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
+                            <div class="col-lg-6">
+                                <div class="form-group mb-3">
+                                    <label for="relationship" class="form-label">Relationship</label>
+                                    <input type="text" class="form-control @error('relationship') is-invalid @enderror"
+                                        id="relationship" value="{{ old('relationship', $dependent->relationship) }}"
+                                        placeholder="Enter relationship" name="relationship">
+                                    @error('relationship')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
                             <div class="col-lg-6">
                                 <div class="form-group mb-3">
                                     <label for="status" class="form-label">Status</label>
@@ -145,6 +121,17 @@
                                             Inactive</option>
                                     </select>
                                     @error('status')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group mb-3">
+                                    <label for="address" class="form-label">Address</label>
+                                    <input type="text" class="form-control @error('address') is-invalid @enderror"
+                                        id="address" value="{{ old('address', $dependent->address) }}"
+                                        placeholder="Enter address" name="address">
+                                    @error('address')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -166,13 +153,8 @@
                         </div>
                         <div class="form-group">
                             <button class="btn btn-success">Update</button>
-                            @if ($employeeId)
-                                <a href="{{ route('employees.details', ['id' => $employeeId, 'clientId' => $clientId]) }}"
-                                    class="btn btn-light">Back to List</a>
-                            @else
-                                <a href="{{ route('dependents.index') }}" class="btn btn-light">Back to List</a>
-                            @endif
-
+                            <a href="{{ route('employees.details', ['client' => $employee->client_id, 'employee' => $employee->id]) }}"
+                                class="btn btn-light">Back to List</a>
                         </div>
                     </form>
                 </div>

@@ -2,7 +2,7 @@
 @section('content')
     <div class="row justify-content-center">
         <div class="col-lg-6 pt-5">
-            <div class="card card-outline card-success">
+            <div class="card border-0 shadow-sm">
                 <div class="card-header">
                     {{ $title }}
                 </div>

@@ -3,8 +3,8 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
-            <div class="card card-dark card-outline mb-4">
-                <div class="card-header">
+            <div class="card shadow-sm mb-4" style="border:none;">
+                <div class="card-header" style="border:none;">
                     <div class="card-title">Create Client</div>
                 </div>
                 <div class="card-body">
@@ -106,7 +106,8 @@
                             <div class="col-lg-6">
                                 <div class="form-group mb-3">
                                     <label for="date_of_birth" class="form-label">Date of Birth</label>
-                                    <input type="date" class="form-control @error('date_of_birth') is-invalid @enderror"
+                                    <input type="date"
+                                        class="form-control @error('date_of_birth') is-invalid @enderror"
                                         id="date_of_birth" value="{{ old('date_of_birth') }}" name="date_of_birth">
                                     @error('date_of_birth')
                                         <div class="invalid-feedback">{{ $message }}</div>

@@ -14,14 +14,12 @@
 
 <body class="login-page bg-body-secondary app-loaded">
     <div class="login-box">
-        <div class="card card-outline card-primary">
-            <div class="card-header">
-                <a href="{{ route('login') }}"
-                    class="link-dark text-center link-offset-2 link-opacity-100 link-opacity-50-hover">
-                    <h4 class="mb-0">{{ env('APP_NAME') }}</h4>
-                </a>
-            </div>
-            <div class="card-body login-card-body">
+        <div class="text-center mb-3">
+            <img src="{{ asset('assets/images/VfPHgMS4ndKGxFSTrjGZDZqL5kpgXpnj2hTAZ8vn.png') }}" alt="Application Logo"
+                width="220">
+        </div>
+        <div class="card border-0 shadown-sm">
+            <div class="card-body login-card-body rounded">
                 <p class="login-box-msg">Reset your password</p>
 
                 @if (session('status'))
@@ -54,7 +52,8 @@
                         </div>
                     </div>
                 </form>
-                <p class="mb-1 text-center"><a href="{{ route('login') }}">Back to login</a></p>
+                <p class="mb-1 text-center"><a href="{{ route('login') }}" class="text-decoration-none">Back to
+                        login</a></p>
             </div>
         </div>
     </div>

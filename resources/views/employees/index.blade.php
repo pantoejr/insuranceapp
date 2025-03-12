@@ -3,11 +3,12 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
-            <div class="card card-dark card-outline mb-4">
+            <div class="card shadow-sm mb-4 border-0">
                 <div class="card-header">
                     <div class="card-title">{{ $title }}</div>
                     <div class="card-tools">
-                        <a href="{{ route('employees.create') }}" class="btn btn-primary"><i class="bi bi-pencil-fill"></i> Add
+                        <a href="{{ route('employees.create') }}" class="btn btn-primary"><i class="bi bi-pencil-fill"></i>
+                            Add
                             New</a>
                     </div>
                 </div>
@@ -43,7 +44,7 @@
                                                 style="display:inline;">
                                                 @csrf
                                                 <button type="submit" class="btn btn-danger btn-sm"
-                                                    onclick="return confirm('Are you sure you want to delete this client?');"><i
+                                                    onclick="return confirm('Are you sure you want to delete this employee?');"><i
                                                         class="bi bi-trash"></i> Delete</button>
                                             </form>
                                         </td>

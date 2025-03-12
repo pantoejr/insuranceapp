@@ -5,9 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\EmailSetting;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class EmailSettingController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth']);
+    }
     public function index()
     {
         $emailSettings = EmailSetting::all();

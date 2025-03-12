@@ -6,9 +6,15 @@ use App\Models\Insurer;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Routing\Controller;
 
 class InsurerController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware(['auth']);
+    }
     public function index()
     {
         $insurers = Insurer::all();

@@ -22,4 +22,9 @@ class Insurer extends Model
         'created_by',
         'updated_by',
     ];
+
+    public function assignments()
+    {
+        return $this->hasMany(InsurerAssignment::class);
+    }
 }
