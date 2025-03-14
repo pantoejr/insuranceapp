@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Insurer;
+use App\Models\InsurerAssignment;
+use App\Models\InsurerPolicy;
+use App\Models\Policy;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class InsurerController extends Controller
 {
@@ -144,9 +149,105 @@ class InsurerController extends Controller
     public function details($id)
     {
         $insurer = Insurer::findOrFail($id);
+        $policies = Policy::where('status', 'active')->get();
+        $users = User::where('status', 'active')->get();
         return view('insurers.details', [
             'title' => 'Insurer Details',
             'insurer' => $insurer,
+            'policies' => $policies,
+            'users' => $users,
         ]);
+    }
+
+    public function editPolicy($id)
+    {
+        $insurerPolicy = InsurerPolicy::findOrFail($id);
+        return response()->json($insurerPolicy);
+    }
+
+    public function updatePolicy(Request $request, $id)
+    {
+        $request->validate([
+            'policy_id' => 'required|exists:policies,id',
+            'status' => 'required|in:active,inactive',
+        ]);
+
+        $insurerPolicy = InsurerPolicy::findOrFail($id);
+
+        $insurerPolicy->update([
+            'policy_id' => $request->policy_id,
+            'status' => $request->status,
+            'updated_by' => Auth::user()->name,
+        ]);
+
+        return response()->json(['message' => 'Policy updated successfully']);
+    }
+
+    public function addInsurerUser(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'insurer_id' => 'required|exists:insurers,id',
+            'user_id' => 'required|exists:users,id',
+            'status' => 'required|in:active,inactive',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $existingRecord = InsurerAssignment::where('insurer_id', $request->insurer_id)
+            ->where('user_id', $request->user_id)
+            ->first();
+
+        if ($existingRecord) {
+            return response()->json([
+                'errors' => [
+                    'user_id' => ['A record with the same user and insurer already exists.'],
+                ],
+            ], 409);
+        }
+
+        InsurerAssignment::create([
+            'insurer_id' => $request->insurer_id,
+            'user_id' => $request->user_id,
+            'status' => $request->status,
+            'created_by' => Auth::user()->id,
+            'updated_by' => Auth::user()->id,
+        ]);
+
+        return response()->json(['message' => 'User added successfully']);
+    }
+
+    public function editInsurerUser($id)
+    {
+        $insurerUser = InsurerAssignment::findOrFail($id);
+        return response()->json($insurerUser);
+    }
+
+    public function updateInsurerUser(Request $request, $id)
+    {
+        // Validate the request
+        $request->validate([
+            'edited_status' => 'required|in:active,inactive',
+            'edit_user_id' => 'required|exists:users,id',
+        ]);
+
+        try {
+            $insurerUser = InsurerAssignment::findOrFail($id);
+            $insurerUser->update([
+                'user_id' => $request->edit_user_id,
+                'status' => $request->edited_status,
+                'updated_by' => Auth::user()->id,
+            ]);
+
+            // Return a success response
+            return response()->json(['message' => 'User updated successfully']);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Insurer user not found.',
+            ], 404);
+        }
     }
 }

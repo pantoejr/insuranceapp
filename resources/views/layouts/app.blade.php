@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{{ asset('css/overlayscrollbars.min.css') }}" />
     <link href="{{ asset('css/bootstrap-icons/font/bootstrap-icons.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/adminlte.css') }}" />
-    <link rel="stylesheet" href="{{ asset('css/dataTables.dataTables.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/dataTables.bootstrap5.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/apexcharts.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/jsvectormap.min.css') }}" />
     <script src="{{ asset('js/jquery.js') }}"></script>
@@ -122,33 +122,14 @@
                         <li class="nav-item">
                             <a href="{{ route('insurers.index') }}" class="nav-link">
                                 <i class="nav-icon bi bi-people-fill"></i>
-                                <p>Insurer</p>
+                                <p>Insurers</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon bi bi-journals"></i>
-                                <p>
-                                    Policy Management
-                                    <i class="nav-arrow bi bi-chevron-right"></i>
-                                </p>
+                            <a href="{{ route('policies.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-journal-text"></i>
+                                <p>Policies</p>
                             </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('policies.index') }}" class="nav-link">
-                                        <i class="nav-icon bi bi-journal-text"></i>
-                                        <p>Policies</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('insurer-policies.index') }}" class="nav-link">
-                                        <i class="nav-icon bi bi-people-fill"></i>
-                                        <p>
-                                            Assign Policies
-                                        </p>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
                     </ul>
                 </nav>
@@ -179,12 +160,14 @@
             <div class="float-end d-none d-sm-inline">{{ env('APP_NAME') }}</div>
             <strong>
                 Copyright &copy; {{ date('Y') }}
-                <a href="https:://clatech.io" class="text-decoration-none">Classic Technovations Inc.</a>.
+                <a href="https://clatech.io/" class="text-decoration-none">Classic Technovations Inc.</a>.
             </strong>
             All rights reserved.
         </footer>
     </div>
+    @livewireScripts
     <script src="{{ asset('js/dataTables.js') }}"></script>
+    <script src="{{ asset('js/dataTables.bootstrap5.js') }}"></script>
     <script src="{{ asset('js/overlayscrollbars.browser.es6.min.js') }}"></script>
     <script src="{{ asset('js/popper.min.js') }}"></script>
     <script src="{{ asset('js/bootstrap.min.js') }}"></script>
@@ -247,7 +230,7 @@
     <script src="{{ asset('js/apexcharts.min.js') }}"></script>
     <script src="{{ asset('js/jsvectormap.min.js') }}"></script>
     <script src="{{ asset('js/world.js') }}"></script>
-    @livewireScripts
+
 </body>
 
 </html>

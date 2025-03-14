@@ -95,4 +95,5 @@
             </div>
         </div>
     </div>
+    @include('dependents.partials.dependent_attachments', ['dependent' => $dependent])
 @endsection

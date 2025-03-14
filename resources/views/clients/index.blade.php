@@ -35,15 +35,15 @@
                                         <td>{{ ucfirst($client->status) }}</td>
                                         <td>
                                             <a href="{{ route('clients.edit', $client->id) }}"
-                                                class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill"></i> Edit</a>
+                                                class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill"></i></a>
                                             <a href="{{ route('clients.details', $client->id) }}"
-                                                class="btn btn-primary btn-sm"><i class="bi bi-eye-fill"></i> Details</a>
+                                                class="btn btn-primary btn-sm"><i class="bi bi-eye-fill"></i></a>
                                             <form action="{{ route('clients.destroy', $client->id) }}" method="POST"
                                                 style="display:inline;">
                                                 @csrf
                                                 <button type="submit" class="btn btn-danger btn-sm"
                                                     onclick="return confirm('Are you sure you want to delete this client?');"><i
-                                                        class="bi bi-trash"></i> Delete</button>
+                                                        class="bi bi-trash"></i></button>
                                             </form>
                                         </td>
                                     </tr>

@@ -12,11 +12,6 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    @if (session('msg'))
-                        <div class="alert alert-{{ session('flag') }}">
-                            {{ session('msg') }}
-                        </div>
-                    @endif
                     <div class="table-responsive">
                         <table class="table dataTable nowrap">
                             <thead>
@@ -38,20 +33,21 @@
                                         <td>{{ $policy->name }}</td>
                                         <td>{{ $policy->number }}</td>
                                         <td>{{ $policy->premium_amount }}</td>
-                                        <td>{{ $policy->premium_frequency }}</td>
+                                        <td>{{ ucfirst($policy->premium_frequency) }}</td>
                                         <td>{{ $policy->policy_duration }}</td>
                                         <td>{{ ucfirst($policy->status) }}</td>
                                         <td>
 
                                             <a href="{{ route('policies.edit', $policy->id) }}"
-                                                class="btn btn-warning btn-sm">Edit</a>
+                                                class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill"></i></a>
                                             <a href="{{ route('policies.details', $policy->id) }}"
-                                                class="btn btn-primary btn-sm">Details</a>
+                                                class="btn btn-primary btn-sm"><i class="bi bi-eye-fill"></i></a>
                                             <form action="{{ route('policies.destroy', $policy->id) }}" method="POST"
                                                 style="display:inline-block;">
                                                 @csrf
                                                 <button type="submit" class="btn btn-danger btn-sm"
-                                                    onclick="return confirm('Are you sure you want to delete this policy?')">Delete</button>
+                                                    onclick="return confirm('Are you sure you want to delete this policy?')"><i
+                                                        class="bi bi-trash"></i></button>
                                             </form>
                                         </td>
                                     </tr>

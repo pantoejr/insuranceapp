@@ -2,12 +2,12 @@
     <div class="col-md-12">
         <div class="card shadow-sm mb-4" style="border:none;">
             <div class="card-header" style="border:none;">
-                <div class="card-title" id="attachment-header" style="cursor: pointer;">{{ $client->full_name }}
+                <div class="card-title" id="attachment-header" style="cursor: pointer;">{{ $dependent->dependent_name }}
                     Attachments</div>
                 <div class="card-tools">
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                         data-bs-target="#addAttachmentModal">
-                        <i class="bi bi-pencil-fill"></i>
+                        Add
                     </button>
                     <div class="modal" id="addAttachmentModal">
                         <div class="modal-dialog">
@@ -24,7 +24,7 @@
                                 <div class="modal-body">
                                     <form id="addAttachmentForm" enctype="multipart/form-data">
                                         @csrf
-                                        <input type="hidden" name="client_id" value="{{ $client->id }}">
+                                        <input type="hidden" name="employee_id" value="{{ $dependent->id }}">
                                         <div class="form-group mb-3">
                                             <label for="file_name" class="form-label">Name</label>
                                             <input type="text" class="form-control" id="file_name" name="file_name"
@@ -63,7 +63,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($client->attachments as $attachment)
+                            @foreach ($dependent->attachments as $attachment)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $attachment->file_name }}</td>
@@ -72,7 +72,7 @@
                                         <a href="{{ asset('storage/' . $attachment->file_path) }}" target="_blank"
                                             class="btn btn-primary btn-sm"><i class="bi bi-eye-fill"></i></a>
                                         <form
-                                            action="{{ route('attachments.destroy', ['id' => $attachment->id, 'clientId' => $client->id]) }}"
+                                            action="{{ route('attachments.destroy', ['id' => $attachment->id, 'dependentId' => $dependent->id]) }}"
                                             method="POST" style="display:inline-block;">
                                             @csrf
                                             <button type="submit" class="btn btn-danger btn-sm"
@@ -102,7 +102,7 @@
             $('#loading').show();
 
             $.ajax({
-                url: '{{ route('clients.addAttachment', $client->id) }}',
+                url: '{{ route('dependents.addAttachment', ['employee' => $employee, 'dependent' => $dependent]) }}',
                 type: 'POST',
                 data: formData,
                 contentType: false,
@@ -118,7 +118,7 @@
                 },
                 error: function(response) {
                     $('#loading').hide();
-                    alert('An error occurred while adding the attachment.');
+                    alert('An error occurred while adding the attachment.' + response.msg);
                 }
             });
         });

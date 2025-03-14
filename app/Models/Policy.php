@@ -20,4 +20,9 @@ class Policy extends Model
         'created_by',
         'updated_by',
     ];
+
+    public function insurerPolicies()
+    {
+        return $this->hasMany(InsurerPolicy::class);
+    }
 }

@@ -103,7 +103,7 @@ class AttachmentController extends Controller
           }
      }
 
-     public function destroy($id, $clientId = null)
+     public function destroy($id, $clientId = null, $employeeId = null, $dependentId = null)
      {
           try {
                $attachment = Attachment::findOrFail($id);
@@ -112,6 +112,12 @@ class AttachmentController extends Controller
 
                if ($clientId) {
                     return redirect()->route('clients.details', ['id' => $clientId])->with('msg', 'Attachment deleted successfully.')
+                         ->with('flag', 'success');
+               } elseif ($employeeId) {
+                    return redirect()->route('employees.details', ['client' => $clientId, 'employee' => $employeeId])->with('msg', 'Attachment deleted successfully.')
+                         ->with('flag', 'success');
+               } elseif ($dependentId) {
+                    return redirect()->route('dependents.details', ['employee' => $employeeId, 'dependent' => $dependentId])->with('msg', 'Attachment deleted successfully.')
                          ->with('flag', 'success');
                } else {
                     return redirect()->route('attachments.index')->with('msg', 'Attachment deleted successfully.')

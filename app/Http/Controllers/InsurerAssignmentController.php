@@ -16,27 +16,27 @@ class InsurerAssignmentController extends Controller
     {
         $this->middleware(['auth']);
     }
-    public function index()
+    public function index(Insurer $insurer)
     {
         $assignments = InsurerAssignment::all();
         return view('insurer_assignments.index', [
             'title' => 'Insurer Assignments',
             'assignments' => $assignments,
+            'insurer' => $insurer,
         ]);
     }
 
-    public function create()
+    public function create(Insurer $insurer)
     {
-        $insurers = Insurer::all();
         $users = User::all();
         return view('insurer_assignments.create', [
             'title' => 'Create Insurer Assignment',
-            'insurers' => $insurers,
+            'insurers' => $insurer,
             'users' => $users,
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, Insurer $insurer)
     {
         $request->validate([
             'insurer_id' => 'required|exists:insurers,id',
@@ -53,7 +53,7 @@ class InsurerAssignmentController extends Controller
                 'updated_by' => Auth::user()->name,
             ]);
 
-            return redirect()->route('insurer_assignments.index')->with('msg', 'Insurer Assignment created successfully.')
+            return redirect()->route('insurers.details', ['id' => $insurer->id])->with('msg', 'Insurer Assignment created successfully.')
                 ->with('flag', 'success');
         } catch (Exception $e) {
             return redirect()->back()->with('msg', 'An error occurred while creating the insurer assignment: ' . $e->getMessage())
@@ -61,18 +61,19 @@ class InsurerAssignmentController extends Controller
         }
     }
 
-    public function edit($id)
+    public function edit(Insurer $insurer, InsurerAssignment $insurerAssignment)
     {
-        $assignment = InsurerAssignment::findOrFail($id);
+        $users = User::all();
         return view('insurer_assignments.edit', [
             'title' => 'Edit Insurer Assignment',
-            'assignment' => $assignment,
+            'assignment' => $insurerAssignment,
+            'insurer' => $insurer,
+            'users' => $users,
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Insurer $insurer, InsurerAssignment $insurerAssignment)
     {
-        $assignment = InsurerAssignment::findOrFail($id);
 
         $request->validate([
             'insurer_id' => 'required|exists:insurers,id',
@@ -81,14 +82,14 @@ class InsurerAssignmentController extends Controller
         ]);
 
         try {
-            $assignment->update([
+            $insurerAssignment->update([
                 'insurer_id' => $request->insurer_id,
                 'user_id' => $request->user_id,
                 'status' => $request->status,
                 'updated_by' => Auth::user()->name,
             ]);
 
-            return redirect()->route('insurer_assignments.index')->with('msg', 'Insurer Assignment updated successfully.')
+            return redirect()->route('insurers.details', ['id' => $insurer->id])->with('msg', 'Insurer Assignment updated successfully.')
                 ->with('flag', 'success');
         } catch (Exception $e) {
             return redirect()->back()->with('msg', 'An error occurred while updating the insurer assignment: ' . $e->getMessage())
@@ -96,13 +97,12 @@ class InsurerAssignmentController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy(Insurer $insurer, InsurerAssignment $insurerAssignment)
     {
         try {
-            $assignment = InsurerAssignment::findOrFail($id);
-            $assignment->delete();
+            $insurerAssignment->delete();
 
-            return redirect()->route('insurer_assignments.index')->with('msg', 'Insurer Assignment deleted successfully.')
+            return redirect()->route('insurers.details', ['id' => $insurer->id])->with('msg', 'Insurer Assignment deleted successfully.')
                 ->with('flag', 'success');
         } catch (Exception $e) {
             return redirect()->back()->with('msg', 'An error occurred while deleting the insurer assignment: ' . $e->getMessage())

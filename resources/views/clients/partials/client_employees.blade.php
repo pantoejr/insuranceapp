@@ -5,7 +5,8 @@
                 <div class="card-title" id="employee-header" style="cursor: pointer;">{{ $client->full_name }} Employees
                 </div>
                 <div class="card-tools">
-                    <a href="{{ route('employees.create', ['client' => $client]) }}" class="btn btn-primary">Add</a>
+                    <a href="{{ route('employees.create', ['client' => $client]) }}" class="btn btn-primary"><i
+                            class="bi bi-pencil-fill"></i></a>
                 </div>
             </div>
             <div class="card-body" id="employee-body" style="display:none;">
@@ -31,16 +32,16 @@
                                     <td>{{ $employee->email }}</td>
                                     <td>
                                         <a href="{{ route('employees.edit', ['employee' => $employee->id, 'client' => $client]) }}"
-                                            class="btn btn-warning btn-sm"> <i class="bi bi-pencil-fill"></i>Edit</a>
+                                            class="btn btn-warning btn-sm"> <i class="bi bi-pencil-fill"></i></a>
                                         <a href="{{ route('employees.details', ['employee' => $employee->id, 'client' => $client]) }}"
-                                            class="btn btn-primary btn-sm"><i class="bi bi-eye-fill"></i>Details</a>
+                                            class="btn btn-primary btn-sm"><i class="bi bi-eye-fill"></i></a>
                                         <form
                                             action="{{ route('employees.destroy', ['employee' => $employee->id, 'client' => $client]) }}"
                                             method="POST" style="display:inline;">
                                             @csrf
                                             <button type="submit" class="btn btn-danger btn-sm"
                                                 onclick="return confirm('Are you sure you want to delete this employee?');"><i
-                                                    class="bi bi-trash"></i> Delete</button>
+                                                    class="bi bi-trash"></i></button>
                                         </form>
                                     </td>
                                 </tr>

@@ -30,9 +30,9 @@
                                     <td>{{ $dependent->date_of_birth }}</td>
                                     <td>
                                         <a href="{{ route('dependents.edit', ['employee' => $employee->id, 'dependent' => $dependent->id]) }}"
-                                            class="btn btn-warning btn-sm">Edit</a>
+                                            class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill"></i></a>
                                         <a href="{{ route('dependents.details', ['employee' => $employee->id, 'dependent' => $dependent->id]) }}"
-                                            class="btn btn-primary btn-sm">Details</a>
+                                            class="btn btn-primary btn-sm"><i class="bi bi-eye-fill"></i></a>
                                         <form
                                             action="{{ route('dependents.destroy', ['employee' => $employee->id, 'dependent' => $dependent->id]) }}"
                                             method="POST" style="display:inline;">
@@ -40,7 +40,7 @@
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger btn-sm"
                                                 onclick="return confirm('Are you sure you want to delete this dependent?');"><i
-                                                    class="bi bi-trash"></i> Delete</button>
+                                                    class="bi bi-trash"></i></button>
                                         </form>
                                     </td>
                                 </tr>

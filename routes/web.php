@@ -95,6 +95,7 @@ Route::prefix('clients/{client}')->group(function () {
         Route::post('/employees/edit/{employee}', 'update')->name('employees.update');
         Route::post('/employees/delete/{employee}', 'destroy')->name('employees.destroy');
         Route::get('/employees/details/{employee}', 'details')->name('employees.details');
+        Route::post('/employees/{employee}/add-attachment', 'addAttachment')->name('employee.addAttachment');
     });
 });
 
@@ -107,6 +108,7 @@ Route::prefix('employees/{employee}')->group(function () {
         Route::post('/dependents/edit/{dependent}', 'update')->name('dependents.update');
         Route::post('/dependents/delete/{dependent}', 'destroy')->name('dependents.destroy');
         Route::get('/dependents/details/{dependent}', 'details')->name('dependents.details');
+        Route::post('/dependents/{dependent}/add-attachment', 'addAttachment')->name('dependents.addAttachment');
     });
 });
 
@@ -116,7 +118,7 @@ Route::controller(AttachmentController::class)->group(function () {
     Route::post('/attachments/store', 'store')->name('attachments.store');
     Route::get('/attachments/edit/{id}', 'edit')->name('attachments.edit');
     Route::post('/attachments/edit/{id}', 'update')->name('attachments.update');
-    Route::post('/attachments/delete/{id}/{clientId?}', 'destroy')->name('attachments.destroy');
+    Route::post('/attachments/delete/{id}/{clientId?}/{employeeId?}/{dependentId?}', 'destroy')->name('attachments.destroy');
     Route::get('/attachments/details/{id}', 'details')->name('attachments.details');
     Route::get('/attachments/download/{id}', 'download')->name('attachments.download');
 });
@@ -129,16 +131,33 @@ Route::controller(InsurerController::class)->group(function () {
     Route::post('/insurers/edit/{id}', 'update')->name('insurers.update');
     Route::post('/insurers/delete/{id}', 'destroy')->name('insurers.destroy');
     Route::get('/insurers/details/{id}', 'details')->name('insurers.details');
+    Route::get('/insurers/editPolicy/{id}', 'editPolicy')->name('insurers.editPolicy');
+    Route::post('/insurers/editPolicy/{id}', 'updatePolicy')->name('insurers.updatePolicy');
+    Route::post('/insurers/addInsurerUser', 'addInsurerUser')->name('insurers.addInsurerUser');
+    Route::get('/insurers/editInsurerUser/{id}', 'editInsurerUser')->name('insurers.editInsurerUser');
+    Route::post('/insurers/editInsurerUser/{id}', 'updateInsurerUser')->name('insurers.updateInsurerUser');
 });
 
-Route::controller(InsurerAssignmentController::class)->group(function () {
-    Route::get('/insurer-assignments', 'index')->name('insurer-assignments.index');
-    Route::get('/insurer-assignments/create', 'create')->name('insurer-assignments.create');
-    Route::post('/insurer-assignments/store', 'store')->name('insurer-assignments.store');
-    Route::get('/insurer-assignments/edit/{id}', 'edit')->name('insurer-assignments.edit');
-    Route::post('/insurer-assignments/edit/{id}', 'update')->name('insurer-assignments.update');
-    Route::post('/insurer-assignments/delete/{id}', 'destroy')->name('insurer-assignments.destroy');
-    Route::get('/insurer-assignments/details/{id}', 'details')->name('insurer-assignments.details');
+Route::prefix('/insurers/{insurer}')->group(function () {
+    Route::controller(InsurerAssignmentController::class)->group(function () {
+        Route::get('/insurer-assignments', 'index')->name('insurer-assignments.index');
+        Route::get('/insurer-assignments/create', 'create')->name('insurer-assignments.create');
+        Route::post('/insurer-assignments/store', 'store')->name('insurer-assignments.store');
+        Route::get('/insurer-assignments/edit/{insurerAssignment}', 'edit')->name('insurer-assignments.edit');
+        Route::post('/insurer-assignments/edit/{insurerAssignment}', 'update')->name('insurer-assignments.update');
+        Route::post('/insurer-assignments/delete/{insurerAssignment}', 'destroy')->name('insurer-assignments.destroy');
+        Route::get('/insurer-assignments/details/{insurerAssignment}', 'details')->name('insurer-assignments.details');
+    });
+});
+
+
+Route::controller(InsurerPolicyController::class)->group(function () {
+    Route::get('/insurer-policies', 'index')->name('insurer-policies.index');
+    Route::get('/insurer-policies/create', 'create')->name('insurer-policies.create');
+    Route::post('/insurer-policies/store', 'store')->name('insurer-policies.store');
+    Route::get('/insurer-policies/edit/{id}', 'edit')->name('insurer-policies.edit');
+    Route::post('/insurer-policies/edit/{id}', 'update')->name('insurer-policies.update');
+    Route::post('/insurer-policies/delete/{id}', 'destroy')->name('insurer-policies.destroy');
 });
 
 Route::controller(PolicyController::class)->group(function () {
@@ -149,13 +168,4 @@ Route::controller(PolicyController::class)->group(function () {
     Route::post('/policies/edit/{id}', 'update')->name('policies.update');
     Route::post('/policies/delete/{id}', 'destroy')->name('policies.destroy');
     Route::get('/policies/details/{id}', 'details')->name('policies.details');
-});
-
-Route::controller(InsurerPolicyController::class)->group(function () {
-    Route::get('/insurer-policies', 'index')->name('insurer-policies.index');
-    Route::get('/insurer-policies/create', 'create')->name('insurer-policies.create');
-    Route::post('/insurer-policies/store', 'store')->name('insurer-policies.store');
-    Route::get('/insurer-policies/edit/{id}', 'edit')->name('insurer-policies.edit');
-    Route::post('/insurer-policies/edit/{id}', 'update')->name('insurer-policies.update');
-    Route::post('/insurer-policies/delete/{id}', 'destroy')->name('insurer-policies.destroy');
 });

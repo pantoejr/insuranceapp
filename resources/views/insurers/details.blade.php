@@ -94,5 +94,7 @@
             </div>
         </div>
     </div>
-    @include('insurers.partials.users_list', ['insurers' => $insurer])
+    @include('insurers.partials.user_list')
+    {{-- @include('insurers.partials.users_list', ['insurers' => $insurer]) --}}
+    @include('insurers.partials.policies_list', ['insurers' => $insurer])
 @endsection

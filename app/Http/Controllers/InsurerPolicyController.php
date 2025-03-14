@@ -39,25 +39,26 @@ class InsurerPolicyController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'insurer_id' => 'required|exists:insurers,id',
+            'insurer_id' => 'required|array',
+            'insurer_id.*' => 'exists:insurers,id',
             'policy_id' => 'required|exists:policies,id',
             'status' => 'required|string|in:active,inactive',
         ]);
 
         try {
-            $insurerPolicy = InsurerPolicy::create([
-                'insurer_id' => $request->insurer_id,
-                'policy_id' => $request->policy_id,
-                'status' => $request->status,
-                'created_by' => Auth::user()->name,
-                'updated_by' => Auth::user()->name,
-            ]);
+            foreach ($request->insurer_id as $insurerId) {
+                InsurerPolicy::create([
+                    'insurer_id' => $insurerId,
+                    'policy_id' => $request->policy_id,
+                    'status' => $request->status,
+                    'created_by' => Auth::user()->name,
+                    'updated_by' => Auth::user()->name,
+                ]);
+            }
 
-            return redirect()->route('insurer-policies.index')->with('msg', 'Insurer Policy created successfully.')
-                ->with('flag', 'success');
+            return response()->json(['msg' => 'Policy assigned successfully.', 'flag' => 'success']);
         } catch (Exception $e) {
-            return redirect()->back()->with('msg', 'An error occurred while creating the insurer policy: ' . $e->getMessage())
-                ->with('flag', 'danger');
+            return response()->json(['msg' => 'An error occurred while adding the policy: ' . $e->getMessage(), 'flag' => 'danger']);
         }
     }
 

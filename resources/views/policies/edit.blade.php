@@ -3,7 +3,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
-            <div class="card card-dark card-outline mb-4">
+            <div class="card border-0 shadown-sm mb-4">
                 <div class="card-header">
                     <div class="card-title">Edit Policy</div>
                 </div>
@@ -91,7 +91,18 @@
                         </div>
                         <div class="form-group mb-3">
                             <label for="eligibility" class="form-label">Eligibility</label>
-                            <textarea class="form-control @error('eligibility') is-invalid @enderror" id="eligibility" name="eligibility">{{ old('eligibility', $policy->eligibility) }}</textarea>
+                            <select class="form-control @error('eligibility') is-invalid @enderror" id="eligibility"
+                                name="eligibility" required>
+                                <option value="Individual"
+                                    {{ old('eligibility', $policy->eligibility) == 'Individual' ? 'selected' : '' }}>
+                                    Individual</option>
+                                <option value="Company"
+                                    {{ old('eligibility', $policy->eligibility) == 'Company' ? 'selected' : '' }}>Company
+                                </option>
+                                <option value="Both"
+                                    {{ old('eligibility', $policy->eligibility) == 'Both' ? 'selected' : '' }}>Both
+                                </option>
+                            </select>
                             @error('eligibility')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

@@ -8,19 +8,19 @@
                     <div class="card-title">Edit Insurer Assignment</div>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('insurer_assignments.update', $assignment->id) }}" method="POST">
+                    <form
+                        action="{{ route('insurer-assignments.update', ['insurer' => $insurer, 'insurerAssignment' => $assignment]) }}"
+                        method="POST">
                         @csrf
                         @method('POST')
                         <div class="form-group mb-3">
                             <label for="insurer_id" class="form-label">Insurer</label>
                             <select class="form-control @error('insurer_id') is-invalid @enderror" id="insurer_id"
                                 name="insurer_id" required>
-                                @foreach ($insurers as $insurer)
-                                    <option value="{{ $insurer->id }}"
-                                        {{ old('insurer_id', $assignment->insurer_id) == $insurer->id ? 'selected' : '' }}>
-                                        {{ $insurer->company_name }}
-                                    </option>
-                                @endforeach
+                                <option value="{{ $insurer->id }}"
+                                    {{ old('insurer_id', $assignment->insurer_id) == $insurer->id ? 'selected' : '' }}>
+                                    {{ $insurer->company_name }}
+                                </option>
                             </select>
                             @error('insurer_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -57,7 +57,8 @@
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-success">Update</button>
-                            <a href="{{ route('insurer_assignments.index') }}" class="btn btn-light">Back to List</a>
+                            <a href="{{ route('insurers.details', ['id' => $insurer->id]) }}" class="btn btn-light">Back
+                                to List</a>
                         </div>
                     </form>
                 </div>

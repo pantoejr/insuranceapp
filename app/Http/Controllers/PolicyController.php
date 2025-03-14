@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Insurer;
 use App\Models\Policy;
 use Exception;
 use Illuminate\Http\Request;
@@ -136,9 +137,11 @@ class PolicyController extends Controller
     public function details($id)
     {
         $policy = Policy::findOrFail($id);
+        $insurers = Insurer::all();
         return view('policies.details', [
             'title' => 'Policy Details',
             'policy' => $policy,
+            'insurers' => $insurers,
         ]);
     }
 }

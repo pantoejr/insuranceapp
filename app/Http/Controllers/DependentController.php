@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attachment;
 use App\Models\Dependent;
 use App\Models\Employee;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class DependentController extends Controller
 {
@@ -123,6 +125,7 @@ class DependentController extends Controller
     public function destroy(Employee $employee, Dependent $dependent)
     {
         try {
+            Storage::disk('public')->delete($dependent->profile_picture);
             $dependent->delete();
             return redirect()->route('employees.details', ['client' => $employee->client_id, 'employee' => $employee->id])
                 ->with('msg', 'Dependent deleted successfully')
@@ -140,5 +143,31 @@ class DependentController extends Controller
             'employee' => $employee,
             'dependent' => $dependent,
         ]);
+    }
+
+    public function addAttachment(Request $request,  Employee $employee, Dependent $dependent)
+    {
+        $request->validate([
+            'file_path' => 'required|file|mimes:jpeg,png,jpg,gif,svg,pdf,doc,docx|max:2048',
+        ]);
+
+        try {
+            $filePath = $request->file('file_path')->store('attachments', 'public');
+            $fileType = mime_content_type($request->file('file_path')->getPathname());
+
+            $attachment = new Attachment([
+                'file_name' => $request->input('file_name') ?? $request->file('file_path')->getClientOriginalName(),
+                'file_path' => $filePath,
+                'file_type' => $fileType,
+                'created_by' => Auth::user()->name,
+                'updated_by' => Auth::user()->name,
+            ]);
+
+            $dependent->attachments()->save($attachment);
+
+            return response()->json(['msg' => 'Attachment added successfully.', 'flag' => 'success']);
+        } catch (Exception $e) {
+            return response()->json(['msg' => 'An error occurred while adding the attachment: ' . $e->getMessage(), 'flag' => 'danger']);
+        }
     }
 }

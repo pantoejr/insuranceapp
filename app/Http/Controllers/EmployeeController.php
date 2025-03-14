@@ -137,4 +137,30 @@ class EmployeeController extends Controller
             ->with('msg', 'Employee deleted successfully')
             ->with('flag', 'success');
     }
+
+    public function addAttachment(Request $request, Client $client, Employee $employee)
+    {
+        $request->validate([
+            'file_path' => 'required|file|mimes:jpeg,png,jpg,gif,svg,pdf,doc,docx|max:2048',
+        ]);
+
+        try {
+            $filePath = $request->file('file_path')->store('attachments', 'public');
+            $fileType = mime_content_type($request->file('file_path')->getPathname());
+
+            $attachment = new Attachment([
+                'file_name' => $request->input('file_name') ?? $request->file('file_path')->getClientOriginalName(),
+                'file_path' => $filePath,
+                'file_type' => $fileType,
+                'created_by' => Auth::user()->name,
+                'updated_by' => Auth::user()->name,
+            ]);
+
+            $employee->attachments()->save($attachment);
+
+            return response()->json(['msg' => 'Attachment added successfully.', 'flag' => 'success']);
+        } catch (Exception $e) {
+            return response()->json(['msg' => 'An error occurred while adding the attachment: ' . $e->getMessage(), 'flag' => 'danger']);
+        }
+    }
 }

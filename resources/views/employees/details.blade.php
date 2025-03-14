@@ -97,4 +97,5 @@
     </div>
 
     @include('employees.partials.employee_dependents', ['employee' => $employee])
+    @include('employees.partials.employee_attachment', ['employee' => $employee])
 @endsection
