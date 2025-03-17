@@ -7,7 +7,7 @@
                     <div class="card-title"><b>{{ $title }}</b></div>
                     <div class="card-tools">
                         <a href="{{ route('users.create') }}" class="btn btn-primary btn-sm" wire:navigate><i
-                                class="bi bi-pencil-fill"></i>
+                                class="bi bi-plus-circle"></i>
                             Add New
                         </a>
                     </div>

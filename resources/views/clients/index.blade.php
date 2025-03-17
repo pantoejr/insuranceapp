@@ -7,9 +7,8 @@
                 <div class="card-header" style="border:none;">
                     <div class="card-title">Clients</div>
                     <div class="card-tools">
-                        <a href="{{ route('clients.create') }}" class="btn btn-primary btn-sm"><i
-                                class="bi bi-pencil-fill"></i> Add
-                            New</a>
+                        <a href="{{ route('clients.create') }}" class="btn btn-primary"><i class="bi bi-plus-circle bold"></i>
+                        </a>
                     </div>
                 </div>
                 <div class="card-body">

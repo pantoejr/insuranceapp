@@ -37,7 +37,7 @@
         </nav>
         <aside class="app-sidebar shadow" data-bs-theme="dark" style="background-color: #00005f;">
             <div class="sidebar-brand" style="background-color: #00004f; border:none;">
-                <a href="./index.html" class="brand-link">
+                <a href="{{ route('app.index') }}" class="brand-link">
                     <img src="{{ asset('assets/images/VfPHgMS4ndKGxFSTrjGZDZqL5kpgXpnj2hTAZ8vn.png') }}"
                         alt="AdminLTE Logo" class="brand-image opacity-75 shadow" />
                     {{-- <span class="brand-text fw-light">Insurance App</span> --}}
@@ -53,6 +53,24 @@
                                 <p>
                                     Dashboard
                                 </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('clients.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-people-fill"></i>
+                                <p>Clients</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('insurers.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-people-fill"></i>
+                                <p>Insurers</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('policies.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-journal-text"></i>
+                                <p>Policies</p>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -112,24 +130,6 @@
                                     </a>
                                 </li>
                             </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('clients.index') }}" class="nav-link">
-                                <i class="nav-icon bi bi-people-fill"></i>
-                                <p>Clients</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('insurers.index') }}" class="nav-link">
-                                <i class="nav-icon bi bi-people-fill"></i>
-                                <p>Insurers</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('policies.index') }}" class="nav-link">
-                                <i class="nav-icon bi bi-journal-text"></i>
-                                <p>Policies</p>
-                            </a>
                         </li>
                     </ul>
                 </nav>

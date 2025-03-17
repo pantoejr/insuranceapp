@@ -11,9 +11,12 @@ use App\Http\Controllers\InsurerAssignmentController;
 use App\Http\Controllers\InsurerController;
 use App\Http\Controllers\InsurerPolicyController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\PolicyAssignmentController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Models\Policy;
+use App\Models\PolicyAssignment;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rules\Can;
 
@@ -168,4 +171,12 @@ Route::controller(PolicyController::class)->group(function () {
     Route::post('/policies/edit/{id}', 'update')->name('policies.update');
     Route::post('/policies/delete/{id}', 'destroy')->name('policies.destroy');
     Route::get('/policies/details/{id}', 'details')->name('policies.details');
+    Route::get('/policies/get-insurer-policies/{id}', 'getInsurerPolicy')->name('policies.getInsurerPolicy');
+});
+
+Route::prefix('/clients/{client}')->group(function () {
+    Route::controller(PolicyAssignmentController::class)->group(function () {
+        Route::get('/client-policies/create', 'create')->name('client-policies.create');
+        Route::post('/client-policies/create', 'store')->name('client-policies.store');
+    });
 });

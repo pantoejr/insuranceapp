@@ -136,7 +136,7 @@ class ClientController extends Controller
         $client = Client::findOrFail($id);
         return view('clients.details', [
             'title' => 'Client Details',
-            'client' => $client,
+            'model' => $client,
         ]);
     }
 

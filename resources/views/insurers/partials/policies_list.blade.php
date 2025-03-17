@@ -5,11 +5,11 @@
                 <div class="card-title" id="policy-header" style="cursor: pointer;">Insurer Policies</div>
                 <div class="card-tools">
                     <a href="{{ route('insurer-policies.create') }}" class="btn btn-primary"><i
-                            class="bi bi-pencil-fill"></i></a>
+                            class="bi bi-plus-circle"></i></a>
                 </div>
                 @include('insurers.partials.edit_policy')
             </div>
-            <div class="card-body" id="policy-body" style="display: none;">
+            <div class="card-body" id="policy-body" style="min-height: 400px;">
                 <div class="table-responsive">
                     <table class="table dataTable nowrap">
                         <thead>
@@ -22,7 +22,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($insurer->insurerPolicies as $insurerPolicy)
+                            @foreach ($model->insurerPolicies as $insurerPolicy)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $insurerPolicy->insurer->company_name }}</td>
@@ -30,7 +30,7 @@
                                     <td>{{ ucfirst($insurerPolicy->status) }}</td>
                                     <td>
                                         <button class="btn btn-warning btn-sm edit-policy-btn" data-bs-toggle="modal"
-                                            data-bs-target="#editModal" data-insurer-id="{{ $insurer->id }}"
+                                            data-bs-target="#editModal" data-insurer-id="{{ $model->id }}"
                                             data-insurerPolicy-id="{{ $insurerPolicy->id }}">
                                             <i class="bi bi-pencil-fill"></i>
                                         </button>
@@ -51,11 +51,3 @@
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#policy-header').click(function() {
-            $('#policy-body').toggle();
-        });
-    });
-</script>

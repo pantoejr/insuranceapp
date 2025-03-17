@@ -6,7 +6,7 @@
                 <div class="card-title" id="policy-header" style="cursor: pointer;">Add Policy to Insurer</div>
                 <div class="card-tools">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPolicyModal"><i
-                            class="bi bi-pencil-fill"></i></button>
+                            class="bi bi-plus-circle"></i></button>
                 </div>
             </div>
             <div class="card-body" id="policy-body" style="display: none;">

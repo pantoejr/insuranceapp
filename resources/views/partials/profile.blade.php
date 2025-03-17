@@ -1,6 +1,6 @@
 <li class="nav-item dropdown user-menu">
     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-        <img src="{{ asset('storage/' . Auth::user()->photo) }}" class="user-image rounded-circle shadow"
+        <img src="{{ asset('storage/' . Auth::user()->photo) }}" class="user-image rounded-circle shadow-sm"
             alt="User Image" />
         <span class="d-none d-md-inline">{{ Auth::user()->name }}</span>
     </a>

@@ -1,15 +1,15 @@
 <div class="row">
     <div class="col-md-12">
-        <div class="card shadow-sm mb-4 border-0">
+        <div class="card shadow-sm mb-4 border-0" style="min-height: 450px;">
             <div class="card-header">
                 @include('insurers.partials.add_or_edit_user')
                 <div class="card-title" id="user-header" style="cursor: pointer;">Insurer User</div>
                 <div class="card-tools">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addInsurerUserModal"><i
-                            class="bi bi-pencil-fill"></i></button>
+                            class="bi bi-plus-circle"></i></button>
                 </div>
             </div>
-            <div class="card-body" id="user-body" style="display: none;">
+            <div class="card-body" id="user-body">
                 <div class="table-responsive">
                     <table class="table dataTable">
                         <thead>
@@ -22,7 +22,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($insurer->assignments as $assignment)
+                            @foreach ($model->assignments as $assignment)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $assignment->insurer->company_name }}</td>
@@ -51,10 +51,3 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#user-header').click(function() {
-            $('#user-body').toggle();
-        });
-    });
-</script>

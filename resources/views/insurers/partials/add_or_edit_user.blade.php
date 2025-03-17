@@ -9,7 +9,7 @@
             <div class="modal-body">
                 <form id="addInsurerUserForm">
                     @csrf
-                    <input type="hidden" id="insurerId" name="insurer_id" value="{{ $insurer->id }}">
+                    <input type="hidden" id="insurerId" name="insurer_id" value="{{ $model->id }}">
 
                     <!-- User Dropdown -->
                     <div class="form-group mb-3">

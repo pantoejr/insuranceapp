@@ -7,8 +7,7 @@
                 <div class="card-header">
                     <div class="card-title">Policies</div>
                     <div class="card-tools">
-                        <a href="{{ route('policies.create') }}" class="btn btn-primary btn-sm"><i
-                                class="bi bi-pencil-fill"></i> Add Policy</a>
+                        <a href="{{ route('policies.create') }}" class="btn btn-primary"><i class="bi bi-plus-circle"></i></a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -20,8 +19,8 @@
                                     <th>Name</th>
                                     <th>Number</th>
                                     <th>Premium Amount</th>
+                                    <th>Currency</th>
                                     <th>Premium Frequency</th>
-                                    <th>Policy Duration</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -33,8 +32,8 @@
                                         <td>{{ $policy->name }}</td>
                                         <td>{{ $policy->number }}</td>
                                         <td>{{ $policy->premium_amount }}</td>
+                                        <td>{{ strtoupper($policy->currency) }}</td>
                                         <td>{{ ucfirst($policy->premium_frequency) }}</td>
-                                        <td>{{ $policy->policy_duration }}</td>
                                         <td>{{ ucfirst($policy->status) }}</td>
                                         <td>
 

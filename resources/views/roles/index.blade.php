@@ -7,8 +7,7 @@
                     <div class="card-header" style="border:none;">
                         <div class="card-title">{{ $title }}</div>
                         <div class="card-tools">
-                            <a href="{{ route('roles.create') }}" class="btn btn-primary btn-sm"><i
-                                    class="bi bi-pencil-fill"></i>
+                            <a href="{{ route('roles.create') }}" class="btn btn-primary "><i class="bi bi-plus-circle"></i>
                                 Add New
                             </a>
                         </div>

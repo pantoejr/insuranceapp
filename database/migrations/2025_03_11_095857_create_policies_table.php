@@ -18,13 +18,14 @@ return new class extends Migration
             $table->text('description')->nullable(true);
             $table->text('coverage_details')->nullable(true);
             $table->decimal('premium_amount', 10, 2);
+            $table->enum('currency', ['usd', 'lrd']);
             $table->enum('premium_frequency', ['monthly', 'quarterly', 'half-yearly', 'yearly']);
-            $table->integer('policy_duration')->require();
             $table->text('terms_conditions')->require();
-            $table->enum('eligibility', ['Individual', 'Company', 'Both'])->default('Individual');
+            $table->enum('eligibility', ['individual', 'company', 'both'])->default('Individual');
             $table->enum('status', ['active', 'inactive'])->default('inactive');
             $table->string('created_by')->nullable(true);
             $table->string('updated_by')->nullable(true);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

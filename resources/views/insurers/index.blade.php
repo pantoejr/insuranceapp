@@ -6,8 +6,7 @@
                 <div class="card-header">
                     <div class="card-title">{{ $title }}</div>
                     <div class="card-tools">
-                        <a href="{{ route('insurers.create') }}" class="btn btn-primary"><i class="bi bi-pencil-fill"></i> Add
-                            New</a>
+                        <a href="{{ route('insurers.create') }}" class="btn btn-primary"><i class="bi bi-plus-circle"></i></a>
                     </div>
                 </div>
                 <div class="card-body">

@@ -41,7 +41,7 @@ class PolicyController extends Controller
             'coverage_details' => 'nullable|string',
             'premium_amount' => 'required|numeric',
             'premium_frequency' => 'required|string|max:255',
-            'policy_duration' => 'required|string|max:255',
+            'currency' => 'required|string|in:usd,lrd',
             'terms_conditions' => 'nullable|string',
             'eligibility' => 'nullable|string',
             'status' => 'required|string|in:active,inactive',
@@ -55,7 +55,7 @@ class PolicyController extends Controller
                 'coverage_details' => $request->coverage_details,
                 'premium_amount' => $request->premium_amount,
                 'premium_frequency' => $request->premium_frequency,
-                'policy_duration' => $request->policy_duration,
+                'currency' => $request->currency,
                 'terms_conditions' => $request->terms_conditions,
                 'eligibility' => $request->eligibility,
                 'status' => $request->status,
@@ -83,21 +83,20 @@ class PolicyController extends Controller
     public function update(Request $request, $id)
     {
         $policy = Policy::findOrFail($id);
-
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'number' => 'required|string|max:255|unique:policies,number,' . $policy->id,
-            'description' => 'nullable|string',
-            'coverage_details' => 'nullable|string',
-            'premium_amount' => 'required|numeric',
-            'premium_frequency' => 'required|string|max:255',
-            'policy_duration' => 'required|string|max:255',
-            'terms_conditions' => 'nullable|string',
-            'eligibility' => 'nullable|string',
-            'status' => 'required|string|in:active,inactive',
-        ]);
-
         try {
+
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'number' => 'required|string|max:255|unique:policies,number,' . $policy->id,
+                'description' => 'nullable|string',
+                'coverage_details' => 'nullable|string',
+                'premium_amount' => 'required|numeric',
+                'currency' => 'required|string|in:usd,lrd',
+                'terms_conditions' => 'nullable|string',
+                'eligibility' => 'nullable|string',
+                'status' => 'required|string|in:active,inactive',
+            ]);
+
             $policy->update([
                 'name' => $request->name,
                 'number' => $request->number,
@@ -105,7 +104,7 @@ class PolicyController extends Controller
                 'coverage_details' => $request->coverage_details,
                 'premium_amount' => $request->premium_amount,
                 'premium_frequency' => $request->premium_frequency,
-                'policy_duration' => $request->policy_duration,
+                'currency' => $request->currency,
                 'terms_conditions' => $request->terms_conditions,
                 'eligibility' => $request->eligibility,
                 'status' => $request->status,
@@ -143,5 +142,16 @@ class PolicyController extends Controller
             'policy' => $policy,
             'insurers' => $insurers,
         ]);
+    }
+
+    public function getInsurerPolicy($id)
+    {
+        $policies = Policy::join('insurer_policies', 'policies.id', '=', 'insurer_policies.policy_id')
+            ->where('insurer_policies.insurer_id', $id)
+            ->where('insurer_policies.status', 'active')
+            ->select('policies.id', 'policies.name', 'policies.*')
+            ->get();
+
+        return response()->json($policies);
     }
 }
