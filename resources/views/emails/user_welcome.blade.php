@@ -75,11 +75,11 @@
                 <li><strong>Password:</strong> {{ $user->login_hint }}</li>
             </ul>
             <p>If you have any questions, feel free to contact us at <a
-                    href="mailto:support@example.com">support@example.com</a>.</p>
+                    href="mailto:ccare@safeinsurancebrokers.com">ccare@safeinsurancebrokers.com</a>.</p>
             <p>Best Regards,<br>{{ env('APP_NAME') }}</p>
         </div>
         <div class="footer">
-            <p>&copy; {{ date('Y') }} Our {{ env('APP_NAME') }}. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} {{ env('APP_NAME') }}. All rights reserved.</p>
         </div>
     </div>
 </body>

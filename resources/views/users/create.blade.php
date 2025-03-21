@@ -20,9 +20,9 @@
                             <div class="col-lg-6">
                                 <div class="form-group mb-3">
                                     <label for="name" class="form-label">Name</label>
-                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                        id="name" value="{{ old('name') }}" placeholder="Enter name" required
-                                        @error('name') aria-describedby="name-error" @enderror name="name">
+                                    <input type="text" name="name"
+                                        class="form-control @error('name') is-invalid @enderror" id="name"
+                                        placeholder="Enter name" required>
                                 </div>
                             </div>
                             <div class="col-lg-6">

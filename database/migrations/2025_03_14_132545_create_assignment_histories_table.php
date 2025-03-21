@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('policy_assignment_id')->constrained('policy_assignments')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->enum('status', ['draft', '', 'pending', 'approved', 'rejected'])->default('draft');
+            $table->enum('status', ['draft', 'submitted', 'pending', 'approved', 'rejected', 'completed'])->default('draft');
             $table->string('comment')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

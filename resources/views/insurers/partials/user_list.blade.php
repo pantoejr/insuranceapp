@@ -17,6 +17,7 @@
                                 <th>#</th>
                                 <th>Insurer</th>
                                 <th>User</th>
+                                <th>Role</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -27,6 +28,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $assignment->insurer->company_name }}</td>
                                     <td>{{ $assignment->user->name }}</td>
+                                    <td>{{ ucfirst($assignment->role) }}</td>
                                     <td>{{ ucfirst($assignment->status) }}</td>
                                     <td>
                                         <button class="btn btn-warning  btn-sm edit-btn" data-bs-toggle="modal"
@@ -34,7 +36,7 @@
                                             data-insurerAssignment-id={{ $assignment->id }}><i
                                                 class="bi bi-pencil-fill"></i></button>
                                         <form
-                                            action="{{ route('insurer-assignments.destroy', ['insurer' => $insurer, 'insurerAssignment' => $assignment]) }}"
+                                            action="{{ route('insurer-assignments.destroy', ['insurer' => $model, 'insurerAssignment' => $assignment]) }}"
                                             method="POST" style="display:inline-block;">
                                             @csrf
                                             <button type="submit" class="btn btn-danger btn-sm"

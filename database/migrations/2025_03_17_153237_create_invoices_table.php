@@ -21,10 +21,10 @@ return new class extends Migration
             $table->enum('currency', ['usd', 'lrd'])->nullable();
             $table->decimal('amount_paid', 10, 2)->default(0);
             $table->decimal('balance', 10, 2);
-            $table->date('invoice_date');
-            $table->date('due_date');
-            $table->boolean('is_recuring');
-            $table->boolean('send_reminders');
+            $table->date('invoice_date')->default(now());
+            $table->date('due_date')->nullable();
+            $table->boolean('is_recuring')->default(false);
+            $table->boolean('send_reminders')->default(true);
             $table->enum('status', ['Draft', 'Pending', 'Partially-Paid', 'Paid', 'Overdue', 'Cancelled'])->default('Draft');
             $table->text('notes')->nullable();
             $table->string('created_by')->nullable();

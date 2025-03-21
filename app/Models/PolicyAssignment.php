@@ -33,4 +33,14 @@ class PolicyAssignment extends Model
     {
         return $this->belongsTo(Insurer::class);
     }
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
+
+    public function invoices()
+    {
+        return $this->morphMany(Invoice::class, 'invoiceable');
+    }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AssignPolicyController;
 use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClientController;
@@ -10,10 +11,14 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InsurerAssignmentController;
 use App\Http\Controllers\InsurerController;
 use App\Http\Controllers\InsurerPolicyController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PolicyAssignmentController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SystemVariableController;
 use App\Http\Controllers\UserController;
 use App\Models\Policy;
 use App\Models\PolicyAssignment;
@@ -79,32 +84,32 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 Route::controller(ClientController::class)->group(function () {
-    Route::get('/clients', 'index')->name('clients.index');
-    Route::get('/clients/create/', 'create')->name('clients.create');
-    Route::post('/clients/store', 'store')->name('clients.store');
-    Route::get('/clients/edit/{id}', 'edit')->name('clients.edit');
-    Route::post('/clients/edit/{id}', 'update')->name('clients.update');
-    Route::post('/clients/delete/{id}', 'destroy')->name('clients.destroy');
-    Route::get('/clients/details/{id}', 'details')->name('clients.details');
-    Route::post('/clients/{id}/add-attachment', 'addAttachment')->name('clients.addAttachment');
+    Route::get('/clients', 'index')->name('clients.index')->can('view-clients');
+    Route::get('/clients/create/', 'create')->name('clients.create')->can('add-client');
+    Route::post('/clients/store', 'store')->name('clients.store')->can('add-client');
+    Route::get('/clients/edit/{id}', 'edit')->name('clients.edit')->can('edit-client');
+    Route::post('/clients/edit/{id}', 'update')->name('clients.update')->can('edit-client');
+    Route::post('/clients/delete/{id}', 'destroy')->name('clients.destroy')->can('delete-client');
+    Route::get('/clients/details/{id}', 'details')->name('clients.details')->can('view-client-details');
+    Route::post('/clients/{id}/add-attachment', 'addAttachment')->name('clients.addAttachment')->can('add-client-attachment');
 });
 
 Route::prefix('clients/{client}')->group(function () {
     Route::controller(EmployeeController::class)->group(function () {
-        Route::get('/employees', 'index')->name('employees.index');
-        Route::get('/employees/create', 'create')->name('employees.create');
-        Route::post('/employees/store', 'store')->name('employees.store');
-        Route::get('/employees/edit/{employee}', 'edit')->name('employees.edit');
-        Route::post('/employees/edit/{employee}', 'update')->name('employees.update');
-        Route::post('/employees/delete/{employee}', 'destroy')->name('employees.destroy');
-        Route::get('/employees/details/{employee}', 'details')->name('employees.details');
-        Route::post('/employees/{employee}/add-attachment', 'addAttachment')->name('employee.addAttachment');
+        Route::get('/employees', 'index')->name('employees.index')->can('view-employees');
+        Route::get('/employees/create', 'create')->name('employees.create')->can('add-employee');
+        Route::post('/employees/store', 'store')->name('employees.store')->can('add-employee');
+        Route::get('/employees/edit/{employee}', 'edit')->name('employees.edit')->can('edit-employee');
+        Route::post('/employees/edit/{employee}', 'update')->name('employees.update')->can('edit-employee');
+        Route::post('/employees/delete/{employee}', 'destroy')->name('employees.destroy')->can('edit-employee');
+        Route::get('/employees/details/{employee}', 'details')->name('employees.details')->can('view-employee-details');
+        Route::post('/employees/{employee}/add-attachment', 'addAttachment')->name('employee.addAttachment')->can('add-employee-attachment');
     });
 });
 
 Route::prefix('employees/{employee}')->group(function () {
     Route::controller(DependentController::class)->group(function () {
-        Route::get('/dependents', 'index')->name('dependents.index');
+        Route::get('/dependents', 'index')->name('dependents.index')->can('view-dependents');
         Route::get('/dependents/create', 'create')->name('dependents.create');
         Route::post('/dependents/store', 'store')->name('dependents.store');
         Route::get('/dependents/edit/{dependent}', 'edit')->name('dependents.edit');
@@ -179,4 +184,53 @@ Route::prefix('/clients/{client}')->group(function () {
         Route::get('/client-policies/create', 'create')->name('client-policies.create');
         Route::post('/client-policies/create', 'store')->name('client-policies.store');
     });
+});
+
+Route::controller(InvoiceController::class)->group(function () {
+    Route::get('/invoices', 'index')->name('invoices.index');
+    Route::get('/invoices/create', 'create')->name('invoices.create');
+    Route::post('/invoices/create', 'store')->name('invoices.store');
+    Route::get('/invoices/edit/{id}', 'edit')->name('invoices.edit');
+    Route::post('/invoices/edit/{id}', 'update')->name('invoices.update');
+    Route::get('/invoices/details/{id}', 'details')->name('invoices.details');
+    Route::get('/invoices/delete/{id}', 'destroy')->name('invoices.destroy');
+    Route::get('/invoices/download/{id}', 'download')->name('invoices.download');
+    Route::get('invoices/{id}/send-email', 'sendEmail')->name('invoices.sendEmail');
+    Route::put('invoices/{id}/update-status', 'updateStatus')->name('invoices.updateStatus');
+});
+
+Route::controller(PaymentController::class)->group(function () {
+    Route::get('/payments', 'index')->name('payments.index');
+    Route::get('/payments/create', 'create')->name('payments.create');
+    Route::post('/payments/create', 'store')->name('payments.store');
+    Route::get('/payments/edit/{id}', 'edit')->name('payments.edit');
+    Route::post('/payments/edit/{id}', 'update')->name('payments.update');
+    Route::get('/payments/details/{id}', 'details')->name('payments.details');
+    Route::post('/payments/delete/{id}', 'destroy')->name('payments.destroy');
+});
+
+
+Route::controller(SystemVariableController::class)->group(function () {
+    Route::get('/system-variables', 'index')->name('system-variables.index');
+    Route::get('/system-variables/create', 'create')->name('system-variables.create');
+    Route::post('/system-variables/create', 'store')->name('system-variables.store');
+    Route::get('/system-variables/edit/{id}', 'edit')->name('system-variables.edit');
+    Route::post('/system-variables/edit/{id}', 'update')->name('system-variables.update');
+    Route::get('/system-variables/details/{id}', 'details')->name('system-variables.details');
+    Route::post('/system-variables/delete/{id}', 'destroy')->name('system-variables.destroy');
+});
+
+Route::post('/notifications/mark-as-read', [NotificationController::class, 'markAsRead'])
+    ->name('notifications.markAsRead');
+
+Route::controller(AssignPolicyController::class)->group(function () {
+    Route::get('/assign-policy', 'index')->name('assign-policy.index');
+    Route::get('/assign-policy/create', 'create')->name('assign-policy.create');
+    Route::post('/assign-policy/create', 'store')->name('assign-policy.store');
+    Route::get('/assign-policy/edit/{id}', 'edit')->name('assign-policy.edit');
+    Route::post('/assign-policy/edit/{id}', 'update')->name('assign-policy.update');
+    Route::post('/assign-policy/delete/{id}', 'destroy')->name('assign-policy.destroy');
+    Route::get('/assign-policy/details/{id}', 'details')->name('assign-policy.details');
+    Route::get('/assign-policy/getInsurerPolicies/{insurer_id}', 'getInsurerPolicies')->name('assign-policy.getInsurerPolicies');
+    Route::get('/assign-policy/getPolicyDetails/{policy_id}', 'getPolicyDetails');
 });

@@ -22,10 +22,24 @@
                         <span class="text-danger" id="user_id_error"></span> <!-- Error container -->
                     </div>
 
+                    <div class="form-group mb-3">
+                        <label for="role">Role</label>
+                        <select id="role" name="role" class="form-control">
+                            <option value="0">Select Role</option>
+                            <option value="uploader">Uploader</option>
+                            <option value="approver">Approver</option>
+                            <option value="reviewer">Reviewer</option>
+                            <option value="final_approver">Final Approver</option>
+                        </select>
+                        <span class="text-danger" id="role_error"></span> <!-- Error container -->
+                    </div>
+
+
                     <!-- Status Dropdown -->
                     <div class="form-group mb-3">
                         <label for="status">Status</label>
                         <select id="status" name="status" class="form-control">
+                            <option value="0">Select Status</option>
                             <option value="active">Active</option>
                             <option value="inactive">Inactive</option>
                         </select>
@@ -65,6 +79,18 @@
                             @endforeach
                         </select>
                         <span class="text-danger" id="edit_user_id_error"></span> <!-- Error container -->
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="editRoleStatus">Role</label>
+                        <select id="editRoleStatus" name="edited_role_status" class="form-control">
+                            <option value="0">Select Role</option>
+                            <option value="uploader">Uploader</option>
+                            <option value="approver">Approver</option>
+                            <option value="reviewer">Reviewer</option>
+                            <option value="final_approver">Final Approver</option>
+                        </select>
+                        <span class="text-danger" id="role_error"></span> <!-- Error container -->
                     </div>
 
                     <!-- Status Dropdown -->
@@ -133,6 +159,7 @@
                 success: function(response) {
                     $('#insurerUserId').val(response.id);
                     $('#editUserSelect').val(response.user_id);
+                    $('#editRoleStatus').val(response.role);
                     $('#editUserStatus').val(response.status);
                 },
                 error: function(xhr) {

@@ -7,10 +7,10 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "barryvdh/laravel-dompdf": "^3.1",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
         "livewire/livewire": "^3.6",
-        "spatie/laravel-pdf": "^1.5",
         "spatie/laravel-permission": "^6.16",
         "twbs/bootstrap-icons": "^1.11"
     },

@@ -4,13 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AssignmentHistory extends Model
+class EmailLog extends Model
 {
     protected $fillable = [
-        'policy_assignment_id',
-        'user_id',
+        'subject',
+        'recipient',
+        'cc',
+        'bcc',
+        'body',
         'status',
-        'comment',
         'created_by',
         'updated_by',
     ];

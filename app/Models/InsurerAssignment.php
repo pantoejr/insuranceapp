@@ -10,6 +10,7 @@ class InsurerAssignment extends Model
         'insurer_id',
         'user_id',
         'status',
+        'role',
         'created_by',
         'updated_by',
     ];

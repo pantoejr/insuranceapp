@@ -28,4 +28,9 @@ class Client extends Model
     {
         return $this->hasMany(Employee::class);
     }
+
+    public function policyAssignments()
+    {
+        return $this->hasMany(PolicyAssignment::class);
+    }
 }

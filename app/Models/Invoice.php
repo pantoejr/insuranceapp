@@ -50,4 +50,19 @@ class Invoice extends Model
     {
         return $this->morphTo();
     }
+
+    public function policyAssignment()
+    {
+        return $this->belongsTo(PolicyAssignment::class);
+    }
+
+    public function client()
+    {
+        return $this->invoiceable->client();
+    }
+
+    public function policy()
+    {
+        return $this->invoiceable->policy();
+    }
 }

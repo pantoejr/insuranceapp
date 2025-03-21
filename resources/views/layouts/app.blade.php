@@ -6,6 +6,7 @@
     <title>Insurance System | {{ $title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="author" content="Classic Technovations Inc." />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ asset('css/index.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/overlayscrollbars.min.css') }}" />
     <link href="{{ asset('css/bootstrap-icons/font/bootstrap-icons.css') }}" rel="stylesheet">
@@ -27,7 +28,8 @@
                             <i class="bi bi-list"></i>
                         </a>
                     </li>
-                    <li class="nav-item d-none d-md-block"><a href="{{ route('app.index') }}" class="nav-link">Insurance
+                    <li class="nav-item d-none d-md-block"><a href="{{ route('app.index') }}"
+                            class="nav-link">Insurance
                             App</a></li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
@@ -72,6 +74,37 @@
                                 <i class="nav-icon bi bi-journal-text"></i>
                                 <p>Policies</p>
                             </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon bi bi-currency-dollar"></i>
+                                <p>
+                                    Sales
+                                    <i class="nav-arrow bi bi-chevron-right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('assign-policy.index') }}" class="nav-link">
+                                        <i class="nav-icon bi bi-journal"></i>
+                                        <p>Assign Policy</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('invoices.index') }}" class="nav-link">
+                                        <i class="nav-icon bi bi-receipt"></i>
+                                        <p>Invoices</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('roles.index') }}" class="nav-link">
+                                        <i class="nav-icon bi bi-wallet-fill"></i>
+                                        <p>
+                                            Payments
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
@@ -126,6 +159,14 @@
                                         <i class="nav-icon bi bi-phone-fill"></i>
                                         <p>
                                             SMS
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('system-variables.index') }}" class="nav-link">
+                                        <i class="nav-icon bi bi-code-slash"></i>
+                                        <p>
+                                            Variables
                                         </p>
                                     </a>
                                 </li>
@@ -230,7 +271,6 @@
     <script src="{{ asset('js/apexcharts.min.js') }}"></script>
     <script src="{{ asset('js/jsvectormap.min.js') }}"></script>
     <script src="{{ asset('js/world.js') }}"></script>
-
 </body>
 
 </html>

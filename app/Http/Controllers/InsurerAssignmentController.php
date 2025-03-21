@@ -41,6 +41,7 @@ class InsurerAssignmentController extends Controller
         $request->validate([
             'insurer_id' => 'required|exists:insurers,id',
             'user_id' => 'required|exists:users,id',
+            'role' => 'required|string|in:uploader,approver,reviewer,final_approver',
             'status' => 'required|string|in:active,inactive',
         ]);
 
@@ -48,6 +49,7 @@ class InsurerAssignmentController extends Controller
             $assignment = InsurerAssignment::create([
                 'insurer_id' => $request->insurer_id,
                 'user_id' => $request->user_id,
+                'role' => $request->role,
                 'status' => $request->status,
                 'created_by' => Auth::user()->name,
                 'updated_by' => Auth::user()->name,
@@ -78,6 +80,7 @@ class InsurerAssignmentController extends Controller
         $request->validate([
             'insurer_id' => 'required|exists:insurers,id',
             'user_id' => 'required|exists:users,id',
+            'edited_role_status' => 'required|string|in:uploader,approver,reviewer,final_approver',
             'status' => 'required|string|in:active,inactive',
         ]);
 
@@ -85,7 +88,8 @@ class InsurerAssignmentController extends Controller
             $insurerAssignment->update([
                 'insurer_id' => $request->insurer_id,
                 'user_id' => $request->user_id,
-                'status' => $request->status,
+                'role' => $request->role,
+                'status' => $request->edited_role_status,
                 'updated_by' => Auth::user()->name,
             ]);
 

@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Insurer extends Model
 {
-
     protected $fillable = [
         'company_name',
         'registration_number',
