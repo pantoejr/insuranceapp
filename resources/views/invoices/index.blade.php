@@ -8,7 +8,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table dataTable nowrap">
+                        <table class="table table-striped dataTable nowrap">
                             <thead>
                                 <tr>
                                     <td>#</td>
@@ -28,7 +28,12 @@
                                                 {{ $invoice->invoice_id }}
                                             </a>
                                         </td>
-                                        <td>{{ ucfirst($invoice->status) }}</td>
+                                        <td>
+                                            <span
+                                                class="badge bg-{{ $invoice->status === 'Paid' ? 'success' : ($invoice->status === 'Partially-Paid' || $invoice->status === 'Pending' ? 'warning' : ($invoice->status === 'Overdue' ? 'danger' : ($invoice->status === 'Cancelled' ? 'secondary' : 'primary'))) }}">
+                                                {{ ucfirst($invoice->status) }}
+                                            </span>
+                                        </td>
                                         <td>{{ ucfirst($invoice->due_date) }}</td>
                                         <td>
                                             <a href="{{ route('invoices.edit', ['id' => $invoice->invoice_id]) }}"

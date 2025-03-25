@@ -3,8 +3,8 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
-            <div class="card shadow-sm mb-4" style="border:none;">
-                <div class="card-header" style="border:none;">
+            <div class="card shadow-sm mb-4 border-0">
+                <div class="card-header">
                     <div class="card-title">Edit Employee</div>
                 </div>
                 <div class="card-body">
@@ -33,13 +33,7 @@
                         <div class="row mb-3">
                             <div class="col-lg-6">
                                 <div class="form-group mb-3">
-                                    <label for="client_id" class="form-label">Client</label>
                                     <input type="hidden" name="client_id" value="{{ $client->id }}">
-                                    <p>{{ $client->full_name }}</p>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group mb-3">
                                     <label for="employee_name" class="form-label">Employee Name</label>
                                     <input type="text" class="form-control @error('employee_name') is-invalid @enderror"
                                         id="employee_name" value="{{ old('employee_name', $employee->employee_name) }}"
@@ -49,8 +43,7 @@
                                     @enderror
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
+
                             <div class="col-lg-6">
                                 <div class="form-group mb-3">
                                     <label for="email" class="form-label">Email</label>
@@ -73,8 +66,6 @@
                                     @enderror
                                 </div>
                             </div>
-                        </div>
-                        <div class="row mb-2">
                             <div class="col-lg-6">
                                 <div class="form-group mb-3">
                                     <label for="position" class="form-label">Position</label>
@@ -103,8 +94,6 @@
                                     @enderror
                                 </div>
                             </div>
-                        </div>
-                        <div class="row mb-2">
                             <div class="col-lg-6">
                                 <div class="form-group mb-3">
                                     <label for="status" class="form-label">Status</label>
@@ -133,8 +122,6 @@
                                     @enderror
                                 </div>
                             </div>
-                        </div>
-                        <div class="row mb-2">
                             <div class="col-lg-6">
                                 <div class="form-group mb-3">
                                     <label for="date_of_birth" class="form-label">Date of Birth</label>

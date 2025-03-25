@@ -5,8 +5,8 @@
                 <div class="card-title" id="dependent-header" style="cursor: pointer;">{{ $employee->employee_name }}
                     Dependents</div>
                 <div class="card-tools">
-                    <a href="{{ route('dependents.create', ['employee' => $employee->id]) }}"
-                        class="btn btn-primary">Add</a>
+                    <a href="{{ route('dependents.create', ['employee' => $employee->id]) }}" class="btn btn-primary"><i
+                            class="bi bi-plus-circle"></i></a>
                 </div>
             </div>
             <div class="card-body" id="dependent-body" style="display:none;">
@@ -38,8 +38,7 @@
                                             method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm"
-                                                onclick="return confirm('Are you sure you want to delete this dependent?');"><i
+                                            <button type="submit" class="btn btn-danger btn-sm delete-btn"><i
                                                     class="bi bi-trash"></i></button>
                                         </form>
                                     </td>

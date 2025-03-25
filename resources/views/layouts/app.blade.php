@@ -1,9 +1,18 @@
 <!doctype html>
 <html lang="en">
+@php
+    $logo = \App\Models\SystemVariable::where('type', 'logo')->first();
+    $name = \App\Models\SystemVariable::where('type', 'name')->first();
+    $sname = \App\Models\SystemVariable::where('type', 'sname')->first();
+@endphp
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Insurance System | {{ $title }}</title>
+    @if (isset($title))
+        <title>Insurance System | {{ $title }}</title>
+    @else
+        <title>Insurance System | Error </title>
+    @endif
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="author" content="Classic Technovations Inc." />
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -15,6 +24,8 @@
     <link rel="stylesheet" href="{{ asset('css/apexcharts.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/jsvectormap.min.css') }}" />
     <script src="{{ asset('js/jquery.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('css/sweetalert2.min.css') }}">
+    <script src="{{ asset('js/chart.js') }}"></script>
     @livewireStyles
 </head>
 
@@ -28,9 +39,13 @@
                             <i class="bi bi-list"></i>
                         </a>
                     </li>
-                    <li class="nav-item d-none d-md-block"><a href="{{ route('app.index') }}"
-                            class="nav-link">Insurance
-                            App</a></li>
+                    <li class="nav-item d-none d-md-block"><a href="{{ route('app.index') }}" class="nav-link">
+                            @if ($name)
+                                {{ $name->value }}
+                            @else
+                                Insurance App
+                            @endif
+                        </a></li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
                     @include('partials.profile')
@@ -39,11 +54,22 @@
         </nav>
         <aside class="app-sidebar shadow" data-bs-theme="dark" style="background-color: #00005f;">
             <div class="sidebar-brand" style="background-color: #00004f; border:none;">
-                <a href="{{ route('app.index') }}" class="brand-link">
-                    <img src="{{ asset('assets/images/VfPHgMS4ndKGxFSTrjGZDZqL5kpgXpnj2hTAZ8vn.png') }}"
-                        alt="AdminLTE Logo" class="brand-image opacity-75 shadow" />
-                    {{-- <span class="brand-text fw-light">Insurance App</span> --}}
-                </a>
+                @if ($logo)
+                    <a href="{{ route('app.index') }}" class="brand-link">
+                        <img src="{{ asset('storage/' . $logo->value) }}" alt="System Logo" class="brand-image " />
+                        <span class="brand-text fw-light">
+                            @if ($sname)
+                                {{ $sname->value }}
+                            @else
+                                Insurance App
+                            @endif
+                        </span>
+                    </a>
+                @else
+                    <a href="{{ route('app.index') }}" class="brand-link">
+                        <span class="brand-text fw-light">Insurance App</span>
+                    </a>
+                @endif
             </div>
             <div class="sidebar-wrapper">
                 <nav class="mt-2">
@@ -97,7 +123,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('roles.index') }}" class="nav-link">
+                                    <a href="{{ route('payments.index') }}" class="nav-link">
                                         <i class="nav-icon bi bi-wallet-fill"></i>
                                         <p>
                                             Payments
@@ -154,14 +180,14 @@
                                         <p>Emails</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                {{-- <li class="nav-item">
                                     <a href="{{ route('roles.index') }}" class="nav-link">
                                         <i class="nav-icon bi bi-phone-fill"></i>
                                         <p>
                                             SMS
                                         </p>
                                     </a>
-                                </li>
+                                </li> --}}
                                 <li class="nav-item">
                                     <a href="{{ route('system-variables.index') }}" class="nav-link">
                                         <i class="nav-icon bi bi-code-slash"></i>
@@ -198,7 +224,13 @@
             </div>
         </main>
         <footer class="app-footer">
-            <div class="float-end d-none d-sm-inline">{{ env('APP_NAME') }}</div>
+            <div class="float-end d-none d-sm-inline">
+                @if ($name)
+                    {{ $name->value }}
+                @else
+                    Insurance App
+                @endif
+            </div>
             <strong>
                 Copyright &copy; {{ date('Y') }}
                 <a href="https://clatech.io/" class="text-decoration-none">Classic Technovations Inc.</a>.
@@ -268,9 +300,33 @@
             return false;
         }
     </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.delete-btn').on('click', function(event) {
+                event.preventDefault();
+                var form = $(this).closest('form');
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
     <script src="{{ asset('js/apexcharts.min.js') }}"></script>
     <script src="{{ asset('js/jsvectormap.min.js') }}"></script>
     <script src="{{ asset('js/world.js') }}"></script>
+    <script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
+
 </body>
 
 </html>

@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Events\PolicyAssignmentSubmitted;
 use App\Listeners\NotifyInsurerAssignmentUsers;
+use App\Models\Policy;
+use App\Observers\PolicyObserver;
 use App\Services\EmailConfigurationService;
 use App\Services\EmailService;
 use App\Services\EmailServiceInterface;
@@ -27,5 +29,7 @@ class AppServiceProvider extends ServiceProvider
             PolicyAssignmentSubmitted::class,
             NotifyInsurerAssignmentUsers::class
         );
+
+        Policy::observe(PolicyObserver::class);
     }
 }

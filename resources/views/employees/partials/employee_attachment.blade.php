@@ -7,7 +7,7 @@
                 <div class="card-tools">
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                         data-bs-target="#addAttachmentModal">
-                        Add
+                        <i class="bi bi-plus-circle"></i>
                     </button>
                     <div class="modal" id="addAttachmentModal">
                         <div class="modal-dialog">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Models\SystemVariable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
@@ -36,10 +37,18 @@ class InvoiceController extends Controller
 
     public function details($id)
     {
+        $systemName = SystemVariable::where('type', 'name')->first();
+        $systemEmail = SystemVariable::where('type', 'email')->first();
+        $systemAddress = SystemVariable::where('type', 'address')->first();
+        $systemPhone = SystemVariable::where('type', 'phone')->first();
         $invoice = Invoice::with(['invoiceable.client', 'invoiceable.policy'])->where('invoice_id', $id)->first();
         return view('invoices.details', [
             'title' => 'Invoice Details',
-            'invoice' => $invoice
+            'invoice' => $invoice,
+            'systemName' => $systemName,
+            'systemAddress' => $systemAddress,
+            'systemEmail' => $systemEmail,
+            'systemPhone' => $systemPhone,
         ]);
     }
 
@@ -63,14 +72,34 @@ class InvoiceController extends Controller
     public function download($id)
     {
         $invoice = Invoice::findOrFail($id);
-        $pdf = Pdf::loadView('invoices.pdf', compact('invoice'));
+        $systemName = SystemVariable::where('type', 'name')->first();
+        $systemEmail = SystemVariable::where('type', 'email')->first();
+        $systemAddress = SystemVariable::where('type', 'address')->first();
+        $systemPhone = SystemVariable::where('type', 'phone')->first();
+        $pdf = Pdf::loadView('invoices.pdf', [
+            'invoice' => $invoice,
+            'systemName' => $systemName->value,
+            'systemAddress' => $systemAddress->value,
+            'systemEmail' => $systemEmail->value,
+            'systemPhone' => $systemPhone->value,
+        ]);
         return $pdf->download('invoice_' . $invoice->invoice_id . '.pdf');
     }
 
     public function sendEmail($id)
     {
         $invoice = Invoice::findOrFail($id);
-        $pdf = Pdf::loadView('invoices.pdf', compact('invoice'));
+        $systemName = SystemVariable::where('type', 'name')->first();
+        $systemEmail = SystemVariable::where('type', 'email')->first();
+        $systemAddress = SystemVariable::where('type', 'address')->first();
+        $systemPhone = SystemVariable::where('type', 'phone')->first();
+        $pdf = Pdf::loadView('invoices.pdf', [
+            'invoice' => $invoice,
+            'systemName' => $systemName->value,
+            'systemAddress' => $systemAddress->value,
+            'systemEmail' => $systemEmail->value,
+            'systemPhone' => $systemPhone->value,
+        ]);
 
         Mail::send('emails.invoice', compact('invoice'), function ($message) use ($invoice, $pdf) {
             $message->to($invoice->client->email)
@@ -78,7 +107,7 @@ class InvoiceController extends Controller
                 ->attachData($pdf->output(), 'invoice_' . $invoice->invoice_id . '.pdf');
         });
 
-        return redirect()->route('invoices.show', $invoice->id)
+        return redirect()->route('invoices.details', ['id' => $invoice->id])
             ->with('msg', 'Invoice sent successfully')
             ->with('flag', 'success');
     }
@@ -93,5 +122,11 @@ class InvoiceController extends Controller
         return redirect()->route('invoices.show', $invoice->id)
             ->with('msg', 'Invoice status updated successfully')
             ->with('flag', 'success');
+    }
+
+    public function checkInvoice($invoiceId)
+    {
+        $invoice = Invoice::find($invoiceId);
+        return response()->json($invoice);
     }
 }

@@ -33,4 +33,9 @@ class Client extends Model
     {
         return $this->hasMany(PolicyAssignment::class);
     }
+
+    public function claims()
+    {
+        return $this->hasMany(Claim::class);
+    }
 }

@@ -43,4 +43,9 @@ class PolicyAssignment extends Model
     {
         return $this->morphMany(Invoice::class, 'invoiceable');
     }
+
+    public function documents()
+    {
+        return $this->hasMany(AssignmentDocument::class, 'policy_assignment_id');
+    }
 }

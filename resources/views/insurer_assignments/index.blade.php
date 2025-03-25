@@ -36,14 +36,14 @@
                                         <td>{{ ucfirst($assignment->status) }}</td>
                                         <td>
                                             <a href="{{ route('insurer_assignments.details', $assignment->id) }}"
-                                                class="btn btn-info btn-sm">View</a>
+                                                class="btn btn-info btn-sm"><i class="bi bi-pencil-fill"></i></a>
                                             <a href="{{ route('insurer_assignments.edit', $assignment->id) }}"
-                                                class="btn btn-warning btn-sm">Edit</a>
+                                                class="btn btn-warning btn-sm"><i class="bi bi-journal-text"></i></a>
                                             <form action="{{ route('insurer_assignments.destroy', $assignment->id) }}"
                                                 method="POST" style="display:inline-block;">
                                                 @csrf
-                                                <button type="submit" class="btn btn-danger btn-sm"
-                                                    onclick="return confirm('Are you sure you want to delete this assignment?')">Delete</button>
+                                                <button type="submit" class="btn btn-danger btn-sm delete-btn"><i
+                                                        class="bi bi-trash"></i></button>
                                             </form>
                                         </td>
                                     </tr>

@@ -1,97 +1,47 @@
 @extends('layouts.app')
 @section('content')
-    <div class="row mb-3">
+    <div class="row">
         <div class="col-md-12">
-            <div class="card border-0 shadow-sm">
+            <div class="card shadow-sm border-0">
                 <div class="card-header">
                     <div class="card-title">Add Policy for <i><b>{{ $client->full_name }}</b></i></div>
                 </div>
                 <div class="card-body px-4">
-                    <form action="{{ route('client-policies.store', ['client' => $client]) }}" method="POST">
+                    <form action="{{ route('client-policies.store', ['client' => $client]) }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
-                        <div class="row">
+                        <div class="row mb-3">
                             <input type="hidden" name="client_id" value="{{ $client->id }}">
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
+                            <div class="col-md-4">
+                                <div class="form-group">
                                     <label for="insurer_id" class="form-label">Insurer</label>
                                     <select name="insurer_id" id="insurer_id"
-                                        class="form-control @error('insurer_id')
-                                        is-invalid
-                                    @enderror">
+                                        class="form-control @error('insurer_id') is-invalid @enderror">
                                         <option value="0">Select Insurer</option>
                                         @foreach ($insurers as $insurer)
                                             <option value="{{ $insurer->id }}">{{ $insurer->company_name }}</option>
                                         @endforeach
                                     </select>
-                                    @error('insurer_id')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="from-group mb-3">
+                            <div class="col-md-4">
+                                <div class="form-group">
                                     <label for="policy_id" class="form-label">Policy</label>
-                                    <select name="policy_id" id="policy_id"
-                                        class="form-control @error('policy_id') is-invalid @enderror">
-                                        <option value="0">Select Policy</option>
+                                    <select name="policy_id" id="policy_id" class="form-control">
+                                        <option value="0" selected>Select Policy</option>
                                     </select>
-                                    @error('policy_id')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
                                 </div>
                             </div>
                         </div>
-                        <div class="row mb-2">
+                        <div class="row mb-3">
                             <div class="col-md-8">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group mb-3">
-                                            <label for="policy_details" class="form-label">Policy Details</label>
-                                            <textarea name="policy_details" id="policy_details" class="form-control" readonly rows="10"></textarea>
-                                        </div>
-                                    </div>
+                                <div class="form-group mb-3">
+                                    <label for="policy_details" class="form-label">Policy Details</label>
+                                    <textarea name="policy_details" id="policy_details" class="form-control" cols="30" rows="10"></textarea>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group mb-3">
-                                            <label for="payment_frequency" class="form-label">Payment Frequency</label>
-                                            <input type="text" name="payment_frequency" id="payment_frequency"
-                                                class="form-control @error('payment_frequency')
-                                                    is-invalid
-                                                @enderror"
-                                                readonly />
-                                            @error('payment_frequency')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group mb-3">
-                                            <label for="payment_method" class="form-label">Payment Method</label>
-                                            <select name="payment_method" id="payment_method"
-                                                class="form-control @error('payment_method')
-                                                is-invalid
-                                            @enderror">
-                                                <option value="0">Select Payment Method</option>
-                                                <option value="Cash">Cash</option>
-                                                <option value="Cheque">Cheque</option>
-                                                <option value="Bank Transfer">Bank Transfer</option>
-                                                <option value="Credit Card">Credit Card</option>
-                                                <option value="Debit Card">Debit Card</option>
-                                                <option value="Deferred">Deferred</option>
-                                            </select>
-                                            @error('payment_method')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group mb-3">
-                                            <label for="document_path" class="form-label">Document</label>
-                                            <input type="file" name="document_path[]" id="document_path"
-                                                class="form-control" multiple>
-                                        </div>
-                                    </div>
+                                <div class="form-group">
+                                    <label for="terms_conditions" class="form-label">Policy Terms</label>
+                                    <textarea name="terms_conditions" id="terms_conditions" class="form-control" cols="30" rows="2"></textarea>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -155,6 +105,44 @@
                                             <input type="number" name="discount" id="discount" class="form-control">
                                         </div>
                                     </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group mb-3">
+                                            <label for="payment_frequency" class="form-label">Payment Frequency</label>
+                                            <input type="text" name="payment_frequency" id="payment_frequency"
+                                                class="form-control @error('payment_frequency') is-invalid @enderror"
+                                                readonly />
+                                            @error('payment_frequency')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group mb-3">
+                                            <label for="payment_method" class="form-label">Payment Method</label>
+                                            <select name="payment_method" id="payment_method"
+                                                class="form-control @error('payment_method')
+                                                is-invalid
+                                            @enderror">
+                                                <option value="0">Select Payment Method</option>
+                                                <option value="Cash">Cash</option>
+                                                <option value="Cheque">Cheque</option>
+                                                <option value="Bank Transfer">Bank Transfer</option>
+                                                <option value="Credit Card">Credit Card</option>
+                                                <option value="Debit Card">Debit Card</option>
+                                                <option value="Deferred">Deferred</option>
+                                            </select>
+                                            @error('payment_method')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group mb-3">
+                                            <label for="document_path" class="form-label">Document</label>
+                                            <input type="file" name="document_path[]" id="document_path"
+                                                class="form-control" multiple>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -164,7 +152,7 @@
                                     <input type="hidden" name="action" id="action" value="">
                                     <div class="col-md-3 mb-3">
                                         <button type="button" id="save-as-draft"
-                                            class="btn btn-primary w-100">Draft</button>
+                                            class="btn btn-info w-100">Draft</button>
                                     </div>
                                     <div class="col-md-3 mb-3">
                                         <button type="button" id="save-and-create"
@@ -176,7 +164,7 @@
                                     </div>
                                     <div class="col-md-3 mb-3">
                                         <a href="{{ route('clients.details', ['id' => $client->id]) }}"
-                                            class="btn btn-light w-100">Cancel</a>
+                                            class="btn btn-danger w-100">Cancel</a>
                                     </div>
                                 </div>
                             </div>
@@ -186,41 +174,80 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
-            var originalCost = parseFloat($('#cost').val()) || 0;
-            $('#cost').data('original-cost', originalCost);
+            var originalCost = 0;
 
-            function fetchPolicies(insurerId) {
-                $.ajax({
-                    url: '/policies/get-insurer-policies/' + insurerId,
-                    method: 'GET',
-                    success: function(response) {
-                        console.log(response);
-                        $('#policy_id').empty();
+            getInsurerPolicies();
+            getPolicyDetails();
 
-                        if (response.length > 0) {
-                            response.forEach(function(policy) {
-                                $('#policy_id').append('<option value="' + policy.id + '">' +
-                                    policy.name + '</option>');
+            function getInsurerPolicies() {
+                $('#insurer_id').change(function() {
+                    var insurerId = $(this).val();
+
+                    if (insurerId > 0) {
+                        $.ajax({
+                            url: '/assign-policy/getInsurerPolicies/' + insurerId,
+                            type: 'GET',
+                            success: function(response) {
+                                var policiesDropdown = $('#policy_id');
+                                policiesDropdown.empty();
+                                policiesDropdown.append(
+                                    '<option value="0">Select Policy</option>');
+
+                                $.each(response, function(index, policy) {
+                                    policiesDropdown.append('<option value="' + policy
+                                        .id + '">' + policy.name + '</option>');
+                                });
+                            },
+                            error: function(xhr) {
+                                console.log(xhr.responseText);
+                            }
+                        });
+                    } else {
+                        $('#policy_id').empty().append('<option value="0">Select Policy</option>');
+                        $('#policy_details').val('');
+                        $('#terms_conditions').val('');
+                        $('#cost').val('');
+                        $('#currency').val('');
+                    }
+                });
+            }
+
+            function getPolicyDetails() {
+                $('#policy_id').change(function() {
+                    var policyId = $(this).val();
+
+                    if (policyId > 0) {
+                        $.ajax({
+                            url: '/assign-policy/getPolicyDetails/' + policyId,
+                            type: 'GET',
+                            success: function(response) {
+                                console.log(response);
+                                var policy = response;
                                 $('#policy_details').val(policy.coverage_details);
-                                $('#currency').val(policy.currency);
+                                $('#terms_conditions').val(policy.terms_conditions);
                                 $('#cost').val(policy.premium_amount);
+                                $('#currency').val(policy.currency);
                                 $('#payment_frequency').val(policy.premium_frequency);
 
+                                // Update the originalCost whenever a new policy is selected
                                 originalCost = parseFloat(policy.premium_amount) || 0;
                                 $('#cost').data('original-cost', originalCost);
-                            });
-                        } else {
-                            $('#policy_id').append(
-                                '<option value="0">No active policies found.</option>');
-                            $('#policy_details').val('');
-                            $('#currency').val('');
-                            $('#cost').val('');
-                        }
-                    },
-                    error: function(xhr) {
-                        console.error('Error fetching policies:', xhr.responseText);
+
+                                // Recalculate the cost with any applied discount
+                                updateCost();
+                            },
+                            error: function(xhr) {
+                                console.log(xhr.responseText);
+                            }
+                        });
+                    } else {
+                        $('#policy_details').val('');
+                        $('#terms_conditions').val('');
+                        $('#cost').val('');
+                        $('#currency').val('');
+                        originalCost = 0; // Reset originalCost when no policy is selected
                     }
                 });
             }
@@ -229,24 +256,19 @@
                 var discountType = $('#discount_type').val();
                 var discountAmount = parseFloat($('#discount').val()) || 0;
 
+                var discountedCost = originalCost; // Default to original cost
+
                 if (discountType === 'percentage') {
-                    var discountedCost = originalCost - (originalCost * (discountAmount / 100));
+                    discountedCost = originalCost - (originalCost * (discountAmount / 100));
                 } else if (discountType === 'fixed') {
-                    var discountedCost = originalCost - discountAmount;
-                } else {
-                    var discountedCost = originalCost;
+                    discountedCost = originalCost - discountAmount;
                 }
+
+                // Ensure the cost doesn't go below 0
+                discountedCost = Math.max(discountedCost, 0);
 
                 $('#cost').val(discountedCost.toFixed(2));
             }
-
-            var initialInsurerId = $('#insurer_id').val();
-            fetchPolicies(initialInsurerId);
-
-            $('#insurer_id').on('change', function() {
-                var insurerId = $(this).val();
-                fetchPolicies(insurerId);
-            });
 
             $('#is_discounted').on('change', function() {
                 if ($(this).is(':checked')) {
@@ -255,10 +277,12 @@
                 } else {
                     $('#discount_type').closest('.form-group').hide();
                     $('#discount').closest('.form-group').hide();
-                    $('#cost').val(originalCost.toFixed(2));
+                    $('#cost').val(originalCost.toFixed(2)); // Reset to original cost
                 }
             });
 
+            $('#discount_type').closest('.form-group').hide();
+            $('#discount').closest('.form-group').hide();
             $('#discount_type, #discount').on('change input', function() {
                 updateCost();
             });
@@ -277,9 +301,6 @@
                 $('#action').val('save_and_send');
                 $('form').submit();
             });
-
-            $('#discount_type').closest('.form-group').hide();
-            $('#discount').closest('.form-group').hide();
         });
     </script>
 @endsection

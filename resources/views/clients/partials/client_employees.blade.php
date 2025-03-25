@@ -14,12 +14,12 @@
                     <table class="table table-striped dataTable nowrap">
                         <thead>
                             <tr>
-                                <td>#</td>
-                                <td>Name</td>
-                                <td>Gender</td>
-                                <td>Position</td>
-                                <td>Email</td>
-                                <td>Action(s)</td>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Gender</th>
+                                <th>Position</th>
+                                <th>Email</th>
+                                <th>Action(s)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -39,8 +39,7 @@
                                             action="{{ route('employees.destroy', ['employee' => $employee->id, 'client' => $model]) }}"
                                             method="POST" style="display:inline;">
                                             @csrf
-                                            <button type="submit" class="btn btn-danger btn-sm"
-                                                onclick="return confirm('Are you sure you want to delete this employee?');"><i
+                                            <button type="submit" class="btn btn-danger btn-sm delete-btn"><i
                                                     class="bi bi-trash"></i></button>
                                         </form>
                                     </td>

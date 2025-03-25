@@ -200,7 +200,7 @@
 body {
   margin: 0;
   font-family: "Inter", sans-serif;
-  font-weight: 300;
+  font-weight: auto;
   font-optical-sizing: auto;
   line-height: var(--bs-body-line-height);
   color: var(--bs-body-color);

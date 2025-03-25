@@ -10,12 +10,15 @@ use App\Models\Insurer;
 use App\Models\Invoice;
 use App\Models\Policy;
 use App\Models\PolicyAssignment;
+use App\Models\SystemVariable;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class AssignPolicyController extends Controller
 {
@@ -76,7 +79,7 @@ class AssignPolicyController extends Controller
                 'payment_frequency' => 'required|in:monthly,quarterly,half-yearly,yearly',
                 'payment_method' => 'required|in:Cash,Cheque,Bank Transfer,Credit Card,Debit Card,Deferred',
                 'action' => 'required|in:save_as_draft,save_and_create,save_and_send',
-                'document_path.*' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
+                'document_path.*' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048', // Corrected validation rule
                 'terms_conditions' => 'nullable|string',
             ]);
 
@@ -120,9 +123,9 @@ class AssignPolicyController extends Controller
             $clientPolicy->invoices()->save($invoice);
 
             // Handle file uploads
-            if ($request->hasFile('document_path')) {
+            if ($request->hasFile('document_path')) { // Corrected file access
                 $documents = [];
-                foreach ($request->file('document_path') as $file) {
+                foreach ($request->file('document_path') as $file) { // Corrected file access
                     $documents[] = [
                         'policy_assignment_id' => $clientPolicy->id,
                         'document_name' => $file->getClientOriginalName(),
@@ -157,7 +160,7 @@ class AssignPolicyController extends Controller
                 'save_and_send' => redirect()->route('assign-policy.index')
                     ->with('msg', 'Policy saved and sent successfully.')
                     ->with('flag', 'success'),
-                default => redirect()->route('assign-policy.index',)
+                default => redirect()->route('assign-policy.index')
                     ->with('msg', 'Policy saved as draft.')
                     ->with('flag', 'info'),
             };
@@ -181,5 +184,111 @@ class AssignPolicyController extends Controller
             'insurers' => $insurers,
             'clients' => $clients,
         ]);
+    }
+
+
+    public function details($id)
+    {
+        $policyAssignment = PolicyAssignment::find($id);
+        $clients = Client::where('status', 'active')->get();
+        $insurers = Insurer::where('status', 'active')->get();
+        return view('assign_policy.details', [
+            'title' => 'Client Policy Details',
+            'policyAssignment' => $policyAssignment,
+            'insurers' => $insurers,
+            'clients' => $clients,
+        ]);
+    }
+
+    public function setPolicyStatus($id, Request $request)
+    {
+        $policyAssignment = PolicyAssignment::find($id);
+        $status = $request->input('status');
+
+        if ($status == 'submitted') {
+            $policyAssignment->status = 'submitted';
+        } elseif ($status == 'approve') {
+
+
+            $policyAssignment->status = 'approved';
+
+            $client = $policyAssignment->client;
+            $invoice = Invoice::where('invoiceable_id', $policyAssignment->id)
+                ->where('invoiceable_type', PolicyAssignment::class)
+                ->first();
+
+            $dueDate = match ($policyAssignment->policy->premium_frequency) {
+                'monthly' => now()->addMonth(),
+                'quarterly' => now()->addMonths(3),
+                'half-yearly' => now()->addMonths(6),
+                'yearly' => now()->addYear(),
+                default => now(),
+            };
+
+            $invoice->due_date = $dueDate;
+            $invoice->save();
+
+            $policyAssignment->policy_duration_start = now();
+            $policyAssignment->policy_duration_end = $dueDate;
+            $systemName = SystemVariable::where('type', 'name')->first();
+            $systemEmail = SystemVariable::where('type', 'email')->first();
+            $systemAddress = SystemVariable::where('type', 'address')->first();
+            $systemPhone = SystemVariable::where('type', 'phone')->first();
+
+            $pdf = Pdf::loadView('invoices.pdf', [
+                'invoice' => $invoice,
+                'systemName' => $systemName->value,
+                'systemAddress' => $systemAddress->value,
+                'systemEmail' => $systemEmail->value,
+                'systemPhone' => $systemPhone->value,
+            ]);
+
+            Mail::send('emails.policy_approved', compact('client', 'policyAssignment'), function ($message) use ($client, $pdf, $invoice) {
+                $message->to($client->email)
+                    ->subject('Policy Approved')
+                    ->attachData($pdf->output(), 'invoice_' . $invoice->invoice_id . '.pdf');
+            });
+        } elseif ($status == 'reject') {
+            $policyAssignment->status = 'rejected';
+        } elseif ($status == 'completed') {
+            $policyAssignment->status = 'completed';
+        }
+        $policyAssignment->save();
+
+        return redirect()->route('assign-policy.details', $id)
+            ->with('msg', 'Policy status updated successfully.')
+            ->with('flag', 'success');
+    }
+
+    public function uploadDocuments($id, Request $request)
+    {
+        $policyAssignment = PolicyAssignment::find($id);
+        $documents = [];
+        if ($request->hasFile('document_path')) {
+            foreach ($request->file('document_path') as $file) {
+                $documents[] = [
+                    'policy_assignment_id' => $policyAssignment->id,
+                    'document_name' => $file->getClientOriginalName(),
+                    'document_path' => $file->store('assignment_documents', 'public'),
+                    'document_type' => $file->getClientMimeType(),
+                    'created_by' => Auth::user()->name,
+                    'updated_by' => Auth::user()->name,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+            AssignmentDocument::insert($documents);
+        }
+        return redirect()->route('assign-policy.details', $id)
+            ->with('msg', 'Documents uploaded successfully.')
+            ->with('flag', 'success');
+    }
+
+    public function destroy($id)
+    {
+        $policyAssignment = PolicyAssignment::find($id);
+        $policyAssignment->delete();
+        return redirect()->route('assign-policy.index')->with('msg', 'Policy deleted successfully.')
+            ->with('flag', 'success');
     }
 }

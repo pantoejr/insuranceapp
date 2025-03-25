@@ -61,7 +61,7 @@
                     </div>
                     <div class="row">
                         @can('refresh-user-permissions')
-                            <div class="col">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <form action="{{ route('users.refreshPermissions', $user->id) }}"
                                         style="display: inline-block;" method="POST">
@@ -71,15 +71,11 @@
                                 </div>
                             </div>
                         @endcan
-                        <div class="col">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <a href="{{ route('users.index') }}" class="btn btn-light">Back to List</a>
                             </div>
                         </div>
-                        <div class="col"></div>
-                        <div class="col"></div>
-                        <div class="col"></div>
-
                     </div>
                 </div>
             </div>

@@ -41,19 +41,21 @@
         }
 
         .invoice-box table tr.top table td.title {
-            font-size: 45px;
+            font-size: 14px;
             line-height: 45px;
             color: #333;
         }
 
         .invoice-box table tr.information table td {
             padding-bottom: 40px;
+            font-size: 14px;
         }
 
         .invoice-box table tr.heading td {
             background: #eee;
             border-bottom: 1px solid #ddd;
             font-weight: bold;
+            font-size: 14px;
         }
 
         .invoice-box table tr.details td {
@@ -62,6 +64,7 @@
 
         .invoice-box table tr.item td {
             border-bottom: 1px solid #eee;
+            font-size: 14px;
         }
 
         .invoice-box table tr.item.last td {
@@ -71,6 +74,7 @@
         .invoice-box table tr.total td:nth-child(2) {
             border-top: 2px solid #eee;
             font-weight: bold;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -84,12 +88,16 @@
                         <tr>
                             <td class="title">
                                 <img src="{{ public_path('assets/images/VfPHgMS4ndKGxFSTrjGZDZqL5kpgXpnj2hTAZ8vn.png') }}"
-                                    style="width: 100%; max-width: 300px;">
+                                    style="width: 100%; max-width: 200px;">
                             </td>
                             <td>
-                                Invoice #: {{ $invoice->invoice_id }}<br>
+                                Invoice #: <b>{{ $invoice->invoice_id }}</b><br>
                                 Created: {{ date('Y-m-d', strtotime($invoice->created_at)) }}<br>
-                                Due: {{ date('Y-m-d', strtotime($invoice->due_date)) }}
+                                @if ($invoice->due_date >= date('Y'))
+                                    Due: <b>{{ date('Y-m-d', strtotime($invoice->due_date)) }}</b><br>
+                                @else
+                                    Due: No date set<br>
+                                @endif
                             </td>
                         </tr>
                     </table>
@@ -100,14 +108,17 @@
                     <table>
                         <tr>
                             <td>
-                                {{ strtoupper(env('APP_NAME')) }}<br>
-                                2nd Street, Sinkor, Monrovia, Liberia<br>
-                                +231 777 000 000
+                                {{ strtoupper($systemName) }}<br>
+                                {{ $systemAddress }} <br>
+                                {{ $systemEmail }} <br>
+                                {{ $systemPhone }}
                             </td>
                             <td>
+                                <b>Bill To:</b><br>
                                 {{ $invoice->client->full_name }}<br>
                                 {{ $invoice->client->address }}<br>
-                                {{ $invoice->client->phone }}
+                                {{ $invoice->client->email }}<br>
+                                {{ $invoice->client->phone }}<br>
                             </td>
                         </tr>
                     </table>
@@ -117,15 +128,25 @@
                 <td>Item</td>
                 <td>Cost</td>
             </tr>
+
             <tr class="item">
                 <td>{{ $invoice->policy->name . ' (' . $invoice->policy->number . ' )' }}</td>
                 <td>{{ $invoice->total_amount }}</td>
+            </tr>
+            <tr class="item">
+                <td>Details:</td>
+                <td>{{ $invoice->policy->description }}</td>
+            </tr>
+            <tr class="item">
+                <td>Coverage:</td>
+                <td>{{ $invoice->policy->coverage_details }}</td>
             </tr>
             <tr class="total">
                 <td></td>
                 <td>Total: {{ $invoice->total_amount }}</td>
             </tr>
         </table>
+        <p style="text-justify:auto; font-size:14px;">{{ $invoice->notes }}</p>
     </div>
 </body>
 

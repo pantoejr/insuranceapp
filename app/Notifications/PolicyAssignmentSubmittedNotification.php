@@ -50,12 +50,12 @@ class PolicyAssignmentSubmittedNotification extends Notification implements Shou
      *
      * @return array<string, mixed>
      */
-    // public function toArray($notifiable)
-    // {
-    //     return [
-    //         'message' => 'A new policy assignment has been submitted.',
-    //         'policy_assignment_id' => $this->policyAssignment->id,
-    //         'link' => '/policy-assignments/' . $this->policyAssignment->id,
-    //     ];
-    // }
+    public function toArray($notifiable)
+    {
+        return [
+            'message' => 'A new policy assignment has been submitted.',
+            'policy_assignment_id' => $this->policyAssignment->id,
+            'link' => '/policy-assignments/' . $this->policyAssignment->id,
+        ];
+    }
 }

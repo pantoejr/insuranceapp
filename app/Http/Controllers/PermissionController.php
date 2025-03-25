@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Spatie\Permission\Models\Permission;
@@ -30,13 +31,18 @@ class PermissionController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'name' => 'required',
-        ]);
-        Permission::create($data);
-        return redirect()->route('permissions.index')
-            ->with('msg', 'Permission created successfully')
-            ->with('flag', 'success');
+        try {
+            $data = $request->validate([
+                'name' => 'required',
+            ]);
+            Permission::create($data);
+            return redirect()->route('permissions.create')
+                ->with('msg', 'Permission created successfully')
+                ->with('flag', 'success');
+        } catch (Exception $ex) {
+            return back()->with('msg', 'Error: ' . $ex->getMessage())
+                ->with('flag', 'danger');
+        }
     }
 
     public function edit($id)

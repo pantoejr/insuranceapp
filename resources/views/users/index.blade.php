@@ -32,15 +32,15 @@
                                         <td>{{ $user->email }}</td>
                                         <td>{{ ucfirst($user->status) }}</td>
                                         <td>
-                                            <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn-sm"
-                                                wire:navigate>Edit</a>
-                                            <a href="{{ route('users.details', $user->id) }}" class="btn btn-primary btn-sm"
-                                                wire:navigate>Details</a>
+                                            <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn-sm"><i
+                                                    class="bi bi-pencil-fill"></i></a>
+                                            <a href="{{ route('users.details', $user->id) }}"
+                                                class="btn btn-primary btn-sm"><i class="bi bi-eye-fill"></i></a>
                                             <form action="{{ route('users.destroy', $user->id) }}" method="POST"
                                                 style="display:inline-block;">
                                                 @csrf
-                                                <button type="submit" class="btn btn-danger btn-sm"
-                                                    onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
+                                                <button type="submit" class="btn btn-danger btn-sm delete-btn"><i
+                                                        class="bi bi-trash"></i></button>
                                             </form>
                                         </td>
                                     </tr>

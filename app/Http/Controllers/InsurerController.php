@@ -250,4 +250,39 @@ class InsurerController extends Controller
             ], 404);
         }
     }
+
+    public function storeMultiplePolicies(Request $request)
+    {
+        $request->validate([
+            'insurer_id' => 'required|exists:insurers,id',
+            'policy_ids' => 'required|array',
+            'policy_ids.*' => 'exists:policies,id',
+            'status' => 'required|string|in:active,inactive',
+        ]);
+
+        try {
+            foreach ($request->policy_ids as $policyId) {
+                InsurerPolicy::create([
+                    'insurer_id' => $request->insurer_id,
+                    'policy_id' => $policyId,
+                    'status' => $request->status,
+                    'created_by' => Auth::user()->name,
+                    'updated_by' => Auth::user()->name,
+                ]);
+            }
+
+            return response()->json(['msg' => 'Policies assigned successfully.', 'flag' => 'success']);
+        } catch (Exception $e) {
+            return response()->json(['msg' => 'An error occurred while adding the policies: ' . $e->getMessage(), 'flag' => 'danger']);
+        }
+    }
+
+    public function removeInsurerPolicy($id, $insurerId)
+    {
+        $insurerPolicy = InsurerPolicy::findOrFail($id);
+        $insurerPolicy->delete();
+        return redirect()->route('insurers.details', ['id' => $insurerId])
+            ->with('msg', 'Insurer Policy removed successfully')
+            ->with('flag', 'success');
+    }
 }

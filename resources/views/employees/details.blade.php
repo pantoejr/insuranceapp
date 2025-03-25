@@ -3,29 +3,24 @@
 @section('content')
     <div class="row mb-3">
         <div class="col-md-12">
-            <h4 class="mb-3">{{ $title }}</h4>
             <div class="card shadow-sm mb-4" style="border:none;">
+                <div class="card-header">
+                    <div class="card-title">
+                        {{ $employee->client->full_name }} Employee Details
+                    </div>
+                </div>
                 <div class="card-body">
                     <div class="row mb-3">
-                        <div class="col-md-4 p-3">
+                        <div class="col-md-4 p-3 text-center">
                             @if ($employee->profile_picture)
                                 <img src="{{ asset('storage/' . $employee->profile_picture) }}" alt="Employee Photo"
-                                    style="max-width: 20%;" class="rounded-circle">
+                                    style="max-width: 70%;" class="card-img">
                             @else
                                 <img src="#" alt="No Photo" style="max-width: 100%; display: none;">
                             @endif
                         </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-12">
+                        <div class="col-md-8">
                             <div class="row p-3">
-                                <div class="col-lg-6">
-                                    <div class="form-group mb-3">
-                                        <label for="client_id" class="form-label">Client</label>
-                                        <input type="text" class="form-control" id="client_id"
-                                            value="{{ $employee->client->full_name }}" readonly>
-                                    </div>
-                                </div>
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label for="employee_name" class="form-label">Employee Name</label>

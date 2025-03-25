@@ -32,26 +32,41 @@
                                         <td>{{ $assignPolicy->client->full_name }}</td>
                                         <td>
                                             @if ($assignPolicy->status === 'draft')
-                                                <span class="badge bg-primary">{{ $assignPolicy->status }}</span>
+                                                <span
+                                                    class="badge bg-primary">{{ strtoupper($assignPolicy->status) }}</span>
                                             @elseif($assignPolicy->status === 'submitted')
-                                                <span class="badge bg-info">{{ $assignPolicy->status }}</span>
+                                                <span class="badge bg-info">{{ strtoupper($assignPolicy->status) }}</span>
                                             @elseif ($assignPolicy->status === 'pending')
-                                                <span class="badge bg-warning">{{ $assignPolicy->status }}</span>
+                                                <span
+                                                    class="badge bg-warning">{{ strtoupper($assignPolicy->status) }}</span>
+                                            @elseif ($assignPolicy->status === 'approved')
+                                                <span
+                                                    class="badge bg-success">{{ strtoupper($assignPolicy->status) }}</span>
+                                            @elseif ($assignPolicy->status === 'completed')
+                                                <span
+                                                    class="badge bg-success">{{ strtoupper($assignPolicy->status) }}</span>
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="{{ route('assign-policy.edit', ['id' => $assignPolicy->id]) }}"
-                                                class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill"></i></a>
-                                            <a href="{{ route('assign-policy.details', ['id' => $assignPolicy->id]) }}"
-                                                class="btn btn-primary btn-sm"><i class="bi bi-journal-text"></i></a>
-                                            <form
-                                                action="{{ route('assign-policy.destroy', ['id' => $assignPolicy->id]) }}"
-                                                style="display: inline-block">
-                                                @csrf
-                                                <button type="submit" class="btn btn-danger btn-sm"
-                                                    onclick="return confirm('Are you sure you want to delete this client policy?')"><i
-                                                        class="bi bi-trash"></i></button>
-                                            </form>
+                                            @if ($assignPolicy->status === 'draft')
+                                                @can('edit-client-policy')
+                                                    <a href="{{ route('assign-policy.edit', ['id' => $assignPolicy->id]) }}"
+                                                        class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill"></i></a>
+                                                @endcan
+                                            @endif
+                                            @can('view-client-policy-details')
+                                                <a href="{{ route('assign-policy.details', ['id' => $assignPolicy->id]) }}"
+                                                    class="btn btn-primary btn-sm"><i class="bi bi-journal-text"></i></a>
+                                            @endcan
+                                            @can('delete-client-policy')
+                                                <form
+                                                    action="{{ route('assign-policy.destroy', ['id' => $assignPolicy->id]) }}"
+                                                    style="display: inline-block" method="POST">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-danger btn-sm delete-btn"><i
+                                                            class="bi bi-trash"></i></button>
+                                                </form>
+                                            @endcan
                                         </td>
                                     </tr>
                                 @endforeach

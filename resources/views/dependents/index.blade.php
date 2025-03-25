@@ -41,8 +41,8 @@
                                             <form action="{{ route('dependents.destroy', $dependent->id) }}" method="POST"
                                                 style="display:inline-block;">
                                                 @csrf
-                                                <button type="submit" class="btn btn-danger btn-sm"
-                                                    onclick="return confirm('Are you sure you want to delete this dependent?')">Delete</button>
+                                                <button type="submit" class="btn btn-danger btn-sm delete-btn"><i
+                                                        class="bi bi-trash"></i></button>
                                             </form>
                                         </td>
                                     </tr>

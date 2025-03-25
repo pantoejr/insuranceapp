@@ -73,6 +73,7 @@
                 <li><strong>Name:</strong> {{ $user->name }}</li>
                 <li><strong>Email:</strong> {{ $user->email }}</li>
                 <li><strong>Password:</strong> {{ $user->login_hint }}</li>
+                <li><strong>Link:</strong> <a href="{{ env('APP_URL') }}">Click to login</a></li>
             </ul>
             <p>If you have any questions, feel free to contact us at <a
                     href="mailto:ccare@safeinsurancebrokers.com">ccare@safeinsurancebrokers.com</a>.</p>

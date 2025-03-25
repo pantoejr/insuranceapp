@@ -5,7 +5,7 @@
             <div class="card shadow-sm border-0">
                 <div class="card-header">{{ $title }}</div>
                 <div class="card-body px-4">
-                    <form action="{{ route('assign-policy.store') }}">
+                    <form action="{{ route('assign-policy.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row mb-3">
                             <div class="col-md-4">
@@ -69,7 +69,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group mb-3">
                                             <label for="currency" class="form-label">Currency</label>
-                                            <select name="currency" id="currency" disabled
+                                            <select name="currency" id="currency"
                                                 class="form-control @error('currency')
                                                 is-invalid
                                             @enderror"
@@ -142,6 +142,13 @@
                                             @error('payment_method')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group mb-3">
+                                            <label for="document_path" class="form-label">Document</label>
+                                            <input type="file" name="document_path[]" id="document_path"
+                                                class="form-control" multiple>
                                         </div>
                                     </div>
                                 </div>
@@ -224,11 +231,13 @@
                             url: '/assign-policy/getPolicyDetails/' + policyId,
                             type: 'GET',
                             success: function(response) {
+                                console.log(response);
                                 var policy = response;
                                 $('#policy_details').val(policy.coverage_details);
                                 $('#terms_conditions').val(policy.terms_conditions);
                                 $('#cost').val(policy.premium_amount);
                                 $('#currency').val(policy.currency);
+                                $('#payment_frequency').val(policy.premium_frequency);
 
                                 // Update the originalCost whenever a new policy is selected
                                 originalCost = parseFloat(policy.premium_amount) || 0;

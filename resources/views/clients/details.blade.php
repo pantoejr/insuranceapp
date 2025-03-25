@@ -22,9 +22,15 @@
             ],
             [
                 'id' => 'section4',
-                'title' => 'Policy List',
+                'title' => 'Policies',
                 'view' => 'clients.partials.policy_list',
                 'icons' => 'file-earmark-text',
+            ],
+            [
+                'id' => 'section5',
+                'title' => 'Claims',
+                'view' => 'clients.partials.client_claims',
+                'icons' => 'journal-text',
             ],
         ];
     @endphp

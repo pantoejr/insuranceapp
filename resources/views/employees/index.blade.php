@@ -43,8 +43,7 @@
                                             <form action="{{ route('employees.destroy', $employee->id) }}" method="POST"
                                                 style="display:inline;">
                                                 @csrf
-                                                <button type="submit" class="btn btn-danger btn-sm"
-                                                    onclick="return confirm('Are you sure you want to delete this employee?');"><i
+                                                <button type="submit" class="btn btn-danger btn-sm delete-btn"><i
                                                         class="bi bi-trash"></i> Delete</button>
                                             </form>
                                         </td>

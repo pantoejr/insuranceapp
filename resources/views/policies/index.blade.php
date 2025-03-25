@@ -34,7 +34,11 @@
                                         <td>{{ $policy->premium_amount }}</td>
                                         <td>{{ strtoupper($policy->currency) }}</td>
                                         <td>{{ ucfirst($policy->premium_frequency) }}</td>
-                                        <td>{{ ucfirst($policy->status) }}</td>
+                                        <td>
+                                            <span
+                                                class="p-1 btn btn-sm @if ($policy->status === 'active') btn-success
+                                            @else btn-danger @endif">{{ ucfirst($policy->status) }}</span>
+                                        </td>
                                         <td>
 
                                             <a href="{{ route('policies.edit', $policy->id) }}"
@@ -44,8 +48,7 @@
                                             <form action="{{ route('policies.destroy', $policy->id) }}" method="POST"
                                                 style="display:inline-block;">
                                                 @csrf
-                                                <button type="submit" class="btn btn-danger btn-sm"
-                                                    onclick="return confirm('Are you sure you want to delete this policy?')"><i
+                                                <button type="submit" class="btn btn-danger btn-sm delete-btn"><i
                                                         class="bi bi-trash"></i></button>
                                             </form>
                                         </td>

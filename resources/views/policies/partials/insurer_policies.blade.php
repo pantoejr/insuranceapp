@@ -27,7 +27,6 @@
                                     <td>{{ $insurerPolicy->policy->name }}</td>
                                     <td>{{ $insurerPolicy->insurer->company_name }}</td>
                                     <td>
-
                                     </td>
                                 </tr>
                             @endforeach

@@ -56,7 +56,7 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            @role('Superadmin')
+                            @can('edit-user-role')
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label for="roleId" class="form-label">Role</label>
@@ -70,7 +70,7 @@
                                         </select>
                                     </div>
                                 </div>
-                            @endrole
+                            @endcan
                             <div class="col-lg-6">
                                 <div class="form-group mb-3">
                                     <label for="status" class="form-label">Status</label>

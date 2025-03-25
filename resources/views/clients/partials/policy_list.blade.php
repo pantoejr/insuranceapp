@@ -13,12 +13,12 @@
                     <table class="table dataTable nowrap">
                         <thead>
                             <tr>
-                                <td>#</td>
-                                <td>Policy</td>
-                                <td>Insurer</td>
-                                <td>Assigned By</td>
-                                <td>Status</td>
-                                <td>Action(s)</td>
+                                <th>#</th>
+                                <th>Policy</th>
+                                <th>Insurer</th>
+                                <th>Assigned By</th>
+                                <th>Status</th>
+                                <th>Action(s)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -28,9 +28,34 @@
                                     <td>{{ $clientPolicy->policy->name }}</td>
                                     <td>{{ $clientPolicy->insurer->company_name }}</td>
                                     <td>{{ $clientPolicy->created_by }}</td>
-                                    <td>{{ ucfirst($clientPolicy->status) }}</td>
                                     <td>
+                                        @if ($clientPolicy->status === 'draft')
+                                            <span
+                                                class="badge bg-primary">{{ strtoupper($clientPolicy->status) }}</span>
+                                        @elseif($clientPolicy->status === 'submitted')
+                                            <span class="badge bg-info">{{ strtoupper($clientPolicy->status) }}</span>
+                                        @elseif ($clientPolicy->status === 'pending')
+                                            <span
+                                                class="badge bg-warning">{{ strtoupper($clientPolicy->status) }}</span>
+                                        @elseif ($clientPolicy->status === 'approved')
+                                            <span
+                                                class="badge bg-success">{{ strtoupper($clientPolicy->status) }}</span>
+                                        @elseif ($clientPolicy->status === 'completed')
+                                            <span
+                                                class="badge bg-success">{{ strtoupper($clientPolicy->status) }}</span>
+                                        @endif
+                                    </td>
 
+                                    <td>
+                                        <a href="#" class="btn btn-warning btn-sm"><i
+                                                class="bi bi-pencil-fill"></i></a>
+                                        <a href="#" class="btn btn-primary btn-sm"><i
+                                                class="bi bi-journal-text"></i></a>
+                                        <form action="#" method="POST" style="display:inline;">
+                                            @csrf
+                                            <button type="submit" class="btn btn-danger btn-sm delete-btn">
+                                                <i class="bi bi-trash"></i></button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
