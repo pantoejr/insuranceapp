@@ -64,15 +64,8 @@ class InsurerPolicyController extends Controller
 
     public function edit($id)
     {
-        $insurers = Insurer::where('status', 'active')->get();
         $insurerPolicy = InsurerPolicy::findOrFail($id);
-        $policies = Policy::where('status', 'active')->get();
-        return view('insurer_policies.edit', [
-            'title' => 'Edit Insurer Policy',
-            'insurerPolicy' => $insurerPolicy,
-            'insurers' => $insurers,
-            'policies' => $policies,
-        ]);
+        return response()->json($insurerPolicy);
     }
 
     public function update(Request $request, $id)
@@ -86,6 +79,7 @@ class InsurerPolicyController extends Controller
         ]);
 
         try {
+
             $insurerPolicy->update([
                 'insurer_id' => $request->insurer_id,
                 'policy_id' => $request->policy_id,
@@ -93,34 +87,30 @@ class InsurerPolicyController extends Controller
                 'updated_by' => Auth::user()->name,
             ]);
 
-            return redirect()->route('insurer-policies.index')->with('msg', 'Insurer Policy updated successfully.')
-                ->with('flag', 'success');
+            return response()->json([
+                'success' => true,
+                'message' => 'Claim updated successfully',
+                'data' => null,
+            ], status: 201);
         } catch (Exception $e) {
-            return redirect()->back()->with('msg', 'An error occurred while updating the insurer policy: ' . $e->getMessage())
-                ->with('flag', 'danger');
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $e->getMessage()
+            ], 422);
         }
     }
 
     public function destroy($id)
     {
-        try {
-            $insurerPolicy = InsurerPolicy::findOrFail($id);
-            $insurerPolicy->delete();
-
-            return redirect()->route('insurer-policies.index')->with('msg', 'Insurer Policy deleted successfully.')
-                ->with('flag', 'success');
-        } catch (Exception $e) {
-            return redirect()->back()->with('msg', 'An error occurred while deleting the insurer policy: ' . $e->getMessage())
-                ->with('flag', 'danger');
-        }
+        $insurerPolicy = InsurerPolicy::findOrFail($id);
+        $insurerPolicy->delete();
+        return response()->json(null, 204);
     }
 
     public function details($id)
     {
-        $insurerPolicy = InsurerPolicy::findOrFail($id);
-        return view('insurer_policies.details', [
-            'title' => 'Insurer Policy Details',
-            'insurerPolicy' => $insurerPolicy,
-        ]);
+        $insurerPolicy = InsurerPolicy::with(['policy', 'insurer'])->where('id', $id)->first();
+        return response()->json($insurerPolicy);
     }
 }

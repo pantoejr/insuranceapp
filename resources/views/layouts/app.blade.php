@@ -9,9 +9,9 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     @if (isset($title))
-        <title>Insurance System | {{ $title }}</title>
+        <title>{{ env('APP_NAME') }} | {{ $title }}</title>
     @else
-        <title>Insurance System | Error </title>
+        <title>{{ env('APP_NAME') }} | Error </title>
     @endif
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="author" content="Classic Technovations Inc." />
@@ -26,6 +26,7 @@
     <script src="{{ asset('js/jquery.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('css/sweetalert2.min.css') }}">
     <script src="{{ asset('js/chart.js') }}"></script>
+    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.png') }}" type="image/x-icon">
     @livewireStyles
 </head>
 
@@ -102,6 +103,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('services.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-list-task"></i>
+                                <p>Services</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon bi bi-currency-dollar"></i>
                                 <p>
@@ -132,6 +139,7 @@
                                 </li>
                             </ul>
                         </li>
+
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon bi bi-people-fill"></i>
@@ -317,6 +325,13 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         form.submit();
+
+                        // Swal.fire({
+                        //     title: "Success",
+                        //     text: "Record deleted successfully",
+                        //     icon: "success",
+                        // });
+                        // location.reload();
                     }
                 });
             });

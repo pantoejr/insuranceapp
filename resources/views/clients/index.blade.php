@@ -3,8 +3,8 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
-            <div class="card shadow-sm mb-4" style="border:none;">
-                <div class="card-header" style="border:none;">
+            <div class="card shadow-sm mb-4 border-0">
+                <div class="card-header">
                     <div class="card-title">Clients</div>
                     <div class="card-tools">
                         <a href="{{ route('clients.create') }}" class="btn btn-primary"><i class="bi bi-plus-circle bold"></i>

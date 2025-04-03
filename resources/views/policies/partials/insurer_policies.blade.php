@@ -1,5 +1,7 @@
 <div class="row">
     @include('policies.partials.assign_policy')
+    @include('policies.partials.assign_policy_edit')
+    @include('policies.partials.assign_policy_details')
     <div class="col-md-12">
         <div class="card border-0 shadown-sm">
             <div class="card-header">
@@ -27,6 +29,20 @@
                                     <td>{{ $insurerPolicy->policy->name }}</td>
                                     <td>{{ $insurerPolicy->insurer->company_name }}</td>
                                     <td>
+                                        <button class="btn btn-sm btn-warning edit-policy-btn"
+                                            data-id="{{ $insurerPolicy->id }}">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-primary view-policy-btn"
+                                            data-id={{ $insurerPolicy->id }}>
+                                            <i class="bi bi-journal-text"></i>
+                                        </button>
+                                        <form
+                                            action="{{ route('insurer-policies.destroy', ['id' => $insurerPolicy->id]) }}"
+                                            style="display: inline-block" method="POST">
+                                            <button type="submit" class="btn btn-danger btn-sm delete-btn"><i
+                                                    class="bi bi-trash"></i></button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach

@@ -202,62 +202,68 @@ class AssignPolicyController extends Controller
 
     public function setPolicyStatus($id, Request $request)
     {
-        $policyAssignment = PolicyAssignment::find($id);
-        $status = $request->input('status');
+        try {
 
-        if ($status == 'submitted') {
-            $policyAssignment->status = 'submitted';
-        } elseif ($status == 'approve') {
+            $policyAssignment = PolicyAssignment::find($id);
+            $status = $request->input('status');
+
+            if ($status === 'submitted') {
+                $policyAssignment->status = 'submitted';
+            } elseif ($status === 'approve') {
 
 
-            $policyAssignment->status = 'approved';
+                $policyAssignment->status = 'approved';
 
-            $client = $policyAssignment->client;
-            $invoice = Invoice::where('invoiceable_id', $policyAssignment->id)
-                ->where('invoiceable_type', PolicyAssignment::class)
-                ->first();
+                $client = $policyAssignment->client;
+                $invoice = Invoice::where('invoiceable_id', $policyAssignment->id)
+                    ->where('invoiceable_type', PolicyAssignment::class)
+                    ->first();
 
-            $dueDate = match ($policyAssignment->policy->premium_frequency) {
-                'monthly' => now()->addMonth(),
-                'quarterly' => now()->addMonths(3),
-                'half-yearly' => now()->addMonths(6),
-                'yearly' => now()->addYear(),
-                default => now(),
-            };
+                $dueDate = match ($policyAssignment->policy->premium_frequency) {
+                    'monthly' => now()->addMonth(),
+                    'quarterly' => now()->addMonths(3),
+                    'half-yearly' => now()->addMonths(6),
+                    'yearly' => now()->addYear(),
+                    default => now(),
+                };
 
-            $invoice->due_date = $dueDate;
-            $invoice->save();
+                $invoice->due_date = $dueDate;
+                $invoice->save();
 
-            $policyAssignment->policy_duration_start = now();
-            $policyAssignment->policy_duration_end = $dueDate;
-            $systemName = SystemVariable::where('type', 'name')->first();
-            $systemEmail = SystemVariable::where('type', 'email')->first();
-            $systemAddress = SystemVariable::where('type', 'address')->first();
-            $systemPhone = SystemVariable::where('type', 'phone')->first();
+                $policyAssignment->policy_duration_start = now();
+                $policyAssignment->policy_duration_end = $dueDate;
+                $systemName = SystemVariable::where('type', 'name')->first();
+                $systemEmail = SystemVariable::where('type', 'email')->first();
+                $systemAddress = SystemVariable::where('type', 'address')->first();
+                $systemPhone = SystemVariable::where('type', 'phone')->first();
 
-            $pdf = Pdf::loadView('invoices.pdf', [
-                'invoice' => $invoice,
-                'systemName' => $systemName->value,
-                'systemAddress' => $systemAddress->value,
-                'systemEmail' => $systemEmail->value,
-                'systemPhone' => $systemPhone->value,
-            ]);
+                $pdf = Pdf::loadView('invoices.pdf', [
+                    'invoice' => $invoice,
+                    'systemName' => $systemName->value,
+                    'systemAddress' => $systemAddress->value,
+                    'systemEmail' => $systemEmail->value,
+                    'systemPhone' => $systemPhone->value,
+                ]);
 
-            Mail::send('emails.policy_approved', compact('client', 'policyAssignment'), function ($message) use ($client, $pdf, $invoice) {
-                $message->to($client->email)
-                    ->subject('Policy Approved')
-                    ->attachData($pdf->output(), 'invoice_' . $invoice->invoice_id . '.pdf');
-            });
-        } elseif ($status == 'reject') {
-            $policyAssignment->status = 'rejected';
-        } elseif ($status == 'completed') {
-            $policyAssignment->status = 'completed';
+                Mail::send('emails.policy_approved', compact('client', 'policyAssignment'), function ($message) use ($client, $pdf, $invoice) {
+                    $message->to($client->email)
+                        ->subject('Policy Approved')
+                        ->attachData($pdf->output(), 'invoice_' . $invoice->invoice_id . '.pdf');
+                });
+            } elseif ($status === 'reject') {
+                $policyAssignment->status = 'rejected';
+            } elseif ($status === 'completed') {
+                $policyAssignment->status = 'completed';
+            }
+            $policyAssignment->save();
+
+            return redirect()->route('assign-policy.details', $id)
+                ->with('msg', 'Policy status updated successfully.')
+                ->with('flag', 'success');
+        } catch (Exception $ex) {
+            return back()->with('msg', 'Error:' . $ex->getMessage())
+                ->with('flag', 'danger');
         }
-        $policyAssignment->save();
-
-        return redirect()->route('assign-policy.details', $id)
-            ->with('msg', 'Policy status updated successfully.')
-            ->with('flag', 'success');
     }
 
     public function uploadDocuments($id, Request $request)

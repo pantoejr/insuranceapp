@@ -27,4 +27,14 @@ class Claim extends Model
     {
         return $this->belongsTo(Policy::class);
     }
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
+
+    public function invoices()
+    {
+        return $this->morphMany(Invoice::class, 'invoiceable');
+    }
 }

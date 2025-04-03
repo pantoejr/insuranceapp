@@ -32,6 +32,12 @@
                 'view' => 'clients.partials.client_claims',
                 'icons' => 'journal-text',
             ],
+            [
+                'id' => 'section6',
+                'title' => 'Services',
+                'view' => 'clients.partials.client_services',
+                'icons' => 'list-task',
+            ],
         ];
     @endphp
 

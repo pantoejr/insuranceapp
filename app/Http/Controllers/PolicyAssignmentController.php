@@ -11,10 +11,13 @@ use App\Models\InsurerPolicy;
 use App\Models\Invoice;
 use App\Models\Policy;
 use App\Models\PolicyAssignment;
+use App\Models\SystemVariable;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class PolicyAssignmentController extends Controller
 {
@@ -53,6 +56,7 @@ class PolicyAssignmentController extends Controller
             $clientPolicy->policy_id = $validatedData['policy_id'];
             $clientPolicy->cost = $validatedData['cost'];
             $clientPolicy->currency = $validatedData['currency'];
+            $clientPolicy->notes = $validatedData['policy_details'];
             $clientPolicy->is_discounted = $isDiscounted;
             $clientPolicy->discount = $request->discount ?? 0;
             if ($isDiscounted) {
@@ -133,5 +137,190 @@ class PolicyAssignmentController extends Controller
             return back()->with('msg', 'Error: ' . $ex->getMessage())
                 ->with('flag', 'danger');
         }
+    }
+
+    public function edit(Client $client, $id)
+    {
+        $policyAssignment = PolicyAssignment::find($id);
+        $insurers = Insurer::all();
+        $policies = Policy::all();
+        return view('policy_assignments.edit', [
+            'title' => 'Edit Poilcy Assignment',
+            'policyAssignment' => $policyAssignment,
+            'client' => $client,
+            'insurers' => $insurers,
+            'policies' => $policies,
+        ]);
+    }
+
+    public function update(Request $request, Client $client, $id)
+    {
+        try {
+            $validatedData = $request->validate([
+                'insurer_id' => 'required|exists:insurers,id',
+                'policy_id' => 'required|exists:policies,id',
+                'cost' => 'required|numeric',
+                'currency' => 'required|string|in:usd,lrd',
+                'policy_details' => 'required',
+                'payment_frequency' => 'required|in:monthly,quarterly,half-yearly,yearly',
+                'payment_method' => 'required|in:Cash,Cheque,Bank Transfer,Credit Card,Debit Card,Deferred',
+                'document_path.*' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
+            ]);
+
+            $policyAssignment = PolicyAssignment::findOrFail($id);
+            $policyAssignment->insurer_id = $validatedData['insurer_id'];
+            $policyAssignment->policy_id = $validatedData['policy_id'];
+            $policyAssignment->cost = $validatedData['cost'];
+            $policyAssignment->currency = $validatedData['currency'];
+            $policyAssignment->notes = $validatedData['policy_details'];
+            $policyAssignment->payment_frequency = $validatedData['payment_frequency'];
+            $policyAssignment->payment_method = $validatedData['payment_method'];
+            $policyAssignment->updated_by = Auth::user()->name;
+
+            if ($policyAssignment->save()) {
+                if ($request->hasFile('document_path')) {
+                    foreach ($request->file('document_path') as $file) {
+                        $documentName = $file->getClientOriginalName();
+                        $documentPath = $file->store('assignment_documents', 'public');
+
+                        $assignmentDocument = new AssignmentDocument();
+                        $assignmentDocument->policy_assignment_id = $policyAssignment->id;
+                        $assignmentDocument->document_name = $documentName;
+                        $assignmentDocument->document_path = $documentPath;
+                        $assignmentDocument->document_type = $file->getClientMimeType();
+                        $assignmentDocument->created_by = Auth::user()->name;
+                        $assignmentDocument->updated_by = Auth::user()->name;
+                        $assignmentDocument->save();
+                    }
+                }
+            }
+
+            return redirect()->route('clients.details', ['id' => $client->id])
+                ->with('msg', 'Policy updated successfully.')
+                ->with('flag', 'success');
+        } catch (Exception $ex) {
+            Log::error('Error in update method: ' . $ex->getMessage());
+
+            return back()->with('msg', 'Error: ' . $ex->getMessage())
+                ->with('flag', 'danger');
+        }
+    }
+
+    public function details(Client $client, $id)
+    {
+        $policyAssignment = PolicyAssignment::with('insurer', 'policy')->findOrFail($id);
+        return view('policy_assignments.details', [
+            'title' => 'Policy Assignment Details',
+            'policyAssignment' => $policyAssignment,
+            'client' => $client
+        ]);
+    }
+
+
+    public function destroy(Client $client, $id)
+    {
+        try {
+            $policyAssignment = PolicyAssignment::findOrFail($id);
+            $policyAssignment->delete();
+
+            return redirect()->route('clients.details', ['id' => $client->id])
+                ->with('msg', 'Policy deleted successfully.')
+                ->with('flag', 'success');
+        } catch (Exception $ex) {
+            Log::error('Error in destroy method: ' . $ex->getMessage());
+
+            return back()->with('msg', 'Error: ' . $ex->getMessage())
+                ->with('flag', 'danger');
+        }
+    }
+
+    public function setPolicyStatus(Client $client, $id, Request $request)
+    {
+        try {
+
+            $policyAssignment = PolicyAssignment::find($id);
+            $status = $request->input('status');
+
+            if ($status === 'submitted') {
+                $policyAssignment->status = 'submitted';
+            } elseif ($status === 'approve') {
+
+
+                $policyAssignment->status = 'approved';
+
+                $client = $policyAssignment->client;
+                $invoice = Invoice::where('invoiceable_id', $policyAssignment->id)
+                    ->where('invoiceable_type', PolicyAssignment::class)
+                    ->first();
+
+                $dueDate = match ($policyAssignment->policy->premium_frequency) {
+                    'monthly' => now()->addMonth(),
+                    'quarterly' => now()->addMonths(3),
+                    'half-yearly' => now()->addMonths(6),
+                    'yearly' => now()->addYear(),
+                    default => now(),
+                };
+
+                $invoice->due_date = $dueDate;
+                $invoice->save();
+
+                $policyAssignment->policy_duration_start = now();
+                $policyAssignment->policy_duration_end = $dueDate;
+                $systemName = SystemVariable::where('type', 'name')->first();
+                $systemEmail = SystemVariable::where('type', 'email')->first();
+                $systemAddress = SystemVariable::where('type', 'address')->first();
+                $systemPhone = SystemVariable::where('type', 'phone')->first();
+
+                $pdf = Pdf::loadView('invoices.pdf', [
+                    'invoice' => $invoice,
+                    'systemName' => $systemName->value,
+                    'systemAddress' => $systemAddress->value,
+                    'systemEmail' => $systemEmail->value,
+                    'systemPhone' => $systemPhone->value,
+                ]);
+
+                Mail::send('emails.policy_approved', compact('client', 'policyAssignment'), function ($message) use ($client, $pdf, $invoice) {
+                    $message->to($client->email)
+                        ->subject('Policy Approved')
+                        ->attachData($pdf->output(), 'invoice_' . $invoice->invoice_id . '.pdf');
+                });
+            } elseif ($status === 'reject') {
+                $policyAssignment->status = 'rejected';
+            } elseif ($status === 'completed') {
+                $policyAssignment->status = 'completed';
+            }
+            $policyAssignment->save();
+
+            return redirect()->route('clients.details', ['id' => $client->id])
+                ->with('msg', 'Policy status updated successfully.')
+                ->with('flag', 'success');
+        } catch (Exception $ex) {
+            return back()->with('msg', 'Error:' . $ex->getMessage())
+                ->with('flag', 'danger');
+        }
+    }
+
+    public function uploadDocuments(Client $client, $id, Request $request)
+    {
+        $policyAssignment = PolicyAssignment::find($id);
+        $documents = [];
+        if ($request->hasFile('document_path')) {
+            foreach ($request->file('document_path') as $file) {
+                $documents[] = [
+                    'policy_assignment_id' => $policyAssignment->id,
+                    'document_name' => $file->getClientOriginalName(),
+                    'document_path' => $file->store('assignment_documents', 'public'),
+                    'document_type' => $file->getClientMimeType(),
+                    'created_by' => Auth::user()->name,
+                    'updated_by' => Auth::user()->name,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+            AssignmentDocument::insert($documents);
+        }
+        return redirect()->route('clients.details', ['id' => $client->id])
+            ->with('msg', 'Documents uploaded successfully.')
+            ->with('flag', 'success');
     }
 }

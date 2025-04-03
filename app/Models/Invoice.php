@@ -65,4 +65,9 @@ class Invoice extends Model
     {
         return $this->invoiceable->policy();
     }
+
+    public function claim()
+    {
+        return $this->invoiceable->claim();
+    }
 }

@@ -5,98 +5,71 @@
         <div class="col-md-12">
             <div class="card shadow-sm border-0">
                 <div class="card-header">
-                    <div class="card-title">Client Policy Details</div>
-                    <div class="card-tools">
-                        @if ($policyAssignment->status === 'draft')
-                            <span class="badge bg-primary">{{ strtoupper($policyAssignment->status) }}</span>
-                        @elseif($policyAssignment->status === 'submitted')
-                            <span class="badge bg-info">{{ strtoupper($policyAssignment->status) }}</span>
-                        @elseif ($policyAssignment->status === 'pending')
-                            <span class="badge bg-warning">{{ strtoupper($policyAssignment->status) }}</span>
-                        @elseif ($policyAssignment->status === 'approved')
-                            <span class="badge bg-success">{{ strtoupper($policyAssignment->status) }}</span>
-                        @elseif ($policyAssignment->status === 'completed')
-                            <span class="badge bg-success">{{ strtoupper($policyAssignment->status) }}</span>
-                        @endif
-                    </div>
+                    <div class="card-title">Policy Details <i><b>{{ $client->full_name }}</b></i></div>
                 </div>
                 <div class="card-body px-4">
-                    <!-- Client, Insurer, and Policy Section -->
                     <div class="row mb-3">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="client_id" class="form-label">Client</label>
-                                <input type="text" class="form-control"
-                                    value="{{ $policyAssignment->client->full_name }}" readonly>
-                            </div>
-                        </div>
+                        <input type="hidden" name="client_id" value="{{ $client->id }}">
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="insurer_id" class="form-label">Insurer</label>
-                                <input type="text" class="form-control"
+                                <input type="text" class="form-control" name="insurer_id"
                                     value="{{ $policyAssignment->insurer->company_name }}" readonly>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="policy_id" class="form-label">Policy</label>
-                                <input type="text" class="form-control" value="{{ $policyAssignment->policy->name }}"
-                                    readonly>
+                                <input type="text" class="form-control" name="policy_id"
+                                    value="{{ $policyAssignment->policy->name }}" readonly>
                             </div>
                         </div>
                     </div>
-
                     <div class="row mb-3">
                         <div class="col-md-8">
                             <div class="form-group mb-3">
                                 <label for="policy_details" class="form-label">Policy Details</label>
-                                <textarea class="form-control" rows="10" readonly>{{ $policyAssignment->policy->description }}</textarea>
+                                <textarea name="policy_details" id="policy_details" readonly class="form-control" cols="30" rows="10">{{ $policyAssignment->policy->coverage_details }}</textarea>
                             </div>
                             <div class="form-group">
                                 <label for="terms_conditions" class="form-label">Policy Terms</label>
-                                <textarea class="form-control" rows="2" readonly>{{ $policyAssignment->policy->terms_conditions }}</textarea>
+                                <textarea name="terms_conditions" id="terms_conditions" readonly class="form-control" cols="30" rows="2">{{ $policyAssignment->policy->terms_conditions }}</textarea>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="row">
-
                                 <div class="col-md-12">
                                     <div class="form-group mb-3">
                                         <label for="cost" class="form-label">Cost</label>
-                                        <input type="text" class="form-control"
-                                            value="{{ $policyAssignment->cost }} {{ strtoupper($policyAssignment->currency) }}"
-                                            readonly>
+                                        <input type="number" name="cost" id="cost" class="form-control" readonly
+                                            value="{{ $policyAssignment->cost }}">
                                     </div>
                                 </div>
-
-                                <!-- Discount -->
                                 <div class="col-md-12">
                                     <div class="form-group mb-3">
-                                        <label for="discount" class="form-label">Discount</label>
-                                        <input type="text" class="form-control"
-                                            value="{{ $policyAssignment->discount }} ({{ $policyAssignment->discount_type }})"
-                                            readonly>
+                                        <label for="currency" class="form-label">Currency</label>
+                                        <input type="text" class="form-control" name="currency"
+                                            value="{{ strtoupper($policyAssignment->currency) }}" readonly>
                                     </div>
                                 </div>
-
-                                <!-- Payment Frequency -->
                                 <div class="col-md-12">
                                     <div class="form-group mb-3">
                                         <label for="payment_frequency" class="form-label">Payment Frequency</label>
-                                        <input type="text" class="form-control"
-                                            value="{{ ucfirst($policyAssignment->policy->premium_frequency) }}" readonly>
+                                        <input type="text" name="payment_frequency" id="payment_frequency" readonly
+                                            class="form-control"
+                                            value="{{ ucfirst($policyAssignment->policy->premium_frequency) }}">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group mb-3">
                                         <label for="payment_method" class="form-label">Payment Method</label>
-                                        <input type="text" class="form-control"
+                                        <input type="text" class="form-control" name="payment_method"
                                             value="{{ ucfirst($policyAssignment->payment_method) }}" readonly>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div> <!-- Uploaded Documents Section -->
+                    </div>
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <div class="table-responsive">
@@ -132,7 +105,7 @@
                                 @else
                                     <p class="text-danger">No documents uploaded.</p>
                                     <form
-                                        action="{{ route('assign-policy.uploadDocuments', ['id' => $policyAssignment->id]) }}"
+                                        action="{{ route('client-policies.uploadDocuments', ['client' => $client->id, 'id' => $policyAssignment->id]) }}"
                                         method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <div class="input-group">
@@ -151,7 +124,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <form id="statusForm" style="display: inline-block"
-                                action="{{ route('assign-policy.setStatus', ['id' => $policyAssignment->id]) }}"
+                                action="{{ route('client-policies.setStatus', ['client' => $client->id, 'id' => $policyAssignment->id]) }}"
                                 method="POST">
                                 @csrf
                                 <input type="hidden" name="status" id="status" value="">
@@ -173,33 +146,12 @@
                                         Mark As Done</button>
                                 @endif
                             </form>
-                            <a href="{{ route('assign-policy.index') }}" class="btn btn-light">Back to List</a>
+                            <a href="{{ route('clients.details', ['id' => $client->id]) }}" class="btn btn-light">Back to
+                                List</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $('#confirmButton').on('click', function() {
-                    $('#status').val('submitted');
-                    $('#statusForm').submit();
-                });
-
-                $('#approveButton').on('click', function() {
-                    $('#status').val('approve');
-                    $('#statusForm').submit();
-                });
-
-                $('#rejectButton').on('click', function() {
-                    $('#status').val('reject');
-                    $('#statusForm').submit();
-                });
-
-                $('#completedButton').on('click', function() {
-                    $('#status').val('completed');
-                    $('#statusForm').submit();
-                });
-            });
-        </script>
-    @endsection
+    </div>
+@endsection

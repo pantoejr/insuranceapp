@@ -5,6 +5,7 @@ use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClaimController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ClientServiceController;
 use App\Http\Controllers\DependentController;
 use App\Http\Controllers\EmailSettingController;
 use App\Http\Controllers\EmployeeController;
@@ -19,6 +20,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PolicyAssignmentController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SystemVariableController;
 use App\Http\Controllers\UserController;
 use App\Models\Policy;
@@ -169,6 +171,7 @@ Route::controller(InsurerPolicyController::class)->group(function () {
     Route::get('/insurer-policies/edit/{id}', 'edit')->name('insurer-policies.edit')->can('edit-insurer-policy');
     Route::post('/insurer-policies/edit/{id}', 'update')->name('insurer-policies.update')->can('edit-insurer-policy');
     Route::post('/insurer-policies/delete/{id}', 'destroy')->name('insurer-policies.destroy')->can('delete-insurer-policy');
+    Route::get('/insurer-policies/details/{id}', 'details')->name('insurer-policies.details')->can('view-insurer-policies');
 });
 
 Route::controller(PolicyController::class)->group(function () {
@@ -186,6 +189,12 @@ Route::prefix('/clients/{client}')->group(function () {
     Route::controller(PolicyAssignmentController::class)->group(function () {
         Route::get('/client-policies/create', 'create')->name('client-policies.create')->can('add-client-policy');
         Route::post('/client-policies/create', 'store')->name('client-policies.store')->can('add-client-policy');
+        Route::get('/client-policies/edit/{id}', 'edit')->name('client-policies.edit');
+        Route::post('/client-policies/edit/{id}', 'update')->name('client-policies.update');
+        Route::delete('/client-policies/delete/{id}', 'destroy')->name('client-policies.destroy');
+        Route::get('/client-policies/details/{id}', 'details')->name('client-policies.details');
+        Route::post('/client-policies/uploadDocuments/{id}', 'uploadDocuments')->name('client-policies.uploadDocuments')->can('upload-documents');
+        Route::post('/client-policies/setStatus/{id}', 'setPolicyStatus')->name('client-policies.setStatus')->can('set-policy-status');
     });
 });
 
@@ -245,12 +254,37 @@ Route::controller(AssignPolicyController::class)->group(function () {
 });
 
 
-Route::controller(ClaimController::class)->group(function () {
-    Route::get('/claims', 'index')->name('claims.index')->can('view-claims');
-    Route::get('/claims/create', 'create')->name('claims.create')->can('add-claim');
-    Route::post('/claims/create', 'store')->name('claims.store')->can('add-claim');
-    Route::get('/claims/edit/{id}', 'edit')->name('claims.edit')->can('add-claim');
-    Route::post('/claims/edit/{id}', 'update')->name('claims.update')->can('edit-claim');
-    Route::post('/claims/delete/{id}', 'destroy')->name('claims.destroy')->can('delete-claim');
-    Route::get('/claims/details/{id}', 'details')->name('claims.details')->can('view-claim-details');
+Route::prefix('/clients/{client}')->group(function () {
+    Route::controller(ClaimController::class)->group(function () {
+        Route::get('/claims', 'index')->name('claims.index')->can('view-claims');
+        Route::get('/claims/create', 'create')->name('claims.create')->can('add-claim');
+        Route::post('/claims/create', 'store')->name('claims.store')->can('add-claim');
+        Route::get('/claims/edit/{id}', 'edit')->name('claims.edit')->can('edit-claim');
+        Route::post('/claims/edit/{id}', 'update')->name('claims.update')->can('edit-claim');
+        Route::post('/claims/delete/{id}', 'destroy')->name('claims.destroy')->can('delete-claim');
+        Route::get('/claims/details/{id}', 'details')->name('claims.details')->can('view-claim-details');
+        Route::post('/claims/setStatus/{id}', 'setStatus')->name('claims.setStatus')->can('set-claim-status');
+    });
+});
+
+Route::controller(ServiceController::class)->group(function () {
+    Route::get('/services', 'index')->name('services.index')->can('view-services');
+    Route::get('/services/create', 'create')->name('services.create')->can('add-service');
+    Route::post('/services/create', 'store')->name('services.store')->can('add-service');
+    Route::get('/services/details/{id}', 'details')->name('services.details')->can('view-service-details');
+    Route::get('/services/edit/{id}', 'edit')->name('services.edit')->can('edit-service');
+    Route::post('/services/edit/{id}', 'update')->name('services.update')->can('edit-service');
+    Route::post('/services/delete/{id}', 'destroy')->name('services.destroy')->can('delete-service');
+});
+
+Route::prefix('/clients/{client}')->group(function () {
+    Route::controller(ClientServiceController::class)->group(function () {
+        Route::get('/client-services/create', 'create')->name('client-services.create')->can('add-client-service');
+        Route::post('/client-services/store', 'store')->name('client-services.store')->can('add-client-service');
+        Route::get('/client-services/edit/{id}', 'edit')->name('client-services.edit')->can('edit-client-service');
+        Route::get('/client-services/edit/{id}', 'update')->name('client-services.update')->can('edit-client-services');
+        Route::get('/client-services/details/{id}', 'details')->name('client-services.details')->can('view-client-service');
+        Route::post('/client-services/updateStatus/{id}', 'updateStatus')->name('client-service-UpdateStatus')->can('update-client-status');
+        Route::post('/client-services/delete/{id}', 'destroy')->name('client-services.destroy')->can('delete-client-service');
+    });
 });

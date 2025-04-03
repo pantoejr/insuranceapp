@@ -93,15 +93,31 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>{{ $invoice->policy->name . ' (' . $invoice->policy->number . ' )' }}</td>
-                                            <td>{{ $invoice->policy->description }}</td>
-                                            <td>{{ $invoice->total_amount }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Coverage</th>
-                                            <td colspan="2">{{ $invoice->policy->coverage_details }}</td>
-                                        </tr>
+                                        @if ($invoice->invoiceable_type == \App\Models\PolicyAssignment::class)
+                                            <tr>
+                                                <td>{{ $invoice->policy->name . ' (' . $invoice->policy->number . ' )' }}
+                                                </td>
+                                                <td>{{ $invoice->policy->description }}</td>
+                                                <td>{{ $invoice->total_amount }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Coverage</th>
+                                                <td colspan="2">{{ $invoice->policy->coverage_details }}</td>
+                                            </tr>
+                                        @elseif ($invoice->invoiceable_type == \App\Models\Claim::class)
+                                            <tr>
+                                                <td>
+                                                    {{ $invoice->invoiceable->claim_type }}
+                                                </td>
+                                                <td>{{ $invoice->invoiceable->description }}</td>
+                                                <td>{{ $invoice->total_amount }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Purpose</th>
+                                                <td colspan="2">{{ $invoice->invoiceable->description }}</td>
+                                            </tr>
+                                        @endif
+
                                         <tr>
                                             <td colspan="2">Total</td>
                                             <td>{{ $invoice->total_amount }}</td>
