@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('css/bootstrap-icons/font/bootstrap-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('css/adminlte.css') }}">
     <link rel="shortcut icon" href="{{ asset('assets/images/favicon.png') }}" type="image/x-icon">
+    <script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
 </head>
 
 <body class="login-page bg-body-secondary app-loaded">
@@ -67,6 +68,7 @@
                 </form>
                 <p class="mb-1 text-center"><a href="{{ route('password.request') }}" class="text-decoration-none">I
                         forgot my password</a></p>
+                <div class="g-recaptcha mt-4" data-sitekey={{ config('services.recaptcha.key') }}></div>
             </div>
         </div>
     </div>

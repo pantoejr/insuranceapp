@@ -5,10 +5,13 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-header">
                     <div class="card-title">{{ $title }}</div>
-                    <div class="card-tools">
-                        <a href="{{ route('assign-policy.create') }}" class="btn btn-primary"><i
-                                class="bi bi-plus-circle"></i></a>
-                    </div>
+                    @can('add-client-policy')
+                        <div class="card-tools">
+                            <a href="{{ route('assign-policy.create') }}" class="btn btn-primary"><i
+                                    class="bi bi-plus-circle"></i></a>
+                        </div>
+                    @endcan
+
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

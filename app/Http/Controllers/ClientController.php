@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\SmsHelper;
 use App\Models\Attachment;
 use App\Models\Client;
 use App\Models\Employee;
@@ -62,6 +63,8 @@ class ClientController extends Controller
                 'created_by' => Auth::user()->name,
                 'updated_by' => Auth::user()->name,
             ]);
+
+            //SmsHelper::sendSms($request->phone, 'Welcome to our service! Your account has been created successfully.');
         } catch (Exception $ex) {
             return back()->with('msg', 'An error occurred while creating the client: ' . $ex->getMessage())
                 ->with('flag', 'danger');

@@ -15,6 +15,7 @@
     @endif
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="author" content="Classic Technovations Inc." />
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ asset('css/index.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/overlayscrollbars.min.css') }}" />
@@ -76,136 +77,231 @@
                 <nav class="mt-2">
                     <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu"
                         data-accordion="false">
-                        <li class="nav-item">
-                            <a href="{{ route('app.index') }}" class="nav-link">
-                                <i class="nav-icon bi bi-speedometer"></i>
-                                <p>
-                                    Dashboard
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('clients.index') }}" class="nav-link">
-                                <i class="nav-icon bi bi-people-fill"></i>
-                                <p>Clients</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('insurers.index') }}" class="nav-link">
-                                <i class="nav-icon bi bi-people-fill"></i>
-                                <p>Insurers</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('policies.index') }}" class="nav-link">
-                                <i class="nav-icon bi bi-journal-text"></i>
-                                <p>Policies</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('services.index') }}" class="nav-link">
-                                <i class="nav-icon bi bi-list-task"></i>
-                                <p>Services</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon bi bi-currency-dollar"></i>
-                                <p>
-                                    Sales
-                                    <i class="nav-arrow bi bi-chevron-right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('assign-policy.index') }}" class="nav-link">
-                                        <i class="nav-icon bi bi-journal"></i>
-                                        <p>Assign Policy</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('invoices.index') }}" class="nav-link">
-                                        <i class="nav-icon bi bi-receipt"></i>
-                                        <p>Invoices</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('payments.index') }}" class="nav-link">
-                                        <i class="nav-icon bi bi-wallet-fill"></i>
-                                        <p>
-                                            Payments
-                                        </p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon bi bi-people-fill"></i>
-                                <p>
-                                    User Management
-                                    <i class="nav-arrow bi bi-chevron-right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('users.index') }}" class="nav-link">
-                                        <i class="nav-icon bi bi-person-fill"></i>
-                                        <p>Users</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('roles.index') }}" class="nav-link">
-                                        <i class="nav-icon bi bi-gear-fill"></i>
-                                        <p>
-                                            Roles
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('permissions.index') }}" class="nav-link">
-                                        <i class="nav-icon bi bi-person-gear"></i>
-                                        <p>
-                                            Permissions
-                                        </p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon bi bi-gear-fill"></i>
-                                <p>
-                                    System Settings
-                                    <i class="nav-arrow bi bi-chevron-right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('email-settings.index') }}" class="nav-link">
-                                        <i class="nav-icon bi bi-envelope-fill"></i>
-                                        <p>Emails</p>
-                                    </a>
-                                </li>
-                                {{-- <li class="nav-item">
-                                    <a href="{{ route('roles.index') }}" class="nav-link">
-                                        <i class="nav-icon bi bi-phone-fill"></i>
-                                        <p>
-                                            SMS
-                                        </p>
-                                    </a>
-                                </li> --}}
-                                <li class="nav-item">
-                                    <a href="{{ route('system-variables.index') }}" class="nav-link">
-                                        <i class="nav-icon bi bi-code-slash"></i>
-                                        <p>
-                                            Variables
-                                        </p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                        @can('dashboard')
+                            <li class="nav-item">
+                                <a href="{{ route('app.index') }}" class="nav-link">
+                                    <i class="nav-icon bi bi-speedometer"></i>
+                                    <p>
+                                        Dashboard
+                                    </p>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('clients')
+                            <li class="nav-item">
+                                <a href="{{ route('clients.index') }}" class="nav-link">
+                                    <i class="nav-icon bi bi-people-fill"></i>
+                                    <p>Clients</p>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('insurers')
+                            <li class="nav-item">
+                                <a href="{{ route('insurers.index') }}" class="nav-link">
+                                    <i class="nav-icon bi bi-people-fill"></i>
+                                    <p>Insurers</p>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('requests')
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon bi bi-patch-question-fill"></i>
+                                    <p>
+                                        Requests
+                                        <i class="nav-arrow bi bi-chevron-right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    @can('view-policies')
+                                        <li class="nav-item">
+                                            <a href="{{ route('sms-logs.index') }}" class="nav-link">
+                                                <i class="nav-icon bi bi-card-text"></i>
+                                                <p>Policies</p>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('view-claims')
+                                        <li class="nav-item">
+                                            <a href="{{ route('system-variables.index') }}" class="nav-link">
+                                                <i class="nav-icon bi bi-journal-text"></i>
+                                                <p>
+                                                    Claims
+                                                </p>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('view-services')
+                                        <li class="nav-item">
+                                            <a href="{{ route('system-variables.index') }}" class="nav-link">
+                                                <i class="nav-icon bi bi-gear"></i>
+                                                <p>
+                                                    Services
+                                                </p>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                </ul>
+                            </li>
+                        @endcan
+                        @can('policies')
+                            <li class="nav-item">
+                                <a href="{{ route('policies.index') }}" class="nav-link">
+                                    <i class="nav-icon bi bi-journal-text"></i>
+                                    <p>Policies</p>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('services')
+                            <li class="nav-item">
+                                <a href="{{ route('services.index') }}" class="nav-link">
+                                    <i class="nav-icon bi bi-list-task"></i>
+                                    <p>Services</p>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('sales')
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon bi bi-currency-dollar"></i>
+                                    <p>
+                                        Sales
+                                        <i class="nav-arrow bi bi-chevron-right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    @can('view-policies-assigned')
+                                        <li class="nav-item">
+                                            <a href="{{ route('assign-policy.index') }}" class="nav-link">
+                                                <i class="nav-icon bi bi-journal"></i>
+                                                <p>Assign Policy</p>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('view-invoices')
+                                        <li class="nav-item">
+                                            <a href="{{ route('invoices.index') }}" class="nav-link">
+                                                <i class="nav-icon bi bi-receipt"></i>
+                                                <p>Invoices</p>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('view-payments')
+                                        <li class="nav-item">
+                                            <a href="{{ route('payments.index') }}" class="nav-link">
+                                                <i class="nav-icon bi bi-wallet-fill"></i>
+                                                <p>
+                                                    Payments
+                                                </p>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                </ul>
+                            </li>
+                        @endcan
+                        @can('policy-configuration')
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon bi bi-gear-fill"></i>
+                                    <p>
+                                        Policy Configuration
+                                        <i class="nav-arrow bi bi-chevron-right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    @can('view-policy-types')
+                                        <li class="nav-item">
+                                            <a href="{{ route('policy-types.index') }}" class="nav-link">
+                                                <i class="nav-icon bi bi-journals"></i>
+                                                <p>Policy Type</p>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('view-policy-sub-types')
+                                        <li class="nav-item">
+                                            <a href="{{ route('policySubTypes.index') }}" class="nav-link">
+                                                <i class="nav-icon bi bi-journals"></i>
+                                                <p>
+                                                    Policy Sub Type
+                                                </p>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                </ul>
+                            </li>
+                        @endcan
+                        @can('user-management')
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon bi bi-people-fill"></i>
+                                    <p>
+                                        User Management
+                                        <i class="nav-arrow bi bi-chevron-right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    @can('view-users')
+                                        <li class="nav-item">
+                                            <a href="{{ route('users.index') }}" class="nav-link">
+                                                <i class="nav-icon bi bi-person-fill"></i>
+                                                <p>Users</p>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('view-roles')
+                                        <li class="nav-item">
+                                            <a href="{{ route('roles.index') }}" class="nav-link">
+                                                <i class="nav-icon bi bi-gear-fill"></i>
+                                                <p>
+                                                    Roles
+                                                </p>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('view-permissions')
+                                        <li class="nav-item">
+                                            <a href="{{ route('permissions.index') }}" class="nav-link">
+                                                <i class="nav-icon bi bi-person-gear"></i>
+                                                <p>
+                                                    Permissions
+                                                </p>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                </ul>
+                            </li>
+                        @endcan
+                        @can('system-settings')
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon bi bi-gear-fill"></i>
+                                    <p>
+                                        System Settings
+                                        <i class="nav-arrow bi bi-chevron-right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    @can('view-sms-logs')
+                                        <li class="nav-item">
+                                            <a href="{{ route('sms-logs.index') }}" class="nav-link">
+                                                <i class="nav-icon bi bi-envelope-fill"></i>
+                                                <p>SMS Logs</p>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('view-system-variables')
+                                        <li class="nav-item">
+                                            <a href="{{ route('system-variables.index') }}" class="nav-link">
+                                                <i class="nav-icon bi bi-code-slash"></i>
+                                                <p>
+                                                    Variables
+                                                </p>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                </ul>
+                            </li>
+                        @endcan
                     </ul>
                 </nav>
             </div>

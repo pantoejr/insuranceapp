@@ -57,7 +57,7 @@ class PaymentController extends Controller
                 'payment_date' => $request->payment_date,
                 'currency' => $invoice->currency,
                 'payment_method' => $request->payment_method,
-                'payment_reference' => Str::random(5),
+                'payment_reference' => Str::random(16),
                 'notes' => $request->notes,
                 'status' => 'uploaded',
                 'created_by' => Auth::user()->name,

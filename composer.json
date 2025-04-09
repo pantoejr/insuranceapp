@@ -12,7 +12,8 @@
         "laravel/tinker": "^2.10.1",
         "livewire/livewire": "^3.6",
         "spatie/laravel-permission": "^6.16",
-        "twbs/bootstrap-icons": "^1.11"
+        "twbs/bootstrap-icons": "^1.11",
+        "twilio/sdk": "^8.5"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

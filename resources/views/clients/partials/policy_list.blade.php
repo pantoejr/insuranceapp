@@ -25,7 +25,7 @@
                             @foreach ($model->policyAssignments as $clientPolicy)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $clientPolicy->policy->name }}</td>
+                                    <td>{{ $clientPolicy->policy->policyType->name }}</td>
                                     <td>{{ $clientPolicy->insurer->company_name }}</td>
                                     <td>{{ $clientPolicy->created_by }}</td>
                                     <td>

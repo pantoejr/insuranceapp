@@ -26,7 +26,7 @@
                             @foreach ($policy->insurerPolicies as $insurerPolicy)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $insurerPolicy->policy->name }}</td>
+                                    <td>{{ $insurerPolicy->policy->policyType->name }}</td>
                                     <td>{{ $insurerPolicy->insurer->company_name }}</td>
                                     <td>
                                         <button class="btn btn-sm btn-warning edit-policy-btn"

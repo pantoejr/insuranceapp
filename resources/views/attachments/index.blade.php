@@ -26,7 +26,8 @@
                                         <td>{{ $attachment->file_type }}</td>
                                         <td>
                                             <a href="{{ route('attachments.details', $attachment->id) }}"
-                                                class="btn btn-info btn-sm"><i class="bi bi-down-arrow"></i>Download</a>
+                                                class="btn btn-primary btn-sm" download=""><i
+                                                    class="bi bi-arrow-down"></i></a>
                                             <form action="{{ route('attachments.destroy', $attachment->id) }}"
                                                 method="POST" style="display:inline-block;">
                                                 @csrf

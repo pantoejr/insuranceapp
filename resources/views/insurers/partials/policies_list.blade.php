@@ -28,7 +28,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $insurerPolicy->insurer->company_name }}</td>
-                                    <td>{{ $insurerPolicy->policy->name }}</td>
+                                    <td>{{ $insurerPolicy->policy->policyType->name }}</td>
                                     <td>{{ ucfirst($insurerPolicy->status) }}</td>
                                     <td>
                                         <button class="btn btn-warning btn-sm edit-policy-btn" data-bs-toggle="modal"
@@ -81,7 +81,7 @@
                         <select class="form-control @error('policy_ids') is-invalid @enderror" id="policy_ids"
                             name="policy_ids[]" multiple required>
                             @foreach ($policies as $policy)
-                                <option value="{{ $policy->id }}">{{ $policy->name }}</option>
+                                <option value="{{ $policy->id }}">{{ $policy->policyType->name }}</option>
                             @endforeach
                         </select>
                         @error('policy_ids')

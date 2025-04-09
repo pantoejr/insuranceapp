@@ -19,14 +19,19 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PolicyAssignmentController;
 use App\Http\Controllers\PolicyController;
+use App\Http\Controllers\PolicySubTypeController;
+use App\Http\Controllers\PolicyTypeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\SmsLogController;
 use App\Http\Controllers\SystemVariableController;
 use App\Http\Controllers\UserController;
 use App\Models\Policy;
 use App\Models\PolicyAssignment;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rules\Can;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index')->name('app.index');
@@ -61,17 +66,6 @@ Route::controller(UserController::class)->group(function () {
     Route::post('/users/delete/{id}', 'destroy')->name('users.destroy')->can('delete-user');
     Route::get('/users/details/{id}', 'details')->name('users.details')->can('view-user-details');
     Route::post('/users/refresh-permissions/{id}', 'refreshPermissions')->name('users.refreshPermissions')->can('refresh-user-permissions');
-});
-
-
-Route::controller(EmailSettingController::class)->group(function () {
-    Route::get('/email-settings', 'index')->name('email-settings.index')->can('view-email-settings');
-    Route::get('/email-settings/create', 'create')->name('email-settings.create')->can('add-email-setting');
-    Route::post('/email-settings/store', 'store')->name('email-settings.store')->can('add-email-setting');
-    Route::get('/email-settings/edit/{id}', 'edit')->name('email-settings.edit')->can('edit-email-setting');
-    Route::post('/email-settings/edit/{id}', 'update')->name('email-settings.update')->can('edit-email-setting');
-    Route::get('/email-settings/delete/{id}', 'destroy')->name('email-settings.destroy')->can('delete-email-setting');
-    Route::get('/email-settings/details/{id}', 'details')->name('email-settings.details')->can('view-email-setting-details');
 });
 
 Route::controller(AuthController::class)->group(function () {
@@ -287,4 +281,168 @@ Route::prefix('/clients/{client}')->group(function () {
         Route::post('/client-services/updateStatus/{id}', 'updateStatus')->name('client-service-UpdateStatus')->can('update-client-status');
         Route::post('/client-services/delete/{id}', 'destroy')->name('client-services.destroy')->can('delete-client-service');
     });
+});
+
+Route::get('/sms-logs', [SmsLogController::class, 'index'])->name('sms-logs.index');
+
+Route::controller(PolicyTypeController::class)->group(function () {
+    Route::get('/policy-types', 'index')->name('policy-types.index')->can('view-policy-types');
+    Route::get('/policy-types/create', 'create')->name('policy-types.create')->can('add-policy-type');
+    Route::post('/policy-types/create', 'store')->name('policy-types.store')->can('add-policy-type');
+    Route::get('/policy-types/edit/{id}', 'edit')->name('policy-types.edit')->can('edit-policy-type');
+    Route::post('/policy-types/edit/{id}', 'update')->name('policy-types.update')->can('edit-policy-type');
+    Route::get('/policy-types/show/{id}', 'show')->name('policy-types.show')->can('view-policy-type');
+    Route::post('/policy-types/delete/{id}', 'destroy')->name('policy-types.destroy')->can('delete-policy-type');
+});
+
+Route::controller(PolicySubTypeController::class)->group(function () {
+    Route::get('/policy-sub-types', 'index')->name('policySubTypes.index')->can('view-policy-sub-types');
+    Route::get('/policy-sub-types/create', 'create')->name('policySubTypes.create')->can('add-policy-sub-type');
+    Route::post('/policy-sub-types/create', 'store')->name('policySubTypes.store')->can('add-policy-sub-type');
+    Route::get('/policy-sub-types/edit/{id}', 'edit')->name('policySubTypes.edit')->can('edit-policy-sub-type');
+    Route::post('/policy-sub-types/edit/{id}', 'update')->name('policySubTypes.update')->can('edit-policy-sub-type');
+    Route::post('/policy-sub-types/delete/{id}', 'destroy')->name('policySubTypes.destroy')->can('delete-policy-sub-type');
+});
+
+Route::get('/generate-permissions', function () {
+    $permissions = [
+        'view-permissions',
+        'add-permission',
+        'edit-permission',
+        'delete-permission',
+        'view-roles',
+        'add-role',
+        'edit-role',
+        'delete-role',
+        'view-role-details',
+        'view-users',
+        'add-user',
+        'edit-user',
+        'delete-user',
+        'view-user-details',
+        'refresh-user-permissions',
+        'view-clients',
+        'add-client',
+        'edit-client',
+        'delete-client',
+        'view-client-details',
+        'add-client-attachment',
+        'view-employees',
+        'add-employee',
+        'edit-employee',
+        'delete-employee',
+        'view-employee-details',
+        'add-employee-attachment',
+        'view-dependents',
+        'add-dependent',
+        'edit-dependent',
+        'delete-dependent',
+        'view-dependent-details',
+        'add-dependent-attachment',
+        'view-attachments',
+        'add-attachment',
+        'edit-attachment',
+        'delete-attachment',
+        'view-attachment-details',
+        'download-attachment',
+        'view-insurers',
+        'add-insurer',
+        'edit-insurer',
+        'delete-insurer',
+        'view-insurer-details',
+        'edit-insurer-policy',
+        'add-insurer-user',
+        'edit-insurer-user',
+        'add-multiple-policies',
+        'remove-policy',
+        'view-insurer-assignments',
+        'add-insurer-assignment',
+        'edit-insurer-assignment',
+        'delete-insurer-assignment',
+        'view-insurer-assignment-details',
+        'view-insurer-policies',
+        'add-insurer-policy',
+        'edit-insurer-policy',
+        'delete-insurer-policy',
+        'view-policies',
+        'add-policy',
+        'edit-policy',
+        'delete-policy',
+        'view-policy-details',
+        'get-insurer-policies',
+        'add-client-policy',
+        'upload-documents',
+        'set-policy-status',
+        'view-invoices',
+        'add-invoice',
+        'edit-invoice',
+        'delete-invoice',
+        'view-invoice-details',
+        'download-invoice',
+        'send-invoice-email',
+        'update-invoice-status',
+        'fetch-invoice',
+        'view-payments',
+        'add-payment',
+        'edit-payment',
+        'delete-payment',
+        'view-payment-details',
+        'download-payment-receipt',
+        'send-payment-email',
+        'update-payment-status',
+        'view-system-variables',
+        'add-system-variable',
+        'edit-system-variable',
+        'delete-system-variable',
+        'view-system-variable-details',
+        'view-policies-assigned',
+        'add-policy-assignment',
+        'edit-policy-assignment',
+        'delete-policy-assignment',
+        'view-policy-assignment-details',
+        'fetch-policy-details',
+        'view-claims',
+        'add-claim',
+        'edit-claim',
+        'delete-claim',
+        'view-claim-details',
+        'set-claim-status',
+        'view-services',
+        'add-service',
+        'edit-service',
+        'delete-service',
+        'view-service-details',
+        'add-client-service',
+        'edit-client-service',
+        'delete-client-service',
+        'view-client-service',
+        'update-client-status',
+        'view-sms-logs',
+        'view-policy-types',
+        'add-policy-type',
+        'edit-policy-type',
+        'delete-policy-type',
+        'view-policy-sub-types',
+        'add-policy-sub-type',
+        'edit-policy-sub-type',
+        'delete-policy-sub-type',
+        'policy-configuration',
+        'user-management',
+        'system-settings',
+        'sales',
+        'requests',
+        'dashboard',
+        'clients',
+        'insurers',
+        'policies',
+        'services',
+    ];
+
+    foreach ($permissions as $permission) {
+        Permission::firstOrCreate(['name' => $permission]);
+    }
+    $superadminRole = Role::firstOrCreate(['name' => 'Superadmin']);
+
+    $superadminRole->syncPermissions($permissions);
+    return 'Permissions generated and assigned to Superadmin successfully!';
 });

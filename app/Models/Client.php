@@ -38,4 +38,9 @@ class Client extends Model
     {
         return $this->hasMany(Claim::class);
     }
+
+    public function clientServices()
+    {
+        return $this->hasMany(ClientService::class);
+    }
 }

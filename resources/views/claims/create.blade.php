@@ -21,7 +21,7 @@
                                     @enderror">
                                         <option value="0">Select Policy</option>
                                         @foreach ($policies as $policy)
-                                            <option value="{{ $policy->id }}">{{ $policy->name }}</option>
+                                            <option value="{{ $policy->id }}">{{ $policy->policyType->name }}</option>
                                         @endforeach
                                     </select>
                                     @error('policy_id')

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Insurer;
 use App\Models\Policy;
+use App\Models\PolicyType;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,15 +28,18 @@ class PolicyController extends Controller
 
     public function create()
     {
+        $policyTypes = PolicyType::with('policySubTypes')->get();
         return view('policies.create', [
             'title' => 'Create Policy',
+            'policyTypes' => $policyTypes,
         ]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'policy_type_id' => 'required|exists:policy_types,id',
+            'policy_sub_type_id' => 'nullable|exists:policy_sub_types,id',
             'number' => 'required|string|max:255|unique:policies',
             'description' => 'nullable|string',
             'coverage_details' => 'nullable|string',
@@ -49,7 +53,8 @@ class PolicyController extends Controller
 
         try {
             $policy = Policy::create([
-                'name' => $request->name,
+                'policy_type_id' => $request->policy_type_id,
+                'policy_sub_type_id' => $request->policy_sub_type_id,
                 'number' => $request->number,
                 'description' => $request->description,
                 'coverage_details' => $request->coverage_details,
@@ -74,9 +79,11 @@ class PolicyController extends Controller
     public function edit($id)
     {
         $policy = Policy::findOrFail($id);
+        $policyTypes = PolicyType::with('policySubTypes')->get();
         return view('policies.edit', [
             'title' => 'Edit Policy',
             'policy' => $policy,
+            'policyTypes' => $policyTypes,
         ]);
     }
 
@@ -86,7 +93,8 @@ class PolicyController extends Controller
         try {
 
             $request->validate([
-                'name' => 'required|string|max:255',
+                'policy_type_id' => 'required|exists:policy_types,id',
+                'policy_sub_type_id' => 'nullable|exists:policy_sub_types,id',
                 'number' => 'required|string|max:255|unique:policies,number,' . $policy->id,
                 'description' => 'nullable|string',
                 'coverage_details' => 'nullable|string',
@@ -98,7 +106,8 @@ class PolicyController extends Controller
             ]);
 
             $policy->update([
-                'name' => $request->name,
+                'policy_type_id' => $request->policy_type_id,
+                'policy_sub_type_id' => $request->policy_sub_type_id,
                 'number' => $request->number,
                 'description' => $request->description,
                 'coverage_details' => $request->coverage_details,
@@ -147,9 +156,11 @@ class PolicyController extends Controller
     public function getInsurerPolicy($id)
     {
         $policies = Policy::join('insurer_policies', 'policies.id', '=', 'insurer_policies.policy_id')
+            ->join('policy_types', 'policies.policy_type_id', '=', 'policy_types.id')
+            ->join('policy_sub_types', 'policies.policy_sub_type_id', '=', 'policy_sub_types.id')
             ->where('insurer_policies.insurer_id', $id)
             ->where('insurer_policies.status', 'active')
-            ->select('policies.id', 'policies.name', 'policies.*')
+            ->select('policies.id', 'policy_types.*', 'policies.*', 'policy_sub_types.*')
             ->get();
 
         return response()->json($policies);

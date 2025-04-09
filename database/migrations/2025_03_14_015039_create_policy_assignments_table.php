@@ -25,6 +25,12 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->date('policy_duration_start')->nullable();
             $table->date('policy_duration_end')->nullable();
+            $table->string('vehicle_make')->nullable();
+            $table->string('vehicle_model')->nullable();
+            $table->date('vehicle_year')->nullable();
+            $table->string('vehicle_VIN')->nullable();
+            $table->string('vehicle_reg_number')->nullable();
+            $table->enum('vehicle_use_type', ['personal', 'commercial', 'corporate'])->nullable();
             $table->enum('payment_method', ['cash', 'cheque', 'bank transfer', 'credit card', 'debit card', 'deferred', 'mobile money']);
             $table->enum('status', ['draft', 'submitted', 'pending', 'approved', 'rejected', 'completed'])->default('draft');
             $table->string('created_by')->nullable();

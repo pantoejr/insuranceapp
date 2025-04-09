@@ -32,7 +32,7 @@
                         <select class="form-control @error('policy_id') is-invalid @enderror" id="policy_id"
                             name="policy_id" required>
                             <option value="{{ $policy->id }}" {{ old('policy_id') == $policy->id ? 'selected' : '' }}>
-                                {{ $policy->name }}
+                                {{ $policy->policyType->name }}
                             </option>
                         </select>
                         @error('policy_id')

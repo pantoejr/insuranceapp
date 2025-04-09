@@ -21,24 +21,10 @@
     @role('Superadmin')
         <div class="row">
             <div class="col-lg-6">
-                <div class="card card-success card-outline mb-4">
-                    <div class="card-header">
-                        <div class="card-title">Add Permissions for {{ $role->name }}</div>
-                    </div>
-                    <div class="card-body" style="overflow: auto; height: 300px;">
-                        @livewire('role.add-permission', ['roleId' => $role->id])
-                    </div>
-                </div>
+                @livewire('role.add-permission', ['roleId' => $role->id])
             </div>
             <div class="col-lg-6">
-                <div class="card card-danger card-outline mb-4">
-                    <div class="card-header">
-                        <div class="card-title">Remove Permissions for {{ $role->name }}</div>
-                    </div>
-                    <div class="card-body" style="overflow: auto; height: 300px;">
-                        @livewire('role.remove-permission', ['roleId' => $role->id])
-                    </div>
-                </div>
+                @livewire('role.remove-permission', ['roleId' => $role->id])
             </div>
         </div>
     @endrole

@@ -16,7 +16,8 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Sub Type</th>
                                     <th>Number</th>
                                     <th>Premium Amount</th>
                                     <th>Currency</th>
@@ -29,7 +30,8 @@
                                 @foreach ($policies as $policy)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $policy->name }}</td>
+                                        <td>{{ $policy->policyType->name }}</td>
+                                        <td>{{ $policy->policySubType->name ?? 'N/A' }}</td>
                                         <td>{{ $policy->number }}</td>
                                         <td>{{ $policy->premium_amount }}</td>
                                         <td>{{ strtoupper($policy->currency) }}</td>

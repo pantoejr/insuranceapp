@@ -26,7 +26,7 @@
                     @foreach ($model->claims as $claim)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $claim->policy->name }}</td>
+                            <td>{{ $claim->policy->policyType->name }}</td>
                             <td>{{ $claim->amount }}</td>
                             <td>{{ ucfirst($claim->status) }}</td>
                             <td>

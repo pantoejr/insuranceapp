@@ -49,9 +49,10 @@ class AssignPolicyController extends Controller
     public function getInsurerPolicies($insurer_id)
     {
         $policies = Policy::join('insurer_policies', 'policies.id', '=', 'insurer_policies.policy_id')
+            ->join('policy_types', 'policies.policy_type_id', '=', 'policy_types.id')
             ->where('insurer_policies.insurer_id', $insurer_id)
             ->where('insurer_policies.status', 'active')
-            ->select('policies.id', 'policies.name')
+            ->select('policies.id', 'policy_types.name as policy_type')
             ->get();
 
         return response()->json($policies);

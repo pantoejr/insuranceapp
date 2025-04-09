@@ -197,7 +197,8 @@
 
                                 $.each(response, function(index, policy) {
                                     policiesDropdown.append('<option value="' + policy
-                                        .id + '">' + policy.name + '</option>');
+                                        .id + '">' + policy.policy_type +
+                                        '</option>');
                                 });
                             },
                             error: function(xhr) {

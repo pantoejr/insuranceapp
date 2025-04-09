@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('policies', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->require();
+            $table->foreignId('policy_type_id')->constrained()->onDelete('cascade');
             $table->string('number')->unique(true);
             $table->text('description')->nullable(true);
             $table->text('coverage_details')->nullable(true);
@@ -21,7 +21,7 @@ return new class extends Migration
             $table->enum('currency', ['usd', 'lrd']);
             $table->enum('premium_frequency', ['monthly', 'quarterly', 'half-yearly', 'yearly']);
             $table->text('terms_conditions')->require();
-            $table->enum('eligibility', ['individual', 'company', 'both'])->default('Individual');
+            $table->enum('eligibility', ['individual', 'company', 'both'])->default('individual');
             $table->enum('status', ['active', 'inactive'])->default('inactive');
             $table->string('created_by')->nullable(true);
             $table->string('updated_by')->nullable(true);

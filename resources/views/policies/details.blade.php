@@ -11,11 +11,20 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label for="name" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="name" name="name"
-                                    value="{{ $policy->name }}" disabled>
+                                <label for="policy_type" class="form-label">Policy Type</label>
+                                <input type="text" class="form-control" id="policy_type" name="policy_type"
+                                    value="{{ $policy->policyType->name }}" disabled>
                             </div>
                         </div>
+                        @if ($policy->policySubType)
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="policy_sub_type" class="form-label">Policy Sub Type</label>
+                                    <input type="text" class="form-control" id="policy_sub_type" name="policy_sub_type"
+                                        value="{{ $policy->policySubType->name }}" disabled>
+                                </div>
+                            </div>
+                        @endif
                         <div class="col-md-6">
                             <div class="form-group mb-3">
                                 <label for="number" class="form-label">Number</label>

@@ -6,9 +6,7 @@
                 <div class="card-header" style="border:none;">
                     <div class="card-title"><b>{{ $title }}</b></div>
                     <div class="card-tools">
-                        <a href="{{ route('users.create') }}" class="btn btn-primary btn-sm" wire:navigate><i
-                                class="bi bi-plus-circle"></i>
-                            Add New
+                        <a href="{{ route('users.create') }}" class="btn btn-primary"><i class="bi bi-plus-circle"></i>
                         </a>
                     </div>
                 </div>
@@ -30,7 +28,13 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
-                                        <td>{{ ucfirst($user->status) }}</td>
+                                        <td>
+                                            @if ($user->status == 'active')
+                                                <span class="badge bg-success">{{ ucfirst($user->status) }}</span>
+                                            @else
+                                                <span class="badge bg-danger">{{ ucfirst($user->status) }}</span>
+                                            @endif
+                                        </td>
                                         <td>
                                             <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn-sm"><i
                                                     class="bi bi-pencil-fill"></i></a>

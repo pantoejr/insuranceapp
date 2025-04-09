@@ -20,7 +20,6 @@ return new class extends Migration
             $table->text('body');
             $table->string('status')->default('sent');
             $table->string('created_by')->nullable();
-            $table->string('updated_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -27,7 +27,13 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $service->name }}</td>
                                         <td>{{ $service->cost }}</td>
-                                        <td>{{ ucfirst($service->status) }}</td>
+                                        <td>
+                                            @if ($service->status == 'active')
+                                                <span class="badge bg-success">{{ ucfirst($service->status) }}</span>
+                                            @else
+                                                <span class="badge bg-danger">{{ ucfirst($service->status) }}</span>
+                                            @endif
+                                        </td>
                                         <td>
                                             <a class="btn btn-warning btn-sm"
                                                 href="{{ route('services.edit', ['id' => $service->id]) }}">

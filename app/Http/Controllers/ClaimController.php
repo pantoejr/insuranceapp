@@ -24,9 +24,9 @@ class ClaimController extends Controller
     public function create(Client $client)
     {
         $policies = Policy::join('policy_assignments', 'policies.id', '=', 'policy_assignments.policy_id')
+            ->join('policy_types', 'policies.policy_type_id', '=', 'policy_types.id')
             ->where('policy_assignments.client_id', $client->id)
-            //->where('policy_assignments.status', 'active')
-            ->select('policies.id', 'policies.name')
+            ->select('policies.id', 'policies.*')
             ->get();
         return view('claims.create', [
             'title' => 'Create Claim',

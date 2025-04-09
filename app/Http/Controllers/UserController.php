@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\SmsHelper;
 use App\Mail\UserWelcomeEmail;
 use App\Models\User;
 use App\Services\EmailServiceInterface;
@@ -69,8 +70,7 @@ class UserController extends Controller
             $role = Role::findById($request->roleId);
             $user->assignRole($role);
 
-            //$this->emailService->sendWelcomeEmail($user);
-
+            SmsHelper::sendSms($user->phone, 'Welcome to our platform! Your login hint is: ' . $request->input('password'));
             Mail::to($user->email)->send(new UserWelcomeEmail($user));
 
             return redirect()->route('users.index')->with('msg', 'User created successfully.')

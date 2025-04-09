@@ -19,6 +19,7 @@ return new class extends Migration
             $table->morphs('attachmentable');
             $table->string('created_by');
             $table->string('updated_by');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
