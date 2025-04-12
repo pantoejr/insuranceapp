@@ -28,9 +28,9 @@ class Policy extends Model
         return $this->hasMany(InsurerPolicy::class);
     }
 
-    public function policySubType()
+    public function policySubTypes()
     {
-        return $this->belongsTo(PolicySubType::class);
+        return $this->hasMany(PolicySubType::class);
     }
 
     public function policyType()

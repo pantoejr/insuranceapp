@@ -6,8 +6,8 @@
                 <div class="card-header" style="border:none;">
                     <div class="card-title">{{ $title }}</div>
                     <div class="card-tools">
-                        {{-- <a href="{{ route('permissions.create') }}" class="btn btn-primary"><i class="bi bi-plus-circle"></i>
-                        </a> --}}
+                        <a href="{{ route('permissions.create') }}" class="btn btn-primary"><i class="bi bi-plus-circle"></i>
+                        </a>
                     </div>
                 </div>
                 <div class="card-body">

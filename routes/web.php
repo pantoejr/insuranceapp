@@ -266,6 +266,7 @@ Route::controller(ServiceController::class)->group(function () {
     Route::get('/services/create', 'create')->name('services.create')->can('add-service');
     Route::post('/services/create', 'store')->name('services.store')->can('add-service');
     Route::get('/services/details/{id}', 'details')->name('services.details')->can('view-service-details');
+    Route::get('/services/getServiceDetails/{id}', 'getServiceDetails')->name('services.getServiceDetails')->can('view-service-details');
     Route::get('/services/edit/{id}', 'edit')->name('services.edit')->can('edit-service');
     Route::post('/services/edit/{id}', 'update')->name('services.update')->can('edit-service');
     Route::post('/services/delete/{id}', 'destroy')->name('services.destroy')->can('delete-service');
@@ -276,10 +277,11 @@ Route::prefix('/clients/{client}')->group(function () {
         Route::get('/client-services/create', 'create')->name('client-services.create')->can('add-client-service');
         Route::post('/client-services/store', 'store')->name('client-services.store')->can('add-client-service');
         Route::get('/client-services/edit/{id}', 'edit')->name('client-services.edit')->can('edit-client-service');
-        Route::get('/client-services/edit/{id}', 'update')->name('client-services.update')->can('edit-client-services');
+        Route::post('/client-services/edit/{id}', 'update')->name('client-services.update')->can('edit-client-services');
         Route::get('/client-services/details/{id}', 'details')->name('client-services.details')->can('view-client-service');
         Route::post('/client-services/updateStatus/{id}', 'updateStatus')->name('client-service-UpdateStatus')->can('update-client-status');
         Route::post('/client-services/delete/{id}', 'destroy')->name('client-services.destroy')->can('delete-client-service');
+        Route::put('/client-service/{id}/update-status', 'updateStatus')->name('client-service.update-status')->can('update-client-status');
     });
 });
 
@@ -436,6 +438,13 @@ Route::get('/generate-permissions', function () {
         'insurers',
         'policies',
         'services',
+        'update-client-status',
+        'edit-client-policy',
+        'view-client-policy-details',
+        'delete-client-policy',
+        'view-policy-type',
+        'edit-client-attachment',
+        'view-client-policies'
     ];
 
     foreach ($permissions as $permission) {

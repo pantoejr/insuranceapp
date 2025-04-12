@@ -39,7 +39,7 @@ class PolicyController extends Controller
     {
         $request->validate([
             'policy_type_id' => 'required|exists:policy_types,id',
-            'policy_sub_type_id' => 'nullable|exists:policy_sub_types,id',
+            'policy_sub_type_id' => 'required|exists:policy_sub_types,id',
             'number' => 'required|string|max:255|unique:policies',
             'description' => 'nullable|string',
             'coverage_details' => 'nullable|string',
@@ -54,7 +54,6 @@ class PolicyController extends Controller
         try {
             $policy = Policy::create([
                 'policy_type_id' => $request->policy_type_id,
-                'policy_sub_type_id' => $request->policy_sub_type_id,
                 'number' => $request->number,
                 'description' => $request->description,
                 'coverage_details' => $request->coverage_details,
@@ -66,6 +65,7 @@ class PolicyController extends Controller
                 'status' => $request->status,
                 'created_by' => Auth::user()->name,
                 'updated_by' => Auth::user()->name,
+                'policy_sub_type_id' => $request->input('policy_sub_type_id'),
             ]);
 
             return redirect()->route('policies.index')->with('msg', 'Policy created successfully.')
@@ -152,6 +152,7 @@ class PolicyController extends Controller
             'insurers' => $insurers,
         ]);
     }
+
 
     public function getInsurerPolicy($id)
     {

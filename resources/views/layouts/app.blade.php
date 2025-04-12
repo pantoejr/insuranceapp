@@ -103,7 +103,7 @@
                                 </a>
                             </li>
                         @endcan
-                        @can('requests')
+                        {{-- @can('requests')
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
                                     <i class="nav-icon bi bi-patch-question-fill"></i>
@@ -143,7 +143,7 @@
                                     @endcan
                                 </ul>
                             </li>
-                        @endcan
+                        @endcan --}}
                         @can('policies')
                             <li class="nav-item">
                                 <a href="{{ route('policies.index') }}" class="nav-link">

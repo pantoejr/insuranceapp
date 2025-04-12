@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class PolicyAssignment extends Model
 {
     protected $fillable = [
+        'policy_type_id',
         'policy_sub_type_id',
         'client_id',
         'policy_id',
@@ -33,6 +34,11 @@ class PolicyAssignment extends Model
     public function policy()
     {
         return $this->belongsTo(Policy::class);
+    }
+
+    public function policyType()
+    {
+        return $this->belongsTo(PolicyType::class);
     }
 
     public function policySubType()

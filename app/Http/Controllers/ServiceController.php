@@ -69,4 +69,10 @@ class ServiceController extends Controller
             'service' => $service,
         ]);
     }
+
+    public function getServiceDetails($id)
+    {
+        $service = Service::findOrFail($id);
+        return response()->json($service);
+    }
 }

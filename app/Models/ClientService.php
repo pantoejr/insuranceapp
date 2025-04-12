@@ -22,4 +22,19 @@ class ClientService extends Model
         'created_by',
         'updated_by'
     ];
+
+    public function attachments()
+    {
+        return $this->morphMany(Attachment::class, 'attachmentable');
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class);
+    }
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
 }

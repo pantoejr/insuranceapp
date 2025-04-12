@@ -18,10 +18,14 @@
                         </div>
                         <div class="col-md-6">
                             <div class="btn-group float-end" role="group">
-                                <a href="{{ route('payments.downloadReceipt', ['id' => $payment->id]) }}"
-                                    class="btn btn-primary btn-sm"><i class="bi bi-file-pdf"></i> Download Receipt</a>
-                                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#emailModal"><i class="bi bi-envelope-fill"></i> Email Receipt</button>
+                                @can('download-payment-receipt')
+                                    <a href="{{ route('payments.downloadReceipt', ['id' => $payment->id]) }}"
+                                        class="btn btn-primary btn-sm"><i class="bi bi-file-pdf"></i> Download Receipt</a>
+                                @endcan
+                                @can('send-payment-email')
+                                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#emailModal"><i class="bi bi-envelope-fill"></i> Email Receipt</button>
+                                @endcan
                             </div>
                         </div>
                     </div>
@@ -96,18 +100,20 @@
                     </div>
                     <div class="row">
                         <div class="form-group">
-                            @foreach (['approved', 'rejected'] as $status)
-                                <form action="{{ route('payments.updateStatus', $payment->id) }}" method="POST"
-                                    style="display:inline-block;">
-                                    @csrf
-                                    @method('PATCH')
-                                    <input type="hidden" name="status" value="{{ $status }}">
-                                    <button type="submit"
-                                        class="btn btn-{{ $status == 'rejected' ? 'danger' : ($status == 'approved' ? 'success' : ($status == 'pending' ? 'warning' : 'secondary')) }}">
-                                        {{ ucfirst($status) }}
-                                    </button>
-                                </form>
-                            @endforeach
+                            @if (!in_array($payment->status, ['approved', 'rejected']))
+                                @foreach (['approved', 'rejected'] as $status)
+                                    <form action="{{ route('payments.updateStatus', $payment->id) }}" method="POST"
+                                        style="display:inline-block;">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="{{ $status }}">
+                                        <button type="submit"
+                                            class="btn btn-{{ $status == 'rejected' ? 'danger' : ($status == 'approved' ? 'success' : ($status == 'pending' ? 'warning' : 'secondary')) }}">
+                                            {{ ucfirst($status) }}
+                                        </button>
+                                    </form>
+                                @endforeach
+                            @endif
                             <a href="{{ route('payments.index') }}" class="btn btn-light">Back To List</a>
                         </div>
                     </div>

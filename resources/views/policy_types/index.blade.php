@@ -30,7 +30,7 @@
                                                 class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill"></i></a>
                                             <a href="{{ route('policy-types.show', ['id' => $policyType->id]) }}"
                                                 class="btn btn-primary btn-sm"><i class="bi bi-eye-fill"></i></a>
-                                            <form action="{{ route('policies.destroy', ['id' => $policyType->id]) }}"
+                                            <form action="{{ route('policy-types.destroy', ['id' => $policyType->id]) }}"
                                                 style="display: inline-block;" method="POST">
                                                 @csrf
                                                 <button type="submit" class="btn btn-danger btn-sm delete-btn"><i

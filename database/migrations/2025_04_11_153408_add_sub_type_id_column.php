@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('policy_assignments', function (Blueprint $table) {
-            $table->foreignId('policy_sub_type_id')->nullable()->constrained('policy_sub_types')->onDelete('cascade')->after('policy_id');
+        Schema::table('policies', function (Blueprint $table) {
+            $table->foreignId('policy_sub_type_id')->nullable()->constrained('policy_sub_types')->onDelete('cascade');
         });
     }
 
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('policy_assignments', function (Blueprint $table) {
+        Schema::table('policies', function (Blueprint $table) {
             $table->dropForeign(['policy_sub_type_id']);
             $table->dropColumn('policy_sub_type_id');
         });

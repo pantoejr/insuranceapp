@@ -40,13 +40,22 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <a href="{{ route('payments.edit', ['id' => $payment->id]) }}"
-                                                class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill"></i></a>
-                                            <a href="{{ route('payments.details', ['id' => $payment->id]) }}"
-                                                class="btn btn-primary btn-sm"><i class="bi bi-journal-text"></i></a>
-                                            <a href="{{ route('payments.destroy', ['id' => $payment->id]) }}"
-                                                class="btn btn-danger btn-sm" onclick="confirmDelete(event)"><i
-                                                    class="bi bi-trash"></i></a>
+                                            @can('edit-payment')
+                                                @if ($payment->status != 'approved')
+                                                    <a href="{{ route('payments.edit', ['id' => $payment->id]) }}"
+                                                        class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill"></i></a>
+                                                @endif
+                                            @endcan
+                                            @can('view-payment-details')
+                                                <a href="{{ route('payments.details', ['id' => $payment->id]) }}"
+                                                    class="btn btn-primary btn-sm"><i class="bi bi-journal-text"></i></a>
+                                            @endcan
+                                            @can('delete-payment')
+                                                <a href="{{ route('payments.destroy', ['id' => $payment->id]) }}"
+                                                    class="btn btn-danger btn-sm" onclick="confirmDelete(event)"><i
+                                                        class="bi bi-trash"></i></a>
+                                            @endcan
+
                                         </td>
                                     </tr>
                                 @endforeach

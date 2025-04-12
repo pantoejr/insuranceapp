@@ -23,13 +23,20 @@
                                     <input type="text" name="name"
                                         class="form-control @error('name') is-invalid @enderror" id="name"
                                         placeholder="Enter name" required>
+                                    @error('name')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group mb-3">
                                     <label for="phone" class="form-label">Phone</label>
                                     <input type="text" class="form-control @error('phone') is-invalid @enderror"
-                                        id="phone" value="{{ old('phone') }}" placeholder="Enter phone" name="phone">
+                                        id="phone" value="{{ old('phone') }}" placeholder="E.g (+231 / 231)"
+                                        name="phone">
+                                    @error('phone')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                         </div>

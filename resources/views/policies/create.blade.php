@@ -175,6 +175,7 @@
     <script>
         $(document).ready(function() {
             const policyTypes = @json($policyTypes);
+            console.log(policyTypes);
 
             $('#policy_type_id').on('change', function() {
                 const selectedTypeId = $(this).val();
@@ -188,6 +189,7 @@
                 if (selectedType && selectedType.policy_sub_types.length > 0) {
                     subTypeContainer.show();
                     selectedType.policy_sub_types.forEach(subType => {
+                        console.log(subType.id);
                         subTypeSelect.append(
                             `<option value="${subType.id}">${subType.name}</option>`);
                     });

@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('client_id')->constrained()->onDelete('cascade');
             $table->foreignId('policy_id')->constrained()->onDelete('cascade');
+            $table->foreignId('policy_type_id')->nullable()->constrained('policy_types')->onDelete('cascade');
+            $table->foreignId('policy_sub_type_id')->nullable()->constrained('policy_sub_types')->onDelete('cascade');
             $table->foreignId('insurer_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->decimal('cost', 10, 2)->default(0);
@@ -27,7 +29,7 @@ return new class extends Migration
             $table->date('policy_duration_end')->nullable();
             $table->string('vehicle_make')->nullable();
             $table->string('vehicle_model')->nullable();
-            $table->date('vehicle_year')->nullable();
+            $table->string('vehicle_year')->nullable();
             $table->string('vehicle_VIN')->nullable();
             $table->string('vehicle_reg_number')->nullable();
             $table->enum('vehicle_use_type', ['personal', 'commercial', 'corporate'])->nullable();

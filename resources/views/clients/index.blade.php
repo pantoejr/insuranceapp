@@ -7,8 +7,10 @@
                 <div class="card-header">
                     <div class="card-title">Clients</div>
                     <div class="card-tools">
-                        <a href="{{ route('clients.create') }}" class="btn btn-primary"><i class="bi bi-plus-circle bold"></i>
-                        </a>
+                        @can('add-client')
+                            <a href="{{ route('clients.create') }}" class="btn btn-primary"><i class="bi bi-plus-circle bold"></i>
+                            </a>
+                        @endcan
                     </div>
                 </div>
                 <div class="card-body">
@@ -33,16 +35,22 @@
                                         </td>
                                         <td>{{ ucfirst($client->status) }}</td>
                                         <td>
-                                            <a href="{{ route('clients.edit', $client->id) }}"
-                                                class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill"></i></a>
-                                            <a href="{{ route('clients.details', $client->id) }}"
-                                                class="btn btn-primary btn-sm"><i class="bi bi-eye-fill"></i></a>
-                                            <form action="{{ route('clients.destroy', $client->id) }}" method="POST"
-                                                style="display:inline;">
-                                                @csrf
-                                                <button type="submit" class="btn btn-danger btn-sm delete-btn">
-                                                    <i class="bi bi-trash"></i></button>
-                                            </form>
+                                            @can('edit-client')
+                                                <a href="{{ route('clients.edit', $client->id) }}"
+                                                    class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill"></i></a>
+                                            @endcan
+                                            @can('view-client-details')
+                                                <a href="{{ route('clients.details', $client->id) }}"
+                                                    class="btn btn-primary btn-sm"><i class="bi bi-eye-fill"></i></a>
+                                            @endcan
+                                            @can('delete-client')
+                                                <form action="{{ route('clients.destroy', $client->id) }}" method="POST"
+                                                    style="display:inline;">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-danger btn-sm delete-btn">
+                                                        <i class="bi bi-trash"></i></button>
+                                                </form>
+                                            @endcan
                                         </td>
                                     </tr>
                                 @endforeach

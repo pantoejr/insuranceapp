@@ -44,7 +44,16 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:255',
+            'phone' => [
+                'nullable',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) {
+                    if (!str_starts_with($value, '+231')) {
+                        $fail('The phone number must start with +231');
+                    }
+                },
+            ],
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
@@ -145,8 +154,9 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
-        $user->status = 'inactive';
-        $user->save();
+        // $user->status = 'inactive';
+        // $user->save();
+        $user->delete();
         return redirect()->route('users.index')->with('msg', 'User deactivated successfully.')
             ->with('flag', 'success');
     }

@@ -1,129 +1,178 @@
 @extends('layouts.app')
+
 @section('content')
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card shadow-sm border-0">
-                <div class="card-header">
-                    <div class="card-title">Add Policy for <i><b>{{ $client->full_name }}</b></i></div>
-                </div>
-                <div class="card-body px-4">
-                    <form action="{{ route('client-policies.store', ['client' => $client]) }}" method="POST"
-                        enctype="multipart/form-data">
-                        @csrf
-                        <div class="row mb-3">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header">
+                        <h5 class="mb-0">Add Policy for <strong>{{ $client->full_name }}</strong></h5>
+                    </div>
+                    <div class="card-body">
+                        <form action="{{ route('client-policies.store', ['client' => $client]) }}" method="POST"
+                            enctype="multipart/form-data">
+                            @csrf
                             <input type="hidden" name="client_id" value="{{ $client->id }}">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="insurer_id" class="form-label">Insurer</label>
-                                    <select name="insurer_id" id="insurer_id"
-                                        class="form-control @error('insurer_id') is-invalid @enderror">
-                                        <option value="0">Select Insurer</option>
-                                        @foreach ($insurers as $insurer)
-                                            <option value="{{ $insurer->id }}">{{ $insurer->company_name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="policy_id" class="form-label">Policy</label>
-                                    <select name="policy_id" id="policy_id" class="form-control">
-                                        <option value="0" selected>Select Policy</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-8">
-                                <div class="form-group mb-3">
-                                    <label for="policy_details" class="form-label">Policy Details</label>
-                                    <textarea name="policy_details" id="policy_details" class="form-control" cols="30" rows="10"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="terms_conditions" class="form-label">Policy Terms</label>
-                                    <textarea name="terms_conditions" id="terms_conditions" class="form-control" cols="30" rows="2"></textarea>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
+                            <input type="hidden" name="policy_type_name" id="policy_type_name">
+                            <input type="hidden" name="policy_type_id" id="policy_type_id">
+                            <div class="mb-4">
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group mb-3">
-                                            <label for="cost" class="form-label">Cost</label>
-                                            <input type="number" name="cost" id="cost"
-                                                class="form-control @error('cost')
-                                                is-invalid
-                                            @enderror">
-                                            @error('cost')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group mb-3">
-                                            <label for="currency" class="form-label">Currency</label>
-                                            <select name="currency" id="currency"
-                                                class="form-control @error('currency')
-                                                is-invalid
-                                            @enderror"
-                                                readonly>
-                                                <option value="0">Select Currency</option>
-                                                <option value="usd" {{ old('currency') == 'usd' ? 'selected' : '' }}>USD
-                                                </option>
-                                                <option value="lrd" {{ old('currency') == 'lrd' ? 'selected' : '' }}>LRD
-                                                </option>
-                                            </select>
-                                            @error('currency')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group mb-3">
-                                            <div class="form-check">
-                                                <label for="is_discounted">Discount</label>
-                                                <input type="checkbox" name="is_discounted" id="is_discounted"
-                                                    class="form-check-input" value="1" />
+                                    <div class="col-md-8">
+                                        <h6 class="section-header bg-light p-2 mb-3 border-all">
+                                            <i class="bi bi-file-earmark me-2"></i>Policy Information
+                                        </h6>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-3">
+                                                    <label for="insurer_id" class="form-label required">Insurer</label>
+                                                    <select name="insurer_id" id="insurer_id"
+                                                        class="form-select @error('insurer_id') is-invalid @enderror"
+                                                        required>
+                                                        <option value="">Select Insurer</option>
+                                                        @foreach ($insurers as $insurer)
+                                                            <option value="{{ $insurer->id }}"
+                                                                {{ old('insurer_id') == $insurer->id ? 'selected' : '' }}>
+                                                                {{ $insurer->company_name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    @error('insurer_id')
+                                                        <div class="text-danger">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-3">
+                                                    <label for="policy_id" class="form-label required">Policy Type</label>
+                                                    <select name="policy_id" id="policy_id" class="form-select" required>
+                                                        <option value="">Select Policy</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-3">
+                                                    <label for="policy_sub_type_id" class="form-label">Policy Sub
+                                                        Type</label>
+                                                    <select name="policy_sub_type_id" id="policy_sub_type_id"
+                                                        class="form-select" required>
+                                                        <option value="">Select Policy Sub Type</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-3">
+                                                    <label for="cost" class="form-label required">Premium Amount</label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-text"><i
+                                                                class="bi bi-currency-dollar"></i></span>
+                                                        <input type="number" name="cost" id="cost" step="0.01"
+                                                            class="form-control @error('cost') is-invalid @enderror"
+                                                            required>
+                                                    </div>
+                                                    @error('cost')
+                                                        <div class="text-danger">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-3">
+                                                    <label for="terms_conditions" class="form-label">Terms &
+                                                        Conditions</label>
+                                                    <textarea name="terms_conditions" id="terms_conditions" class="form-control" rows="3" readonly></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-3">
+                                                    <label for="policy_details" class="form-label">Coverage Details</label>
+                                                    <textarea name="policy_details" id="policy_details" class="form-control" rows="3" readonly></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Vehicle Information Section (Conditional) -->
+                                        <div id="vehicle-fields" class="row mb-4" style="display: none;">
+                                            <h6 class="section-header bg-light p-2 mb-3 border-all">
+                                                <i class="fas fa-car me-2"></i>Vehicle Information
+                                            </h6>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-3">
+                                                    <label for="vehicle_make" class="form-label">Make & Model</label>
+                                                    <input type="text" name="vehicle_make" id="vehicle_make"
+                                                        class="form-control">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-3">
+                                                    <label for="vehicle_year" class="form-label">Year</label>
+                                                    <input type="number" name="vehicle_year" id="vehicle_year"
+                                                        min="1900" max="{{ date('Y') + 1 }}" class="form-control">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-3">
+                                                    <label for="vehicle_VIN" class="form-label">VIN/Chassis
+                                                        Number</label>
+                                                    <input type="text" name="vehicle_VIN" id="vehicle_VIN"
+                                                        class="form-control">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-3">
+                                                    <label for="vehicle_reg_number" class="form-label">Registration
+                                                        Number</label>
+                                                    <input type="text" name="vehicle_reg_number"
+                                                        id="vehicle_reg_number" class="form-control">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-3">
+                                                    <label for="vehicle_use_type" class="form-label">Vehicle Use
+                                                        Type</label>
+                                                    <select name="vehicle_use_type" id="vehicle_use_type"
+                                                        class="form-select">
+                                                        <option value="0">Select Usage</option>
+                                                        <option value="personal">Personal</option>
+                                                        <option value="commercial">Commercial</option>
+                                                        <option value="corporate">Rental</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-md-4">
+                                        <h6 class="section-header bg-light p-2 mb-3 border-all">
+                                            <i class="fas fa-money-bill-wave me-2"></i>Payment Details
+                                        </h6>
+
                                         <div class="form-group mb-3">
-                                            <label for="discount_type" class="form-label">Discount Type</label>
-                                            <select name="discount_type" id="discount_type" class="form-control">
-                                                <option value="0">Select Discount Type</option>
-                                                <option value="percentage"
-                                                    {{ old('discount_type') == 'percentage' ? 'selected' : '' }}>Percentage
-                                                </option>
-                                                <option value="fixed"
-                                                    {{ old('discount_type') == 'fixed' ? 'selected' : '' }}>Fixed</option>
+                                            <label for="currency" class="form-label">Currency</label>
+                                            <select name="currency" id="currency" class="form-select" readonly>
+                                                <option value="">Select Currency</option>
+                                                <option value="usd">USD</option>
+                                                <option value="lrd">LRD</option>
                                             </select>
                                         </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group mb-3">
-                                            <label for="discount" class="form-label">Discount</label>
-                                            <input type="number" name="discount" id="discount" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
+
                                         <div class="form-group mb-3">
                                             <label for="payment_frequency" class="form-label">Payment Frequency</label>
                                             <input type="text" name="payment_frequency" id="payment_frequency"
-                                                class="form-control @error('payment_frequency') is-invalid @enderror"
-                                                readonly />
-                                            @error('payment_frequency')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
+                                                class="form-control" readonly>
                                         </div>
-                                    </div>
-                                    <div class="col-md-12">
+
                                         <div class="form-group mb-3">
                                             <label for="payment_method" class="form-label">Payment Method</label>
-                                            <select name="payment_method" id="payment_method"
-                                                class="form-control @error('payment_method')
-                                                is-invalid
-                                            @enderror">
-                                                <option value="0">Select Payment Method</option>
+                                            <select name="payment_method" id="payment_method" class="form-select">
+                                                <option value="">Select Method</option>
                                                 <option value="Cash">Cash</option>
                                                 <option value="Cheque">Cheque</option>
                                                 <option value="Bank Transfer">Bank Transfer</option>
@@ -131,55 +180,113 @@
                                                 <option value="Debit Card">Debit Card</option>
                                                 <option value="Deferred">Deferred</option>
                                             </select>
-                                            @error('payment_method')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
                                         </div>
-                                    </div>
-                                    <div class="col-md-12">
+
+                                        <div class="card border-0 shadow-sm discount-card mb-3">
+                                            <div class="card-header bg-light">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" name="is_discounted"
+                                                        id="is_discounted" value="1">
+                                                    <label class="form-check-label" for="is_discounted">Apply
+                                                        Discount</label>
+                                                </div>
+                                            </div>
+                                            <div class="card-body discount-fields" style="display: none;">
+                                                <div class="form-group mb-3">
+                                                    <label for="discount_type" class="form-label">Discount
+                                                        Type</label>
+                                                    <select name="discount_type" id="discount_type" class="form-select">
+                                                        <option value="">Select Type</option>
+                                                        <option value="percentage">Percentage</option>
+                                                        <option value="fixed">Fixed Amount</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group mb-3">
+                                                    <label for="discount" class="form-label">Discount Value</label>
+                                                    <input type="number" name="discount" id="discount" step="0.01"
+                                                        class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <h6 class="section-header bg-light p-2 mb-3 border-all">
+                                            <i class="fas fa-file-alt me-2"></i>Policy Documents
+                                        </h6>
+
                                         <div class="form-group mb-3">
-                                            <label for="document_path" class="form-label">Document</label>
+                                            <label for="document_path" class="form-label">Upload Documents</label>
                                             <input type="file" name="document_path[]" id="document_path"
                                                 class="form-control" multiple>
+                                            <small class="text-muted">You can upload multiple documents (PDF, JPG,
+                                                PNG)</small>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <input type="hidden" name="action" id="action" value="">
-                                    <div class="col-md-3 mb-3">
-                                        <button type="button" id="save-as-draft"
-                                            class="btn btn-info w-100">Draft</button>
-                                    </div>
-                                    <div class="col-md-3 mb-3">
-                                        <button type="button" id="save-and-create"
-                                            class="btn btn-primary w-100">Create</button>
-                                    </div>
-                                    <div class="col-md-3 mb-3">
-                                        <button type="button" id="save-and-send"
-                                            class="btn btn-success w-100">Submit</button>
-                                    </div>
-                                    <div class="col-md-3 mb-3">
+                            <!-- Form Actions -->
+                            <div class="form-actions mt-4 border-top pt-3">
+                                <div class="d-flex justify-content-between">
+                                    <div>
                                         <a href="{{ route('clients.details', ['id' => $client->id]) }}"
-                                            class="btn btn-danger w-100">Cancel</a>
+                                            class="btn btn-outline-secondary">
+                                            <i class="fas fa-times me-1"></i> Cancel
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <button type="button" id="save-as-draft" class="btn btn-primary me-2">
+                                            <i class="fas fa-save me-1"></i> Save Draft
+                                        </button>
+                                        <button type="button" id="save-and-create" class="btn btn-success me-2">
+                                            <i class="fas fa-plus-circle me-1"></i> Create
+                                        </button>
+                                        <input type="hidden" name="action" id="action" value="">
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <style>
+        .section-header {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .required:after {
+            content: " *";
+            color: #dc3545;
+        }
+
+        .discount-card {
+            transition: all 0.3s ease;
+        }
+
+        .form-control:read-only,
+        .form-select:read-only {
+            background-color: #f8f9fa;
+        }
+    </style>
+
     <script>
         $(document).ready(function() {
             var originalCost = 0;
 
+            // Initialize form elements
             getInsurerPolicies();
             getPolicyDetails();
+            initDiscountToggle();
+
+            // Make sure currency and payment frequency are properly set when policy changes
+            function syncReadOnlyFields() {
+                $('#currency').val($('#currency option:first').val());
+                $('#payment_frequency').val('');
+            }
 
             function getInsurerPolicies() {
                 $('#insurer_id').change(function() {
@@ -190,27 +297,42 @@
                             url: '/assign-policy/getInsurerPolicies/' + insurerId,
                             type: 'GET',
                             success: function(response) {
+
                                 var policiesDropdown = $('#policy_id');
                                 policiesDropdown.empty();
                                 policiesDropdown.append(
-                                    '<option value="0">Select Policy</option>');
+                                    '<option value="">Select Policy</option>');
 
                                 $.each(response, function(index, policy) {
                                     policiesDropdown.append('<option value="' + policy
                                         .id + '">' + policy.policy_type +
                                         '</option>');
                                 });
+
+
+
+                                // Reset dependent fields
+                                $('#policy_details').val('');
+                                $('#terms_conditions').val('');
+                                $('#cost').val('');
+                                syncReadOnlyFields();
                             },
                             error: function(xhr) {
-                                console.log(xhr.responseText);
+                                Swal.fire({
+                                    title: "Error",
+                                    text: xhr.responseText,
+                                    icon: "error",
+                                });
+                                showAlert('Error loading policies. Please try again.',
+                                    'danger');
                             }
                         });
                     } else {
-                        $('#policy_id').empty().append('<option value="0">Select Policy</option>');
+                        $('#policy_id').empty().append('<option value="">Select Policy</option>');
                         $('#policy_details').val('');
                         $('#terms_conditions').val('');
                         $('#cost').val('');
-                        $('#currency').val('');
+                        syncReadOnlyFields();
                     }
                 });
             }
@@ -224,84 +346,157 @@
                             url: '/assign-policy/getPolicyDetails/' + policyId,
                             type: 'GET',
                             success: function(response) {
-                                console.log(response);
-                                var policy = response;
-                                $('#policy_details').val(policy.coverage_details);
-                                $('#terms_conditions').val(policy.terms_conditions);
-                                $('#cost').val(policy.premium_amount);
-                                $('#currency').val(policy.currency);
-                                $('#payment_frequency').val(policy.premium_frequency);
 
-                                // Update the originalCost whenever a new policy is selected
-                                originalCost = parseFloat(policy.premium_amount) || 0;
+                                $('#policy_type_id').val(response.policy_type.id);
+                                $('#policy_type_name').val(response.policy_type.name);
+
+                                var policySubTypeDropdown = $('#policy_sub_type_id');
+                                policySubTypeDropdown.empty();
+                                policySubTypeDropdown.append(
+                                    '<option value="">Select Policy Sub Type</option>');
+
+                                if (response.policy_type.policy_sub_types) {
+                                    $.each(response.policy_type.policy_sub_types, function(
+                                        index, subType) {
+                                        policySubTypeDropdown.append(
+                                            $('<option></option>')
+                                            .val(subType.id)
+                                            .text(subType.name)
+                                            .prop('selected', (subType.id ==
+                                                response.policy_sub_type_id))
+                                        );
+                                    });
+                                }
+
+                                // 3. Set other fields
+                                $('#policy_details').val(response.coverage_details || 'N/A');
+                                $('#terms_conditions').val(response.terms_conditions || 'N/A');
+                                $('#cost').val(response.premium_amount || '0.00');
+                                $('#currency').val(response.currency || 'usd');
+                                $('#payment_frequency').val(response.premium_frequency ||
+                                    'yearly');
+
+                                // 4. Set original cost for discount calculations
+                                originalCost = parseFloat(response.premium_amount) || 0;
                                 $('#cost').data('original-cost', originalCost);
 
-                                // Recalculate the cost with any applied discount
-                                updateCost();
+                                // 5. Toggle vehicle fields if Motor Insurance
+                                if (response.policy_type.name === 'Motor Insurance') {
+                                    $('#vehicle-fields').slideDown();
+                                } else {
+                                    $('#vehicle-fields').slideUp();
+                                }
                             },
                             error: function(xhr) {
-                                console.log(xhr.responseText);
+                                Swal.fire({
+                                    title: "Error",
+                                    text: xhr.responseText,
+                                    icon: "error"
+                                });
+                                showAlert('Error loading policy details. Please try again.',
+                                    'danger');
                             }
                         });
                     } else {
-                        $('#policy_details').val('');
-                        $('#terms_conditions').val('');
-                        $('#cost').val('');
-                        $('#currency').val('');
-                        originalCost = 0; // Reset originalCost when no policy is selected
+                        resetPolicyFields();
                     }
+                });
+            }
+
+            function initDiscountToggle() {
+                // Initialize discount fields
+                $('.discount-fields').hide();
+
+                $('#is_discounted').change(function() {
+                    if ($(this).is(':checked')) {
+                        $('.discount-fields').slideDown();
+                    } else {
+                        $('.discount-fields').slideUp();
+                        // Reset discount fields
+                        $('#discount_type').val('');
+                        $('#discount').val('');
+                        $('#cost').val(originalCost.toFixed(2));
+                    }
+                });
+
+                // Handle discount calculations
+                $('#discount_type, #discount').on('change input', function() {
+                    updateCost();
                 });
             }
 
             function updateCost() {
                 var discountType = $('#discount_type').val();
                 var discountAmount = parseFloat($('#discount').val()) || 0;
-
                 var discountedCost = originalCost; // Default to original cost
 
-                if (discountType === 'percentage') {
-                    discountedCost = originalCost - (originalCost * (discountAmount / 100));
-                } else if (discountType === 'fixed') {
-                    discountedCost = originalCost - discountAmount;
+                if ($('#is_discounted').is(':checked')) {
+                    if (discountType === 'percentage') {
+                        discountedCost = originalCost - (originalCost * (discountAmount / 100));
+                    } else if (discountType === 'fixed') {
+                        discountedCost = originalCost - discountAmount;
+                    }
                 }
 
                 // Ensure the cost doesn't go below 0
                 discountedCost = Math.max(discountedCost, 0);
-
                 $('#cost').val(discountedCost.toFixed(2));
             }
 
-            $('#is_discounted').on('change', function() {
-                if ($(this).is(':checked')) {
-                    $('#discount_type').closest('.form-group').show();
-                    $('#discount').closest('.form-group').show();
-                } else {
-                    $('#discount_type').closest('.form-group').hide();
-                    $('#discount').closest('.form-group').hide();
-                    $('#cost').val(originalCost.toFixed(2)); // Reset to original cost
-                }
-            });
-
-            $('#discount_type').closest('.form-group').hide();
-            $('#discount').closest('.form-group').hide();
-            $('#discount_type, #discount').on('change input', function() {
-                updateCost();
-            });
-
+            // Form submission handlers
             $('#save-as-draft').on('click', function() {
                 $('#action').val('save_as_draft');
-                $('form').submit();
+                validateAndSubmit();
             });
 
             $('#save-and-create').on('click', function() {
                 $('#action').val('save_and_create');
-                $('form').submit();
+                validateAndSubmit();
             });
 
-            $('#save-and-send').on('click', function() {
-                $('#action').val('save_and_send');
-                $('form').submit();
-            });
+
+            function validateAndSubmit() {
+                // Basic validation
+                let isValid = true;
+
+                if ($('#insurer_id').val() === '') {
+                    showAlert('Please select an insurer', 'danger');
+                    isValid = false;
+                }
+
+                if ($('#policy_id').val() === '') {
+                    showAlert('Please select a policy type', 'danger');
+                    isValid = false;
+                }
+
+                if ($('#cost').val() === '' || $('#cost').val() <= 0) {
+                    showAlert('Please enter a valid premium amount', 'danger');
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    $('form').submit();
+                }
+            }
+
+            function showAlert(message, type) {
+                $('.alert-dismissible').remove();
+
+                const alert = $(`
+                <div class="alert alert-${type} alert-dismissible fade show mb-4">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `);
+
+                // Insert after the card header
+                $('.card-header').after(alert);
+
+                // Auto dismiss after 5 seconds
+                setTimeout(() => {
+                    alert.alert('close');
+                }, 5000);
+            }
         });
     </script>
 @endsection

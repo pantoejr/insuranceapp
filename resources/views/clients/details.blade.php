@@ -41,5 +41,7 @@
         ];
     @endphp
 
-    <x-section-navigation :sections="$sections" :model="$model" />
+    @can('view-client-details')
+        <x-section-navigation :sections="$sections" :model="$model" />
+    @endcan
 @endsection
