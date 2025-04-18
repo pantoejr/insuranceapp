@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('insurer_assignments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('insurer_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->enum('role', ['uploader', 'approver', 'reviewer', 'final_approver']);
-            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->string('name', 50);
+            $table->string('email', 50);
+            $table->string('phone', 20);
+            $table->enum('status',['active', 'inactive'])->default('active');
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->timestamps();

@@ -183,8 +183,11 @@ class InsurerController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'insurer_id' => 'required|exists:insurers,id',
-            'user_id' => 'required|exists:users,id',
+            'name' => 'required|string|max:50',
             'status' => 'required|in:active,inactive',
+            'email' => 'email|required',
+            'phone' => 'required|string|max:20',
+    
         ]);
 
         if ($validator->fails()) {
@@ -207,8 +210,10 @@ class InsurerController extends Controller
 
         InsurerAssignment::create([
             'insurer_id' => $request->insurer_id,
-            'user_id' => $request->user_id,
+            'name' => $request->name,
             'status' => $request->status,
+            'email' => $request->email,
+            'phone' => $request->phone,
             'created_by' => Auth::user()->id,
             'updated_by' => Auth::user()->id,
         ]);
@@ -227,14 +232,18 @@ class InsurerController extends Controller
         // Validate the request
         $request->validate([
             'edited_status' => 'required|in:active,inactive',
-            'edit_user_id' => 'required|exists:users,id',
+            'name' => 'required|string|max:50',
+            'email' => 'unique:insurer_assignments,email,except,id',
+            'phone' => 'unique:insurer_assignments,phone,except,id'
         ]);
 
         try {
             $insurerUser = InsurerAssignment::findOrFail($id);
             $insurerUser->update([
-                'user_id' => $request->edit_user_id,
+                'name' => $request->name,
                 'status' => $request->edited_status,
+                'phone' => $request->phone,
+                'email' => $request->email,
                 'updated_by' => Auth::user()->id,
             ]);
 

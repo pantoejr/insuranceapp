@@ -445,7 +445,11 @@ Route::get('/generate-permissions', function () {
         'view-policy-type',
         'edit-client-attachment',
         'view-client-policies',
-        'edit-user-role'
+        'edit-user-role',
+        'approve-claim',
+        'reject-claim',
+        'approve-policy',
+        'reject-policy',
     ];
 
     foreach ($permissions as $permission) {

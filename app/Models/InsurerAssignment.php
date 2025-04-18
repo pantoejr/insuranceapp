@@ -8,9 +8,10 @@ class InsurerAssignment extends Model
 {
     protected $fillable = [
         'insurer_id',
-        'user_id',
+        'name',
+        'email',
+        'phone',
         'status',
-        'role',
         'created_by',
         'updated_by',
     ];

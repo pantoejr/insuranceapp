@@ -16,8 +16,9 @@
                             <tr>
                                 <th>#</th>
                                 <th>Insurer</th>
-                                <th>User</th>
-                                <th>Role</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -27,9 +28,9 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $assignment->insurer->company_name }}</td>
-                                    <td>{{ $assignment->user->name }}</td>
-                                    <td>{{ ucfirst($assignment->role) }}</td>
-                                    <td>{{ ucfirst($assignment->status) }}</td>
+                                    <td>{{ $assignment->name }}</td>
+                                    <td>{{ $assignment->email }}</td>
+                                    <td>{{ $assignment->phone }}</td>
                                     <td>
                                         <button class="btn btn-warning  btn-sm edit-btn" data-bs-toggle="modal"
                                             data-bs-target="#editInsurerUserModal"
