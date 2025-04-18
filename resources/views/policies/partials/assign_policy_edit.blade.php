@@ -80,7 +80,6 @@
                 url: '/insurer-policies/edit/' + id,
                 type: 'GET',
                 success: function(response) {
-                    console.log(response);
 
                     $('#edit_policy_assignment_id').val(response.id);
 

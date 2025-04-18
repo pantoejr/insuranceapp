@@ -52,14 +52,22 @@ class AssignPolicyController extends Controller
 
     public function getInsurerPolicies($insurer_id)
     {
-
         $policies = Policy::join('insurer_policies', 'policies.id', '=', 'insurer_policies.policy_id')
             ->join('policy_types', 'policies.policy_type_id', '=', 'policy_types.id')
-            ->join('policy_sub_types', 'policies.policy_sub_type_id', '=', 'policy_sub_types.id')
             ->where('insurer_policies.insurer_id', $insurer_id)
             ->where('insurer_policies.status', 'active')
-            ->select('policies.id', 'policy_types.name as policy_type', 'policy_types.id as policyTypeId', 'policy_sub_types.name as policySubType', 'policy_sub_types.id as policySubTypeId')
+            ->select('policies.*', 'policy_types.name as policy_type', 'policy_types.id as policyTypeId')
+            ->with(['policyType.policySubTypes'])
             ->get();
+
+
+        // $policies = Policy::join('insurer_policies', 'policies.id', '=', 'insurer_policies.policy_id')
+        //     ->join('policy_types', 'policies.policy_type_id', '=', 'policy_types.id')
+        //     ->join('policy_sub_types', 'policies.policy_sub_type_id', '=', 'policy_sub_types.id')
+        //     ->where('insurer_policies.insurer_id', $insurer_id)
+        //     ->where('insurer_policies.status', 'active')
+        //     ->select('policies.id', 'policies.policy_name', 'policy_types.name as policy_type', 'policy_types.id as policyTypeId', 'policy_sub_types.name as policySubType', 'policy_sub_types.id as policySubTypeId')
+        //     ->get();
 
         return response()->json($policies);
     }
@@ -366,8 +374,8 @@ class AssignPolicyController extends Controller
 
     private function handleApprovedStatus(Client $client, PolicyAssignment $policyAssignment, Insurer $insurer, $policyType, $systemVariables)
     {
-        $isMotorPolicy = stripos($policyType->name, 'Motor') !== false
-            || stripos($policyType->name, 'Moto') !== false;
+        $isMotorPolicy = stripos($policyType->name, 'Auto') !== false
+            || stripos($policyType->name, 'Auto') !== false;
 
         $pdfTemplate = $isMotorPolicy ? 'invoices.slip' : 'invoices.pdf';
         $attachmentName = ($isMotorPolicy ? 'motor_quotation_slip' : 'quotation_placing_slip')
@@ -418,16 +426,22 @@ class AssignPolicyController extends Controller
 
     private function handleCompletedStatus(Client $client, PolicyAssignment $policyAssignment, Insurer $insurer, $policyType, $systemVariables)
     {
-        $isMotorPolicy = stripos($policyType->name, 'Motor') !== false
-            || stripos($policyType->name, 'Moto') !== false;
+        $isMotorPolicy = stripos($policyType->name, 'Auto') !== false
+            || stripos($policyType->name, 'Auto') !== false;
 
         $pdfTemplate = 'invoices.pdf';
         $attachmentName = ('inv')
             . '_' . $client->name . '.pdf';
 
+
+        $invoice = Invoice::where('invoiceable_id', $policyAssignment->id)
+            ->where('invoiceable_type', PolicyAssignment::class)
+            ->first();
+
         // Generate PDF with all required data including policyAssignment
         $pdf = Pdf::loadView($pdfTemplate, [
             'insurer' => $insurer,
+            'invoice' => $invoice,
             'policyAssignment' => $policyAssignment,
             'client' => $client,
             'policyType' => $policyType,

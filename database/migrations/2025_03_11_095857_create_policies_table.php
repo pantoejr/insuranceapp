@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('policies', function (Blueprint $table) {
             $table->id();
+            $table->string('policy_name');
             $table->foreignId('policy_type_id')->constrained()->onDelete('cascade');
+            $table->foreignId('policy_sub_type_id')->nullable()->constrained('policy_sub_types')->onDelete('cascade');
             $table->string('number')->unique(true);
             $table->text('description')->nullable(true);
             $table->text('coverage_details')->nullable(true);

@@ -11,6 +11,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group mb-3">
+                                <label for="policy_name" class="form-label">Policy Name</label>
+                                <input type="text" class="form-control" id="policy_name" name="policy_name"
+                                    value="{{ $policy->policy_name }}" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
                                 <label for="policy_type" class="form-label">Policy Type</label>
                                 <input type="text" class="form-control" id="policy_type" name="policy_type"
                                     value="{{ $policy->policyType->name }}" disabled>

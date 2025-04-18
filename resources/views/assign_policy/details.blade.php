@@ -187,7 +187,7 @@
                 });
 
                 $('#approveButton').on('click', function() {
-                    $('#status').val('approve');
+                    $('#status').val('approved');
                     $('#statusForm').submit();
                 });
 

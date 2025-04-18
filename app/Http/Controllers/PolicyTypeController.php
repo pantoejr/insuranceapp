@@ -5,9 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\PolicyType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Routing\Controller;
 
 class PolicyTypeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth']);
+    }
+
     public function index()
     {
         $policyTypes = PolicyType::all();

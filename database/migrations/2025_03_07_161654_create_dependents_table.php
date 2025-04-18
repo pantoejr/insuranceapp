@@ -20,11 +20,11 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('relationship');
             $table->string('address');
-            $table->string('profile_picture');
+            $table->string('profile_picture')->nullable();
             $table->date('date_of_birth')->nullable();
             $table->enum('status', ['active', 'inactive']);
-            $table->string('created_by');
-            $table->string('updated_by');
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

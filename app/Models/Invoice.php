@@ -70,4 +70,9 @@ class Invoice extends Model
     {
         return $this->invoiceable->claim();
     }
+
+    public function clientService()
+    {
+        return $this->invoiceable->clientService();
+    }
 }

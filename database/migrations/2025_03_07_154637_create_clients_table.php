@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('address');
             $table->date('date_of_birth')->nullable();
             $table->enum('status', ['active', 'inactive']);
-            $table->string('created_by');
-            $table->string('updated_by');
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

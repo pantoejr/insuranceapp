@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Policy extends Model
 {
     protected $fillable = [
+        'policy_name',
         'policy_type_id',
         'policy_sub_type_id',
         'name',

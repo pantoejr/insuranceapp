@@ -13,7 +13,7 @@
                         <label for="editPolicySelect">Policy</label>
                         <select id="editPolicySelect" name="policy_id" class="form-control">
                             @foreach ($policies as $policy)
-                                <option value="{{ $policy->id }}">{{ $policy->policyType->name }}</option>
+                                <option value="{{ $policy->id }}">{{ $policy->policy_name }}</option>
                             @endforeach
                         </select>
                     </div>

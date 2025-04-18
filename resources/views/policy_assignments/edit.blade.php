@@ -13,8 +13,6 @@
                             action="{{ route('client-policies.update', ['client' => $client, 'id' => $policyAssignment->id]) }}"
                             method="POST" enctype="multipart/form-data">
                             @csrf
-                            @method('PUT')
-
                             <input type="hidden" name="client_id" value="{{ $client->id }}">
                             <input type="hidden" name="policy_type_name" id="policy_type_name"
                                 value="{{ $policyAssignment->policy->policyType->name ?? '' }}">
@@ -113,7 +111,7 @@
                                         </div>
 
                                         <!-- Vehicle Information Section -->
-                                        @if ($policyAssignment->policy->policyType->name == 'Motor Insurance' || old('policy_type_name') == 'Motor Insurance')
+                                        @if (stripos($policyAssignment->policy->policy_name, 'Motor') || stripos($policyAssignment->policyType->name, 'Auto'))
                                             <div id="vehicle-fields" class="row mb-4" style="display: block;">
                                                 <h6 class="section-header bg-light p-2 mb-3 border-all">
                                                     <i class="fas fa-car me-2"></i>Vehicle Information

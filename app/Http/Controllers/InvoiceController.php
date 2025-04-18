@@ -41,7 +41,23 @@ class InvoiceController extends Controller
         $systemEmail = SystemVariable::where('type', 'email')->first();
         $systemAddress = SystemVariable::where('type', 'address')->first();
         $systemPhone = SystemVariable::where('type', 'phone')->first();
-        $invoice = Invoice::with(['invoiceable.client', 'invoiceable.policy'])->where('invoice_id', $id)->first();
+
+        $invoice = Invoice::with([
+            'invoiceable' => function ($query) {
+                $query->with(['client']);
+
+                $model = $query->getModel();
+
+                if ($model instanceof \App\Models\Policy) {
+                    $query->with('policy');
+                }
+
+                if ($model instanceof \App\Models\ClientService) {
+                    $query->with('clientService.service');
+                }
+            }
+        ])->where('invoice_id', $id)->first();
+
         return view('invoices.details', [
             'title' => 'Invoice Details',
             'invoice' => $invoice,

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->enum('role', ['uploader', 'approver', 'reviewer', 'final_approver']);
             $table->enum('status', ['active', 'inactive'])->default('active');
-            $table->string('created_by')->nullable(true);
-            $table->string('updated_by')->nullable(true);
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
             $table->timestamps();
         });
     }

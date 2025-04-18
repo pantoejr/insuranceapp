@@ -146,7 +146,7 @@ class ClientController extends Controller
     public function addAttachment(Request $request, $id)
     {
         $request->validate([
-            'file_path' => 'required|file|mimes:jpeg,png,jpg,gif,svg,pdf,doc,docx|max:2048',
+            'file_path' => 'required|file|mimes:jpeg,png,jpg,gif,svg,pdf,doc,docx,xls,xlsx|max:2048',
         ]);
 
         try {

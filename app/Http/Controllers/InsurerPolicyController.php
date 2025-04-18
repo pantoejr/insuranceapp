@@ -109,30 +109,9 @@ class InsurerPolicyController extends Controller
         return response()->json(null, 204);
     }
 
-    // public function details($id)
-    // {
-    //     $insurerPolicy = InsurerPolicy::with(['policy', 'insurer'])->where('id', $id)->first();
-    //     return response()->json($insurerPolicy);
-    // }
-
     public function details($id)
     {
-        $insurerPolicy = DB::table('insurer_policies')
-            ->join('policies', 'insurer_policies.policy_id', '=', 'policies.id')
-            ->join('policy_types', 'policies.policy_type_id', '=', 'policy_types.id')
-            ->join('policy_sub_types', 'policies.policy_sub_type_id', '=', 'policy_sub_types.id')
-            ->join('insurers', 'insurer_policies.insurer_id', '=', 'insurers.id')
-            ->where('insurer_policies.id', $id)
-            ->select(
-                'insurer_policies.*',
-                'policies.number as policy_number',
-                'insurers.company_name as insurer_name',
-                'insurers.email as insurer_email',
-                'policy_types.name as policy_type_name',
-                'policy_sub_types.name as policy_sub_type_name',
-            )
-            ->first();
-
+        $insurerPolicy = InsurerPolicy::with(['policy.policyType', 'insurer'])->where('id', $id)->first();
         return response()->json($insurerPolicy);
     }
 }

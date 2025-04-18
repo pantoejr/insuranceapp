@@ -17,16 +17,7 @@
                                 id="company_name" name="company_name"
                                 value="{{ old('company_name', $insurer->company_name) }}" required>
                             @error('company_name')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="registration_number" class="form-label">Registration Number</label>
-                            <input type="text" class="form-control @error('registration_number') is-invalid @enderror"
-                                id="registration_number" name="registration_number"
-                                value="{{ old('registration_number', $insurer->registration_number) }}" required>
-                            @error('registration_number')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group mb-3">
@@ -34,7 +25,7 @@
                             <input type="text" class="form-control @error('address') is-invalid @enderror" id="address"
                                 name="address" value="{{ old('address', $insurer->address) }}" required>
                             @error('address')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group mb-3">
@@ -42,7 +33,7 @@
                             <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
                                 name="email" value="{{ old('email', $insurer->email) }}" required>
                             @error('email')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group mb-3">
@@ -50,7 +41,7 @@
                             <input type="text" class="form-control @error('phone') is-invalid @enderror" id="phone"
                                 name="phone" value="{{ old('phone', $insurer->phone) }}" required>
                             @error('phone')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group mb-3">
@@ -59,7 +50,7 @@
                                 id="key_contact_person" name="key_contact_person"
                                 value="{{ old('key_contact_person', $insurer->key_contact_person) }}" required>
                             @error('key_contact_person')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group mb-3">
@@ -68,14 +59,14 @@
                                 id="key_contact_email" name="key_contact_email"
                                 value="{{ old('key_contact_email', $insurer->key_contact_email) }}" required>
                             @error('key_contact_email')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group mb-3">
                             <label for="description" class="form-label">Description</label>
                             <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description">{{ old('description', $insurer->description) }}</textarea>
                             @error('description')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group mb-3">
@@ -84,7 +75,7 @@
                                 id="website_url" name="website_url"
                                 value="{{ old('website_url', $insurer->website_url) }}">
                             @error('website_url')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group mb-3">
@@ -92,7 +83,7 @@
                             <input type="file" class="form-control @error('logo') is-invalid @enderror" id="logo"
                                 name="logo">
                             @error('logo')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="text-danger">{{ $message }}</div>
                             @enderror
                             @if ($insurer->logo)
                                 <img src="{{ asset('storage/' . $insurer->logo) }}" alt="Logo"
@@ -109,7 +100,7 @@
                                     {{ old('status', $insurer->status) == 'inactive' ? 'selected' : '' }}>Inactive</option>
                             </select>
                             @error('status')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group">

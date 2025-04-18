@@ -90,7 +90,7 @@ class PolicyAssignmentController extends Controller
             $clientPolicy->status = 'draft';
 
             // Save vehicle details if policy type is "Motor Insurance"
-            if ($request->input('policy_type_name') === 'Motor Insurance') {
+            if ($request->input('policy_type_name') === 'Auto Insurance') {
                 $clientPolicy->vehicle_make = $validatedData['vehicle_make'];
                 $clientPolicy->vehicle_year = $validatedData['vehicle_year'];
                 $clientPolicy->vehicle_VIN = $validatedData['vehicle_VIN'];
@@ -312,6 +312,8 @@ class PolicyAssignmentController extends Controller
 
             $policyAssignment->save();
 
+
+
             return redirect()->route('clients.details', ['id' => $client->id])
                 ->with('msg', 'Policy status updated successfully.')
                 ->with('flag', 'success');
@@ -342,12 +344,28 @@ class PolicyAssignmentController extends Controller
 
     private function handleApprovedStatus(Client $client, PolicyAssignment $policyAssignment, Insurer $insurer, $policyType, $systemVariables)
     {
-        $isMotorPolicy = stripos($policyType->name, 'Motor') !== false
-            || stripos($policyType->name, 'Moto') !== false;
+        $isMotorPolicy = stripos($policyType->name, 'Auto') !== false
+            || stripos($policyType->name, 'Auto') !== false;
 
         $pdfTemplate = $isMotorPolicy ? 'invoices.slip' : 'invoices.pdf';
         $attachmentName = ($isMotorPolicy ? 'motor_quotation_slip' : 'quotation_placing_slip')
             . '_' . $client->name . '.pdf';
+
+        // Update policy duration and invoice
+        if ($policyAssignment->policy->premium_frequency) {
+            $invoice = Invoice::where('invoiceable_id', $policyAssignment->id)
+                ->where('invoiceable_type', PolicyAssignment::class)
+                ->first();
+
+            if ($invoice) {
+                $invoice->due_date = $this->calculateDueDate($policyAssignment->policy->premium_frequency);
+                $invoice->save();
+
+                $policyAssignment->policy_duration_start = now();
+                $policyAssignment->policy_duration_end = $invoice->due_date;
+            }
+        }
+        $policyAssignment->save();
 
         // Generate PDF with all required data including policyAssignment
         $pdf = Pdf::loadView($pdfTemplate, [
@@ -368,12 +386,22 @@ class PolicyAssignmentController extends Controller
             'policyAssignment' => $policyAssignment,
             'policyType' => $policyType,
             'insurer' => $insurer,
-        ], function ($message) use ($insurer, $pdf, $attachmentName) {
+        ], function ($message) use ($insurer, $pdf, $attachmentName, $policyType) {
             $message->to($insurer->email)
                 ->cc($insurer->key_contact_email)
-                ->subject('Policy Approved')
+                ->subject($policyType->name . 'Request')
                 ->attachData($pdf->output(), $attachmentName);
         });
+    }
+
+
+    private function handleCompletedStatus(Client $client, PolicyAssignment $policyAssignment, Insurer $insurer, $policyType, $systemVariables)
+    {
+        $attachmentName = ('inv') . '_' . $client->full_name . '.pdf';
+
+        $invoice = Invoice::where('invoiceable_id', $policyAssignment->id)
+            ->where('invoiceable_type', PolicyAssignment::class)
+            ->first();
 
         // Update policy duration and invoice
         if ($policyAssignment->policy->premium_frequency) {
@@ -389,21 +417,12 @@ class PolicyAssignmentController extends Controller
                 $policyAssignment->policy_duration_end = $invoice->due_date;
             }
         }
-    }
-
-
-    private function handleCompletedStatus(Client $client, PolicyAssignment $policyAssignment, Insurer $insurer, $policyType, $systemVariables)
-    {
-        $isMotorPolicy = stripos($policyType->name, 'Motor') !== false
-            || stripos($policyType->name, 'Moto') !== false;
-
-        $pdfTemplate = 'invoices.pdf';
-        $attachmentName = ('inv')
-            . '_' . $client->name . '.pdf';
+        $policyAssignment->save();
 
         // Generate PDF with all required data including policyAssignment
-        $pdf = Pdf::loadView($pdfTemplate, [
+        $pdf = Pdf::loadView('invoices.pdf', [
             'insurer' => $insurer,
+            'invoice' => $invoice,
             'policyAssignment' => $policyAssignment,
             'client' => $client,
             'policyType' => $policyType,
@@ -414,8 +433,8 @@ class PolicyAssignmentController extends Controller
         ]);
 
         // Send email with attachment
-        SmsHelper::sendSms($client->phone, 'Dear ' . $client->name .  ', Your policy request has been approved kindly come to our office at your convenient time to pick up your package.');
-        Mail::send('emails.completed', [
+        SmsHelper::sendSms($client->phone, 'Dear ' . $client->name .  ', Your insurance policy is now complete—thank you for choosing SAFE Insurance Brokers! Kindly visit us on 2nd Street, Sinkor (adjacent Monroe Chicken) or call 0888669090 / 0775061697 to arrange document delivery.');
+        Mail::send('emails.policy_completed', [
             'client' => $client,
             'policyAssignment' => $policyAssignment,
             'policyType' => $policyType,
@@ -425,21 +444,6 @@ class PolicyAssignmentController extends Controller
                 ->subject('Policy Approved')
                 ->attachData($pdf->output(), $attachmentName);
         });
-
-        // Update policy duration and invoice
-        if ($policyAssignment->policy->premium_frequency) {
-            $invoice = Invoice::where('invoiceable_id', $policyAssignment->id)
-                ->where('invoiceable_type', PolicyAssignment::class)
-                ->first();
-
-            if ($invoice) {
-                $invoice->due_date = $this->calculateDueDate($policyAssignment->policy->premium_frequency);
-                $invoice->save();
-
-                $policyAssignment->policy_duration_start = now();
-                $policyAssignment->policy_duration_end = $invoice->due_date;
-            }
-        }
     }
     private function calculateDueDate($frequency)
     {

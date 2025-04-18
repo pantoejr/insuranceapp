@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Helpers\SmsHelper;
 use App\Models\PolicyAssignment;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -38,11 +39,12 @@ class CheckPolicyExpiry extends Command
 
         foreach ($policies as $policy) {
             $client = $policy->client;
+            SmsHelper::sendSms($client->phone, 'Dear ' . $client->fullname . ', We would like to inform you that your policy ' .  $policy->policy_number  . ' is set to expire on ' .
+                $policy->policy_duration_end);
             Mail::send('emails.policy_expiry', compact('client', 'policy'), function ($message) use ($client) {
                 $message->to($client->email)
                     ->subject('Policy Expiry Notification');
             });
-
             $this->info('Email sent to ' . $client->email);
         }
 

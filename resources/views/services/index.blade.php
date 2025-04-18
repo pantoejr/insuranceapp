@@ -45,6 +45,7 @@
                                             </a>
                                             <form action="{{ route('services.destroy', ['id' => $service->id]) }}"
                                                 style="display: inline-block" method="POST">
+                                                @csrf
                                                 <button class="btn btn-danger btn-sm delete-btn"><i
                                                         class="bi bi-trash"></i></button>
                                             </form>

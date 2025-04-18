@@ -51,9 +51,13 @@
                                                     class="btn btn-primary btn-sm"><i class="bi bi-journal-text"></i></a>
                                             @endcan
                                             @can('delete-payment')
-                                                <a href="{{ route('payments.destroy', ['id' => $payment->id]) }}"
-                                                    class="btn btn-danger btn-sm" onclick="confirmDelete(event)"><i
-                                                        class="bi bi-trash"></i></a>
+                                                <form action="{{ route('payments.destroy', ['id' => $payment->id]) }}"
+                                                    method="POST" style="display: inline-block;">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-danger btn-sm delete-btn"><i
+                                                            class="bi bi-trash"></i></button>
+                                                    @csrf
+                                                </form>
                                             @endcan
 
                                         </td>

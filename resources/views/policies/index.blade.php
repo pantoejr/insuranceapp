@@ -16,6 +16,7 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>Name</th>
                                     <th>Type</th>
                                     <th>Sub Type</th>
                                     <th>Number</th>
@@ -30,6 +31,7 @@
                                 @foreach ($policies as $policy)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $policy->policy_name }}</td>
                                         <td>{{ $policy->policyType->name }}</td>
                                         <td>{{ $policy->policySubType->name ?? 'N/A' }}</td>
                                         <td>{{ $policy->number }}</td>

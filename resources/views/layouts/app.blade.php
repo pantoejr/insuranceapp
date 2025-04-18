@@ -328,16 +328,9 @@
             </div>
         </main>
         <footer class="app-footer">
-            <div class="float-end d-none d-sm-inline">
-                @if ($name)
-                    {{ $name->value }}
-                @else
-                    Insurance App
-                @endif
-            </div>
             <strong>
                 Copyright &copy; {{ date('Y') }}
-                <a href="https://clatech.io/" class="text-decoration-none">Classic Technovations Inc.</a>.
+                <a href="https://safeinsurancebrokers.com/" class="text-decoration-none">Safe Insurance Brokers</a>.
             </strong>
             All rights reserved.
         </footer>

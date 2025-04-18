@@ -444,7 +444,8 @@ Route::get('/generate-permissions', function () {
         'delete-client-policy',
         'view-policy-type',
         'edit-client-attachment',
-        'view-client-policies'
+        'view-client-policies',
+        'edit-user-role'
     ];
 
     foreach ($permissions as $permission) {

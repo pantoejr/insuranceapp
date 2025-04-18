@@ -4,15 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Policy Approved</title>
+    <title>{{ $policyType->name }} Request</title>
 </head>
 
 <body>
-    <p>Dear {{ $client->full_name }},</p>
-    <p>We are pleased to inform you that your policy has been approved. You can come to pick it up at your convenience.
-    </p>
-    <p>Please find attached the invoice for your policy.</p>
-    <p>Thank you for choosing our services.</p>
+    <p>Dear Nancy/Robert/Deborah,</p>
+    <p>Regarding the above subject, please find attached a placement slip for our client's vehicle to initiate motor
+        insurance coverage, effective today {{ $policyAssignment->policy_duration_start }} till
+        {{ $policyAssignment->policy_duration_end }}.</p>
+    <p>We appreciate your prompt attention to this and look forward to receiving the documents soon</p>
+    <p>Thank you, as always, for your cooperation.</p>
     <p>Best regards,<br>{{ strtoupper(env('APP_NAME')) }}</p>
 </body>
 

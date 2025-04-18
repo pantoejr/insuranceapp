@@ -11,6 +11,16 @@
                         @csrf
                         <div class="row">
                             <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label for="policy_name" class="form-label">Policy Name</label>
+                                    <input type="text" class="form-control @error('policy_name') is-invalid @enderror"
+                                        id="policy_name" name="policy_name" value="{{ old('policy_name') }}" required>
+                                    @error('policy_name')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-4">
                                 <label for="policy_type_id" class="form-label">Policy Type</label>
                                 <select name="policy_type_id" id="policy_type_id"
                                     class="form-control @error('policy_type_id') is-invalid @enderror">

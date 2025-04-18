@@ -116,6 +116,16 @@
                                                 <th>Purpose</th>
                                                 <td colspan="2">{{ $invoice->invoiceable->description }}</td>
                                             </tr>
+                                        @elseif($invoice->invoiceable_type == \App\Models\ClientService::class)
+                                            <tr>
+                                                <td>{{ $invoice->invoiceable->service->name }}</td>
+                                                <td>{{ $invoice->invoiceable->service->description }}</td>
+                                                <td>{{ $invoice->total_amount }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Service</th>
+                                                <td colspan="2">{{ $invoice->invoiceable->service->name }}</td>
+                                            </tr>
                                         @endif
 
                                         <tr>

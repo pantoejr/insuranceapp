@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Str;
 
 class PolicyController extends Controller
 {
@@ -38,9 +39,10 @@ class PolicyController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'policy_name' => 'required',
             'policy_type_id' => 'required|exists:policy_types,id',
-            'policy_sub_type_id' => 'required|exists:policy_sub_types,id',
-            'number' => 'required|string|max:255|unique:policies',
+            'policy_sub_type_id' => 'nullable|exists:policy_sub_types,id',
+            'number' => 'nullable|string|max:255|unique:policies',
             'description' => 'nullable|string',
             'coverage_details' => 'nullable|string',
             'premium_amount' => 'required|numeric',
@@ -53,8 +55,9 @@ class PolicyController extends Controller
 
         try {
             $policy = Policy::create([
+                'policy_name' => $request->policy_name,
                 'policy_type_id' => $request->policy_type_id,
-                'number' => $request->number,
+                'number' => $request->number ?? Str::random(6),
                 'description' => $request->description,
                 'coverage_details' => $request->coverage_details,
                 'premium_amount' => $request->premium_amount,
@@ -93,6 +96,7 @@ class PolicyController extends Controller
         try {
 
             $request->validate([
+                'policy_name' => 'required',
                 'policy_type_id' => 'required|exists:policy_types,id',
                 'policy_sub_type_id' => 'nullable|exists:policy_sub_types,id',
                 'number' => 'required|string|max:255|unique:policies,number,' . $policy->id,
@@ -106,6 +110,7 @@ class PolicyController extends Controller
             ]);
 
             $policy->update([
+                'policy_name' => $request->policy_name,
                 'policy_type_id' => $request->policy_type_id,
                 'policy_sub_type_id' => $request->policy_sub_type_id,
                 'number' => $request->number,
@@ -161,7 +166,7 @@ class PolicyController extends Controller
             ->join('policy_sub_types', 'policies.policy_sub_type_id', '=', 'policy_sub_types.id')
             ->where('insurer_policies.insurer_id', $id)
             ->where('insurer_policies.status', 'active')
-            ->select('policies.id', 'policy_types.*', 'policies.*', 'policy_sub_types.*')
+            ->select('policies.id', 'policies.*', 'policy_types.*', 'policies.*', 'policy_sub_types.*')
             ->get();
 
         return response()->json($policies);

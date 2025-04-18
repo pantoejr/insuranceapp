@@ -23,13 +23,6 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group mb-3">
-                            <label for="registration_number" class="form-label">Registration Number</label>
-                            <input type="text" value="{{ $model->registration_number }}" class="form-control"
-                                disabled>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group mb-3">
                             <label for="address" class="form-label">Address</label>
                             <input type="text" value="{{ $model->address }}" class="form-control" disabled>
                         </div>

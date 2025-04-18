@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\SmsHelper;
 use App\Models\Client;
 use App\Models\ClientService;
+use App\Models\Invoice;
 use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -38,6 +39,7 @@ class ClientServiceController extends Controller
                 'cost' => 'required|numeric|min:0.01',
                 'currency' => 'required|in:usd,lrd',
                 'is_discounted' => 'nullable|boolean',
+                'discount_type' => 'nullable|in:percentage,fixed',
                 'discount' => 'nullable|numeric|min:0.01',
                 'notes' => 'nullable|string',
                 'service_duration_start' => 'nullable|date',
@@ -152,12 +154,31 @@ class ClientServiceController extends Controller
         }
 
         $newStatus = $request->input('status');
+        $clientService->service_duration_start = now();
+        $clientService->service_duration_end = $this->calculateDueDate($clientService->service->frequency);
         $clientService->status = $newStatus;
+
         $clientService->save();
 
         if ($newStatus === 'Completed') {
             $client = $clientService->client;
             $serviceName = $clientService->service->name;
+
+            $invoice = new Invoice();
+            $invoice->invoiceable_id = $clientService->id;
+            $invoice->invoiceable_type = ClientService::class;
+            $invoice->details = $clientService->notes;
+            $invoice->total_amount = $clientService->cost;
+            $invoice->currency = $clientService->currency;
+            $invoice->amount_paid = 0;
+            $invoice->balance = $clientService->cost;
+            $invoice->invoice_date = now();
+            $invoice->due_date = now()->addDays(7);
+            $invoice->notes = $clientService->notes;
+            $invoice->created_by = Auth::user()->name;
+            $invoice->updated_by = Auth::user()->name;
+            $invoice->save();
+            $clientService->invoices()->save($invoice);
 
             SmsHelper::sendSms($client->phone, 'Your service request for ' . $serviceName . ' has been completed.');
             Mail::send('emails.service_completed', ['client' => $client, 'serviceName' => $serviceName], function ($message) use ($client) {
@@ -166,6 +187,21 @@ class ClientServiceController extends Controller
             });
         }
 
-        return redirect()->route('clients.details', ['id' => $client->id])->with('success', 'Status updated successfully.');
+        return to_route('clients.details', ['id' => $client->id])->with('success', 'Status updated successfully.');
+    }
+
+    private function calculateDueDate($frequency)
+    {
+        return match ($frequency) {
+            'monthly' => now()->addMonth(),
+            'quarterly' => now()->addMonths(3),
+            'half-yearly' => now()->addMonths(6),
+            'yearly' => now()->addYear(),
+            'bi-yearly' => now()->addYears(2),
+            'tri-yearly' => now()->addYears(3),
+            'four-yearly' => now()->addYear(4),
+            'five-yearly' => now()->addYear(5),
+            default => now(),
+        };
     }
 }

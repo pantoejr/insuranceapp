@@ -36,9 +36,14 @@
                                                 <a href="{{ route('system-variables.details', $variable->id) }}"
                                                     class="btn btn-primary btn-sm"><i class="bi bi-book-fill"></i>
                                                     Details</a>
-                                                <a href="{{ route('system-variables.destroy', ['id' => $variable->id]) }}"
-                                                    class="btn btn-danger btn-sm" onclick="confirmDelete(event)"><i
-                                                        class="bi bi-trash"></i>Delete</a>
+                                                <form
+                                                    action="{{ route('system-variables.destroy', ['id' => $variable->id]) }}"
+                                                    method="POST" style="display: inline-block">
+                                                    @csrf
+                                                    <button class="btn btn-danger btn-sm delete-btn">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach

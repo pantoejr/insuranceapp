@@ -55,7 +55,7 @@
                                     </div>
 
                                     <!-- Vehicle Information Section -->
-                                    @if ($policyAssignment->policyType->name == 'Motor Insurance')
+                                    @if (stripos($policyAssignment->policy->policy_name, 'Motor') || stripos($policyAssignment->policyType->name, 'Auto'))
                                         <div class="row mb-4">
                                             <h6 class="section-header bg-light p-2 mb-3 border-all">
                                                 <i class="fas fa-car me-2"></i>Vehicle Information
@@ -160,7 +160,7 @@
                                     <div class="form-group mb-3">
                                         <label class="form-label">Policy Number</label>
                                         <input type="text" class="form-control"
-                                            value="{{ $policyAssignment->policy_number ?? 'N/A' }}" disabled>
+                                            value="{{ $policyAssignment->policy->number ?? 'N/A' }}" disabled>
                                     </div>
                                 </div>
                             </div>

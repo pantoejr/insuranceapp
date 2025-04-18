@@ -20,7 +20,7 @@
                             <input type="file" class="form-control @error('profile_picture') is-invalid @enderror"
                                 id="profile_picture" name="profile_picture" onchange="previewPhoto()">
                             @error('profile_picture')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="row mb-3">
@@ -37,7 +37,7 @@
                                     <input type="text" class="form-control @error('employee_name') is-invalid @enderror"
                                         id="employee_name" placeholder="Enter employee name" required name="employee_name">
                                     @error('employee_name')
-                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
@@ -49,7 +49,7 @@
                                     <input type="email" class="form-control @error('email') is-invalid @enderror"
                                         id="email" placeholder="Enter email" required name="email">
                                     @error('email')
-                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
@@ -59,7 +59,7 @@
                                     <input type="text" class="form-control @error('phone') is-invalid @enderror"
                                         id="phone" placeholder="Enter phone" name="phone">
                                     @error('phone')
-                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
@@ -71,7 +71,7 @@
                                     <input type="text" class="form-control @error('position') is-invalid @enderror"
                                         id="position" placeholder="Enter position" name="position">
                                     @error('position')
-                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
@@ -82,9 +82,10 @@
                                         name="gender" required>
                                         <option value="male">Male</option>
                                         <option value="female">Female</option>
+                                        <option value="other">Other</option>
                                     </select>
                                     @error('gender')
-                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
@@ -99,7 +100,7 @@
                                         <option value="inactive">Inactive</option>
                                     </select>
                                     @error('status')
-                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
@@ -109,7 +110,7 @@
                                     <input type="text" class="form-control @error('address') is-invalid @enderror"
                                         id="address" placeholder="Enter address" name="address">
                                     @error('address')
-                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
@@ -122,7 +123,7 @@
                                         class="form-control @error('date_of_birth') is-invalid @enderror"
                                         id="date_of_birth" name="date_of_birth">
                                     @error('date_of_birth')
-                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>

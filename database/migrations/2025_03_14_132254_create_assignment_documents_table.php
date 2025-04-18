@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('document_name');
             $table->string('document_path');
             $table->string('document_type');
-            $table->string('created_by');
-            $table->string('updated_by');
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

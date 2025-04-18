@@ -35,7 +35,7 @@ class ServiceController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string',
+            'name' => 'required|string|unique:services,name,except,id',
             'description' => 'nullable|string',
             'terms_conditions' => 'required|string',
             'eligibility' => 'required|in:individual,company,both',
@@ -68,6 +68,52 @@ class ServiceController extends Controller
             'title' => 'Edit Service',
             'service' => $service,
         ]);
+    }
+
+    public function update($id, Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+            'description' => 'nullable|string',
+            'terms_conditions' => 'required|string',
+            'eligibility' => 'required|in:individual,company,both',
+            'cost' => 'required|numeric|min:0.01',
+            'currency' => 'required|in:usd,lrd',
+            'frequency' => 'required|in:monthly,quartely,half-yearly,yearly,bi-yearly,tri-yearly,four-yearly,five-yearly',
+            'status' => 'required|in:active,inactive',
+        ]);
+
+        try {
+
+            $service = Service::findOrFail($id);
+            $validatedData['updated_by'] = Auth::user()->name;
+            $service->update($validatedData);
+        } catch (Exception $ex) {
+            return back()
+                ->with('msg', 'Error: ' . $ex->getMessage())
+                ->with('flag', 'danger');
+        }
+        return to_route('services.index')
+            ->with('msg', 'Service updated successfully')
+            ->with('flag', 'success');
+    }
+
+    public function details($id)
+    {
+        $service = Service::findOrFail($id);
+        return view('services.details', [
+            'title' => 'Service Details',
+            'service' => $service,
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $service = Service::findOrFail($id);
+        $service->delete();
+        return to_route('services.index')
+            ->with('msg', 'Service deleted successfully')
+            ->with('flag', 'success');
     }
 
     public function getServiceDetails($id)

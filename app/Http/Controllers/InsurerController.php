@@ -40,7 +40,6 @@ class InsurerController extends Controller
     {
         $request->validate([
             'company_name' => 'required|string|max:255',
-            'registration_number' => 'required|string|max:255',
             'address' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:insurers',
             'phone' => 'required|string|max:255',
@@ -57,7 +56,6 @@ class InsurerController extends Controller
 
             $insurer = Insurer::create([
                 'company_name' => $request->company_name,
-                'registration_number' => $request->registration_number,
                 'address' => $request->address,
                 'email' => $request->email,
                 'phone' => $request->phone,
@@ -71,7 +69,7 @@ class InsurerController extends Controller
                 'updated_by' => Auth::user()->name,
             ]);
 
-            return redirect()->route('insurers.index')->with('msg', 'Insurer created successfully.')
+            return to_route('insurers.index')->with('msg', 'Insurer created successfully.')
                 ->with('flag', 'success');
         } catch (Exception $e) {
             return redirect()->back()->with('msg', 'An error occurred while creating the insurer: ' . $e->getMessage())
@@ -94,7 +92,6 @@ class InsurerController extends Controller
 
         $request->validate([
             'company_name' => 'required|string|max:255',
-            'registration_number' => 'required|string|max:255',
             'address' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:insurers,email,' . $insurer->id,
             'phone' => 'required|string|max:255',
@@ -111,7 +108,6 @@ class InsurerController extends Controller
 
             $insurer->update([
                 'company_name' => $request->company_name,
-                'registration_number' => $request->registration_number,
                 'address' => $request->address,
                 'email' => $request->email,
                 'phone' => $request->phone,

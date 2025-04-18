@@ -49,8 +49,8 @@
                 url: '/insurer-policies/details/' + id,
                 type: 'GET',
                 success: function(response) {
-                    $('#view_policy').val(response.policy_type_name);
-                    $('#view_insurer').val(response.insurer_name).trigger('change');
+                    $('#view_policy').val(response.policy.policy_type.name);
+                    $('#view_insurer').val(response.insurer.company_name).trigger('change');
                     $('#view_status').val(response.status);
                     $('#viewPolicyModal').modal('show');
                 },

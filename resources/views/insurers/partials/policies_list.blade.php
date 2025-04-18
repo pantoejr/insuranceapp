@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-12">
-        <div class="card shadow-sm mb-4" style="border:none;">
-            <div class="card-header" style="border:none;">
+        <div class="card shadow-sm mb-4 border-0">
+            <div class="card-header">
                 <div class="card-title" id="policy-header" style="cursor: pointer;">Insurer Policies</div>
                 <div class="card-tools">
                     <a href="#" class="btn btn-primary" data-bs-toggle="modal"
@@ -13,7 +13,7 @@
             </div>
             <div class="card-body" id="policy-body" style="min-height: 400px;">
                 <div class="table-responsive">
-                    <table class="table dataTable nowrap">
+                    <table class="table table-striped dataTable nowrap">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -28,7 +28,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $insurerPolicy->insurer->company_name }}</td>
-                                    <td>{{ $insurerPolicy->policy->policyType->name }}</td>
+                                    <td>{{ $insurerPolicy->policy->policy_name }}</td>
                                     <td>{{ ucfirst($insurerPolicy->status) }}</td>
                                     <td>
                                         <button class="btn btn-warning btn-sm edit-policy-btn" data-bs-toggle="modal"
@@ -81,7 +81,9 @@
                         <select class="form-control @error('policy_ids') is-invalid @enderror" id="policy_ids"
                             name="policy_ids[]" multiple required>
                             @foreach ($policies as $policy)
-                                <option value="{{ $policy->id }}">{{ $policy->policyType->name }}</option>
+                                <option value="{{ $policy->id }}">
+                                    {{ $policy->policy_name . ' (' . $policy->number . ')' }}
+                                </option>
                             @endforeach
                         </select>
                         @error('policy_ids')

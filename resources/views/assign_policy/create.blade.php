@@ -314,7 +314,7 @@
 
                                 $.each(response, function(index, policy) {
                                     policiesDropdown.append('<option value="' + policy
-                                        .id + '">' + policy.policy_type +
+                                        .id + '">' + policy.policy_name +
                                         '</option>');
                                 });
 
@@ -390,7 +390,8 @@
                                 $('#cost').data('original-cost', originalCost);
 
                                 // 5. Toggle vehicle fields if Motor Insurance
-                                if (response.policy_type.name === 'Motor Insurance') {
+                                if (response.policy_name.includes('Motor') || response
+                                    .policy_name.includes('Auto')) {
                                     $('#vehicle-fields').slideDown();
                                 } else {
                                     $('#vehicle-fields').slideUp();

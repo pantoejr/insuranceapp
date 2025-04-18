@@ -12,11 +12,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Illuminate\Routing\Controller;
 
 class PaymentController extends Controller
 {
 
-    //
+    public function __construct()
+    {
+        $this->middleware(['auth']);
+    }
+
     public function index()
     {
         $payments = Payment::all();
@@ -57,7 +62,7 @@ class PaymentController extends Controller
                 'payment_date' => $request->payment_date,
                 'currency' => $invoice->currency,
                 'payment_method' => $request->payment_method,
-                'payment_reference' => Str::random(16),
+                'payment_reference' => Str::random(8),
                 'notes' => $request->notes,
                 'status' => 'uploaded',
                 'created_by' => Auth::user()->name,
