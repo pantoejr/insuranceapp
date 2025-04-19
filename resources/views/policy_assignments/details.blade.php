@@ -55,7 +55,7 @@
                                     </div>
 
                                     <!-- Vehicle Information Section -->
-                                    @if (stripos($policyAssignment->policy->policy_name, 'Motor') || stripos($policyAssignment->policyType->name, 'Auto'))
+                                    @if ($policyAssignment->policy->policyType->name === 'Motor Insurance' || $policyAssignment->policy->policyType->name === 'Auto Insurance')
                                         <div class="row mb-4">
                                             <h6 class="section-header bg-light p-2 mb-3 border-all">
                                                 <i class="fas fa-car me-2"></i>Vehicle Information
@@ -233,25 +233,31 @@
                                         <input type="hidden" name="status" id="status" value="">
                                         <input type="text" name="id" value="{{ $policyAssignment->id }}" hidden>
                                         @if ($policyAssignment->status === 'draft')
-                                            <button type="button" id="confirmButton" class="btn btn-primary"><i
+                                            @can('submit-policy')
+                                                <button type="button" id="confirmButton" class="btn btn-primary"><i
                                                     class="bi bi-check-circle"></i>
                                                 Submit</button>
+                                            @endcan
                                         @elseif ($policyAssignment->status === 'submitted' || $policyAssignment->status === 'pending')
-                                            <button type="button" id="approveButton" class="btn btn-success"><i
+                                            @can('approve-policy')
+                                                <button type="button" id="approveButton" class="btn btn-success"><i
                                                     class="bi bi-check-circle"></i>
                                                 Approve</button>
-                                            <button type="button" id="rejectButton" class="btn btn-danger"><i
-                                                    class="bi bi-x-circle"></i>
-                                                Reject</button>
+                                            @endcan
+                                            @can('reject-policy')
+                                                <button type="button" id="rejectButton" class="btn btn-danger"><i
+                                                        class="bi bi-x-circle"></i>
+                                                    Reject</button>
+                                            @endcan
                                         @elseif ($policyAssignment->status === 'approved')
-                                            <button type="button" id="completedButton" class="btn btn-success"><i
-                                                    class="bi bi-check-circle"></i>
-                                                Mark As Done</button>
+                                            @can('complete-policy')
+                                                <button type="button" id="completedButton" class="btn btn-success">
+                                                    <i class="bi bi-check-circle"></i>
+                                                    Complete
+                                                </button>
+                                            @endcan
                                         @endif
                                     </form>
-                                    <a href="{{ route('clients.details', ['id' => $client->id]) }}"
-                                        class="btn btn-light">Back to
-                                        List</a>
                                 </div>
                             </div>
                         </div>

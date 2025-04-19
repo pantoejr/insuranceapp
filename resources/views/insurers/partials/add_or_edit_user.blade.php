@@ -11,29 +11,22 @@
                     @csrf
                     <input type="hidden" id="insurerId" name="insurer_id" value="{{ $model->id }}">
 
-                    <!-- User Dropdown -->
+        
                     <div class="form-group mb-3">
-                        <label for="userId">User</label>
-                        <select id="userId" name="user_id" class="form-control">
-                            @foreach ($users as $user)
-                                <option value="{{ $user->id }}">{{ $user->name }}</option>
-                            @endforeach
-                        </select>
-                        <span class="text-danger" id="user_id_error"></span> <!-- Error container -->
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" name="name" class="form-control" id="name" required />
+                    </div>
+
+
+                    <div class="form-group mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" name="email" required class="form-control" />
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="role">Role</label>
-                        <select id="role" name="role" class="form-control">
-                            <option value="0">Select Role</option>
-                            <option value="uploader">Uploader</option>
-                            <option value="approver">Approver</option>
-                            <option value="reviewer">Reviewer</option>
-                            <option value="final_approver">Final Approver</option>
-                        </select>
-                        <span class="text-danger" id="role_error"></span> <!-- Error container -->
+                        <label for="phone" class="form-label mb-3">Phone</label>
+                        <input type="text" class="form-control" name="phone" required />
                     </div>
-
 
                     <!-- Status Dropdown -->
                     <div class="form-group mb-3">
@@ -72,25 +65,18 @@
 
                     <!-- User Dropdown -->
                     <div class="form-group mb-3">
-                        <label for="editUserSelect">User</label>
-                        <select id="editUserSelect" name="edit_user_id" class="form-control">
-                            @foreach ($users as $user)
-                                <option value="{{ $user->id }}">{{ $user->name }}</option>
-                            @endforeach
-                        </select>
-                        <span class="text-danger" id="edit_user_id_error"></span> <!-- Error container -->
+                        <label for="editUserName" class="form-label">Name</label>
+                        <input type="text" name="edited_name" class="form-control" id="editUserName" required />
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="editRoleStatus">Role</label>
-                        <select id="editRoleStatus" name="edited_role_status" class="form-control">
-                            <option value="0">Select Role</option>
-                            <option value="uploader">Uploader</option>
-                            <option value="approver">Approver</option>
-                            <option value="reviewer">Reviewer</option>
-                            <option value="final_approver">Final Approver</option>
-                        </select>
-                        <span class="text-danger" id="role_error"></span> <!-- Error container -->
+                        <label for="editUserEmail" class="form-label">Email</label>
+                        <input type="email" name="edited_email" required class="form-control" id="editUserEmail" />
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="editUserPhone" class="form-label">Phone</label>
+                        <input type="text" class="form-control" name="edited_phone" required id="editUserPhone" />
                     </div>
 
                     <!-- Status Dropdown -->
@@ -158,8 +144,9 @@
                 method: 'GET',
                 success: function(response) {
                     $('#insurerUserId').val(response.id);
-                    $('#editUserSelect').val(response.user_id);
-                    $('#editRoleStatus').val(response.role);
+                    $('#editUserName').val(response.name);
+                    $('#editUserEmail').val(response.email);
+                    $('#editUserPhone').val(response.phone);
                     $('#editUserStatus').val(response.status);
                 },
                 error: function(xhr) {

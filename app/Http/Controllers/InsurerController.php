@@ -196,18 +196,6 @@ class InsurerController extends Controller
             ], 422);
         }
 
-        $existingRecord = InsurerAssignment::where('insurer_id', $request->insurer_id)
-            ->where('user_id', $request->user_id)
-            ->first();
-
-        if ($existingRecord) {
-            return response()->json([
-                'errors' => [
-                    'user_id' => ['A record with the same user and insurer already exists.'],
-                ],
-            ], 409);
-        }
-
         InsurerAssignment::create([
             'insurer_id' => $request->insurer_id,
             'name' => $request->name,
@@ -232,18 +220,18 @@ class InsurerController extends Controller
         // Validate the request
         $request->validate([
             'edited_status' => 'required|in:active,inactive',
-            'name' => 'required|string|max:50',
-            'email' => 'unique:insurer_assignments,email,except,id',
-            'phone' => 'unique:insurer_assignments,phone,except,id'
+            'edited_name' => 'required|string|max:50',
+            'edited_email' => 'unique:insurer_assignments,email,except,id',
+            'edited_phone' => 'unique:insurer_assignments,phone,except,id'
         ]);
 
         try {
             $insurerUser = InsurerAssignment::findOrFail($id);
             $insurerUser->update([
-                'name' => $request->name,
+                'name' => $request->edited_name,
                 'status' => $request->edited_status,
-                'phone' => $request->phone,
-                'email' => $request->email,
+                'phone' => $request->edited_phone,
+                'email' => $request->edited_email,
                 'updated_by' => Auth::user()->id,
             ]);
 

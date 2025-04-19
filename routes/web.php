@@ -450,6 +450,8 @@ Route::get('/generate-permissions', function () {
         'reject-claim',
         'approve-policy',
         'reject-policy',
+        'complete-policy',
+        'submit-policy'
     ];
 
     foreach ($permissions as $permission) {

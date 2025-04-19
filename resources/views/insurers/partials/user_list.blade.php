@@ -31,6 +31,7 @@
                                     <td>{{ $assignment->name }}</td>
                                     <td>{{ $assignment->email }}</td>
                                     <td>{{ $assignment->phone }}</td>
+                                    <td>{{ ucfirst($assignment->status)}}</td>
                                     <td>
                                         <button class="btn btn-warning  btn-sm edit-btn" data-bs-toggle="modal"
                                             data-bs-target="#editInsurerUserModal"

@@ -118,18 +118,18 @@ class PolicyAssignmentController extends Controller
 
                 if ($request->hasFile('document_path')) {
                     foreach ($request->file('document_path') as $file) {
-                        $documentName = $file->getClientOriginalName();
-                        $documentPath = $file->store('assignment_documents', 'public');
-
-                        $assignmentDocument = new AssignmentDocument();
-                        $assignmentDocument->policy_assignment_id = $clientPolicy->id;
-                        $assignmentDocument->document_name = $documentName;
-                        $assignmentDocument->document_path = $documentPath;
-                        $assignmentDocument->document_type = $file->getClientMimeType();
-                        $assignmentDocument->created_by = Auth::user()->name;
-                        $assignmentDocument->updated_by = Auth::user()->name;
-                        $assignmentDocument->save();
+                        $documents[] = [
+                            'policy_assignment_id' => $policyAssignment->id,
+                            'document_name' => $file->getClientOriginalName(),
+                            'document_path' => $file->store('assignment_documents', 'public'),
+                            'document_type' => $file->getClientMimeType(),
+                            'created_by' => Auth::user()->name,
+                            'updated_by' => Auth::user()->name,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
                     }
+                    AssignmentDocument::insert($documents);
                 }
             }
 
@@ -223,18 +223,18 @@ class PolicyAssignmentController extends Controller
             if ($policyAssignment->save()) {
                 if ($request->hasFile('document_path')) {
                     foreach ($request->file('document_path') as $file) {
-                        $documentName = $file->getClientOriginalName();
-                        $documentPath = $file->store('assignment_documents', 'public');
-
-                        $assignmentDocument = new AssignmentDocument();
-                        $assignmentDocument->policy_assignment_id = $policyAssignment->id;
-                        $assignmentDocument->document_name = $documentName;
-                        $assignmentDocument->document_path = $documentPath;
-                        $assignmentDocument->document_type = $file->getClientMimeType();
-                        $assignmentDocument->created_by = Auth::user()->name;
-                        $assignmentDocument->updated_by = Auth::user()->name;
-                        $assignmentDocument->save();
+                        $documents[] = [
+                            'policy_assignment_id' => $policyAssignment->id,
+                            'document_name' => $file->getClientOriginalName(),
+                            'document_path' => $file->store('assignment_documents', 'public'),
+                            'document_type' => $file->getClientMimeType(),
+                            'created_by' => Auth::user()->name,
+                            'updated_by' => Auth::user()->name,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
                     }
+                    AssignmentDocument::insert($documents);
                 }
             }
 
@@ -251,7 +251,7 @@ class PolicyAssignmentController extends Controller
 
     public function details(Client $client, $id)
     {
-        $policyAssignment = PolicyAssignment::with('insurer', 'policy', 'policyType', 'policySubType')->findOrFail($id);
+        $policyAssignment = PolicyAssignment::with('insurer', 'policy.policyType')->findOrFail($id);
         return view('policy_assignments.details', [
             'title' => 'Policy Assignment Details',
             'policyAssignment' => $policyAssignment,
@@ -325,14 +325,10 @@ class PolicyAssignmentController extends Controller
 
     private function handleSubmittedStatus(Insurer $insurer, PolicyAssignment $policyAssignment, $systemVariables)
     {
-        $users = User::join('insurer_assignments', 'users.id', '=', 'insurer_assignments.user_id')
-            ->where('insurer_assignments.insurer_id', $insurer->id)
-            ->select('users.*')
-            ->distinct()
-            ->get();
+        $users = User::permission('approve-policy')->get();
 
         foreach ($users as $user) {
-            SmsHelper::sendSms($user->phone, 'Dear ' . $user->name . ', Kindly note that there is a New policy assignment submitted to for review on.' . $systemVariables['name']);
+            SmsHelper::sendSms($user->phone, 'Dear ' . $user->name . ', Kindly note that there is a New policy assignment submitted to you for review on ' . $systemVariables['name']);
             Mail::send('emails.policy_submitted', [
                 'user' => $user,
             ], function ($message) use ($user) {
@@ -344,6 +340,12 @@ class PolicyAssignmentController extends Controller
 
     private function handleApprovedStatus(Client $client, PolicyAssignment $policyAssignment, Insurer $insurer, $policyType, $systemVariables)
     {
+
+        $insurerAssignments = InsurerAssignment::where([
+            'insurer_id' => $insurer->id,
+            'status' => 'active'
+        ])->get();
+
         $isMotorPolicy = stripos($policyType->name, 'Auto') !== false
             || stripos($policyType->name, 'Auto') !== false;
 
@@ -386,9 +388,10 @@ class PolicyAssignmentController extends Controller
             'policyAssignment' => $policyAssignment,
             'policyType' => $policyType,
             'insurer' => $insurer,
-        ], function ($message) use ($insurer, $pdf, $attachmentName, $policyType) {
+        ], function ($message) use ($insurer, $pdf, $attachmentName, $policyType, $insurerAssignments) {
             $message->to($insurer->email)
                 ->cc($insurer->key_contact_email)
+                ->bcc($insurerAssignments->pluck('email')->toArray())
                 ->subject($policyType->name . 'Request')
                 ->attachData($pdf->output(), $attachmentName);
         });

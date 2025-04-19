@@ -379,10 +379,9 @@
                                 // 4. Set original cost for discount calculations
                                 originalCost = parseFloat(response.premium_amount) || 0;
                                 $('#cost').data('original-cost', originalCost);
-
+                                
                                 // 5. Toggle vehicle fields if Motor Insurance
-                                if (response.policy_name.includes('Motor') || response
-                                    .policy_name.includes('Auto')) {
+                                if (response.policy_type.name.includes('Motor') || response.policy_type.name.includes('Auto')) {
                                     $('#vehicle-fields').slideDown();
                                 } else {
                                     $('#vehicle-fields').slideUp();
