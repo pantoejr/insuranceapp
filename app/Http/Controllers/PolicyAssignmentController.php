@@ -119,7 +119,7 @@ class PolicyAssignmentController extends Controller
                 if ($request->hasFile('document_path')) {
                     foreach ($request->file('document_path') as $file) {
                         $documents[] = [
-                            'policy_assignment_id' => $policyAssignment->id,
+                            'policy_assignment_id' => $clientPolicy->id,
                             'document_name' => $file->getClientOriginalName(),
                             'document_path' => $file->store('assignment_documents', 'public'),
                             'document_type' => $file->getClientMimeType(),
@@ -212,7 +212,7 @@ class PolicyAssignmentController extends Controller
             $policyAssignment->updated_by = Auth::user()->name;
 
 
-            if ($request->input('policy_type_name') === 'Motor Insurance') {
+            if ($request->input('policy_type_name') === 'Auto Insurance' || $request->input('policy_type_name') === 'Motor Insurance') {
                 $policyAssignment->vehicle_make = $validatedData['vehicle_make'];
                 $policyAssignment->vehicle_year = $validatedData['vehicle_year'];
                 $policyAssignment->vehicle_VIN = $validatedData['vehicle_VIN'];
@@ -392,7 +392,7 @@ class PolicyAssignmentController extends Controller
             $message->to($insurer->email)
                 ->cc($insurer->key_contact_email)
                 ->bcc($insurerAssignments->pluck('email')->toArray())
-                ->subject($policyType->name . 'Request')
+                ->subject($policyType->name . ' Request')
                 ->attachData($pdf->output(), $attachmentName);
         });
     }

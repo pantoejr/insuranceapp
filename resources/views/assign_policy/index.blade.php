@@ -23,6 +23,7 @@
                                     <th>Insurer</th>
                                     <th>Client</th>
                                     <th>Status</th>
+                                    <th>Is Expired</th>
                                     <th>Action(s)</th>
                                 </tr>
                             </thead>
@@ -48,6 +49,13 @@
                                             @elseif ($assignPolicy->status === 'completed')
                                                 <span
                                                     class="badge bg-success">{{ strtoupper($assignPolicy->status) }}</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($assignPolicy->is_expired)
+                                                <span class="badge bg-danger">YES</span>
+                                            @else
+                                                <span class="badge bg-success">NO</span>
                                             @endif
                                         </td>
                                         <td>

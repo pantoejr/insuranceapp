@@ -3,6 +3,7 @@
 use App\Http\Controllers\AssignPolicyController;
 use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BacklogController;
 use App\Http\Controllers\ClaimController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ClientServiceController;
@@ -306,8 +307,26 @@ Route::controller(PolicySubTypeController::class)->group(function () {
     Route::post('/policy-sub-types/delete/{id}', 'destroy')->name('policySubTypes.destroy')->can('delete-policy-sub-type');
 });
 
+
+Route::controller(BacklogController::class)->group(function(){
+    Route::get('backlog/policy-assignments', 'policyAssignments')->name('backlog.policyAssignments')->can('view-backlog-policy-assignments');
+    Route::get('backlog/policy-assignments/create', 'createPolicyAssignment')->name('backlog.addPolicyAssignment')->can('add-backlog-policy-assignment');
+    Route::post('backlog/policy-assignmens/store','storePolicyAssignment')->name('backlog.storePolicyAssignment')->can('add-backlog-policy-assignment');
+    Route::get('backlog/policy-assignments/{id}/details','policyAssignmentDetails')->name('backlog.policyAssignmentDetails')->can('view-backlog-policy-assignment');
+    Route::get('backlog/policy-assignments/{id}/edit','editPolicyAssignment')->name('backlog.editPolicyAssignment')->can('edit-backlog-policy-assignment');
+    Route::post('backlog/policy-assignments/{id}/update','updatePolicyAssignment')->name('backlog.updatePolicyAssignment')->can('update-backlog-policy-assignment');
+    Route::post('backlog/policy-assignments/{id}/destroy','deletePolicyAssignment')->name('backlog.policyAssignmentDestroy')->can('delete-backlog-policy-assignment');
+}); 
+
+
 Route::get('/generate-permissions', function () {
     $permissions = [
+        'delete-backlog-policy-assignment',
+        'update-backlog-policy-assignment',
+        'edit-backlog-policy-assignment',
+        'view-backlog-policy-assignments',
+        'view-backlog-policy-assignment',
+        'add-backlog-policy-assignment',
         'view-permissions',
         'add-permission',
         'edit-permission',
@@ -451,7 +470,11 @@ Route::get('/generate-permissions', function () {
         'approve-policy',
         'reject-policy',
         'complete-policy',
-        'submit-policy'
+        'submit-policy',
+        'approve-payment',
+        'reject-payment',
+        'backlogs',
+        'expired-policies',
     ];
 
     foreach ($permissions as $permission) {

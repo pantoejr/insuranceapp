@@ -302,6 +302,27 @@
                                 </ul>
                             </li>
                         @endcan
+                        @can('backlogs')
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon bi bi-gear-fill"></i>
+                                    <p>
+                                        Backlogs
+                                        <i class="nav-arrow bi bi-chevron-right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    @can('view-policies-assigned')
+                                        <li class="nav-item">
+                                            <a href="{{ route('backlog.policyAssignments') }}" class="nav-link">
+                                                <i class="nav-icon bi bi-journal"></i>
+                                                <p>Policy Assignments</p>
+                                            </a>
+                                        </li>
+                                    @endcan                                    
+                                </ul>
+                            </li>
+                        @endcan
                     </ul>
                 </nav>
             </div>

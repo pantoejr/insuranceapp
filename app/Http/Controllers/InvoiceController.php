@@ -123,7 +123,7 @@ class InvoiceController extends Controller
                 ->attachData($pdf->output(), 'invoice_' . $invoice->invoice_id . '.pdf');
         });
 
-        return redirect()->route('invoices.details', ['id' => $invoice->id])
+        return redirect()->route('invoices.details', ['id' => $invoice->invoice_id])
             ->with('msg', 'Invoice sent successfully')
             ->with('flag', 'success');
     }
@@ -135,7 +135,7 @@ class InvoiceController extends Controller
         $invoice->notes = $request->input('notes');
         $invoice->save();
 
-        return redirect()->route('invoices.show', $invoice->id)
+        return redirect()->route('invoices.details', $invoice->invoice_id)
             ->with('msg', 'Invoice status updated successfully')
             ->with('flag', 'success');
     }

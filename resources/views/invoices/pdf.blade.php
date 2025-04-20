@@ -130,7 +130,7 @@
             </tr>
 
             <tr class="item">
-                <td>{{ $invoice->policy->name . ' (' . $invoice->policy->number . ' )' }}</td>
+                <td>{{ $invoice->policy->policy_name . ' (' . $invoice->policy->number . ' )' }}</td>
                 <td>{{ $invoice->total_amount }}</td>
             </tr>
             <tr class="item">

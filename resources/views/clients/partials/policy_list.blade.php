@@ -21,6 +21,7 @@
                                     <th>Insurer</th>
                                     <th>Assigned By</th>
                                     <th>Status</th>
+                                    <th>Is Expired</th>
                                     <th>Action(s)</th>
                                 </tr>
                             </thead>
@@ -48,7 +49,13 @@
                                                     class="badge bg-success">{{ strtoupper($clientPolicy->status) }}</span>
                                             @endif
                                         </td>
-
+                                        <td>
+                                            @if ($clientPolicy->is_expired)
+                                                <span class="badge bg-danger">YES</span>
+                                            @else
+                                                <span class="badge bg-success">NO</span>
+                                            @endif
+                                        </td>
                                         <td>
                                             @can('edit-client-policy')
                                                 @if ($clientPolicy->status === 'draft')

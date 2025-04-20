@@ -6,13 +6,11 @@
             <div class="col-md-12">
                 <div class="card border-0 shadow-sm">
                     <div class="card-header">
-                        <h5 class="mb-0">Add Policy for <strong>{{ $client->full_name }}</strong></h5>
+                        <h5 class="mb-0">{{ $title }}</h5>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('client-policies.store', ['client' => $client]) }}" method="POST"
-                            enctype="multipart/form-data">
+                        <form action="{{ route('backlog.storePolicyAssignment') }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            <input type="hidden" name="client_id" value="{{ $client->id }}">
                             <input type="hidden" name="policy_type_name" id="policy_type_name">
                             <input type="hidden" name="policy_type_id" id="policy_type_id">
                             <div class="mb-4">
@@ -22,7 +20,20 @@
                                             <i class="bi bi-file-earmark me-2"></i>Policy Information
                                         </h6>
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="client_id" class="form-label">Client</label>
+                                                    <select name="client_id" id="client_id"
+                                                        class="form-control @error('client_id') is-invalid @enderror">
+                                                        <option value="0">Select Client</option>
+                                                        @foreach ($clients as $client)
+                                                            <option value="{{ $client->id }}">{{ $client->full_name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
                                                 <div class="form-group mb-3">
                                                     <label for="insurer_id" class="form-label required">Insurer</label>
                                                     <select name="insurer_id" id="insurer_id"
@@ -41,7 +52,7 @@
                                                     @enderror
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <div class="form-group mb-3">
                                                     <label for="policy_id" class="form-label required">Policy Type</label>
                                                     <select name="policy_id" id="policy_id" class="form-select" required>
@@ -148,6 +159,20 @@
                                             </div>
 
                                         </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="policy_duration_start" class="form-label">Start Date</label>
+                                                    <input type="date" name="policy_duration_start" required class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="policy_duration_end" class="form-label">End Date</label>
+                                                    <input type="date" name="policy_duration_end" required class="form-control" />
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-4">
                                         <h6 class="section-header bg-light p-2 mb-3 border-all">
@@ -171,7 +196,7 @@
 
                                         <div class="form-group mb-3">
                                             <label for="payment_method" class="form-label">Payment Method</label>
-                                            <select name="payment_method" id="payment_method" class="form-select">
+                                            <select name="payment_method" id="payment_method" required class="form-select">
                                                 <option value="">Select Method</option>
                                                 <option value="Cash">Cash</option>
                                                 <option value="Cheque">Cheque</option>
@@ -228,17 +253,15 @@
                             <div class="form-actions mt-4 border-top pt-3">
                                 <div class="d-flex justify-content-between">
                                     <div>
-                                        <a href="{{ route('clients.details', ['id' => $client->id]) }}"
-                                            class="btn btn-outline-secondary">
-                                            <i class="fas fa-times me-1"></i> Cancel
-                                        </a>
+                                        <a href="{{ route('backlog.policyAssignments') }}"
+                                            class="btn btn-danger w-100">Cancel</a>
                                     </div>
                                     <div>
                                         <button type="button" id="save-as-draft" class="btn btn-primary me-2">
-                                            <i class="fas fa-save me-1"></i> Save Draft
+                                            <i class="fas fa-save me-1"></i> Save and Exit
                                         </button>
                                         <button type="button" id="save-and-create" class="btn btn-success me-2">
-                                            <i class="fas fa-plus-circle me-1"></i> Create
+                                            <i class="fas fa-plus-circle me-1"></i> Save and Create
                                         </button>
                                         <input type="hidden" name="action" id="action" value="">
                                     </div>
@@ -297,7 +320,7 @@
                             url: '/assign-policy/getInsurerPolicies/' + insurerId,
                             type: 'GET',
                             success: function(response) {
-                                console.log(response);
+
                                 var policiesDropdown = $('#policy_id');
                                 policiesDropdown.empty();
                                 policiesDropdown.append(
@@ -380,8 +403,8 @@
                                 originalCost = parseFloat(response.premium_amount) || 0;
                                 $('#cost').data('original-cost', originalCost);
 
-                                // 5. Toggle vehicle fields if Motor Insurance
-                                if (response.policy_type.name.includes('Motor') || response
+                                 // 5. Toggle vehicle fields if Motor Insurance
+                                 if (response.policy_type.name.includes('Motor') || response
                                     .policy_type.name.includes('Auto')) {
                                     $('#vehicle-fields').slideDown();
                                 } else {

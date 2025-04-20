@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <p>Dear Nancy/Robert/Deborah,</p>
+    <p>Dear {{ $insurer->key_contact_person }}, </p>
     <p>Regarding the above subject, please find attached a placement slip for our client's vehicle to initiate motor
         insurance coverage, effective today {{ $policyAssignment->policy_duration_start }} till
         {{ $policyAssignment->policy_duration_end }}.</p>

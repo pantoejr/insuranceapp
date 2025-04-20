@@ -40,7 +40,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="policy_id" class="form-label">Policy</label>
-                                <input type="text" class="form-control" value="{{ $policyAssignment->policy->name }}"
+                                <input type="text" class="form-control" value="{{ $policyAssignment->policy->policy_name }}"
                                     readonly>
                             </div>
                         </div>
@@ -50,7 +50,7 @@
                         <div class="col-md-8">
                             <div class="form-group mb-3">
                                 <label for="policy_details" class="form-label">Policy Details</label>
-                                <textarea class="form-control" rows="10" readonly>{{ $policyAssignment->policy->description }}</textarea>
+                                <input class="form-control" readonly value="{{ $policyAssignment->policy->description }}" />
                             </div>
                             <div class="form-group">
                                 <label for="terms_conditions" class="form-label">Policy Terms</label>

@@ -60,15 +60,6 @@ class AssignPolicyController extends Controller
             ->with(['policyType.policySubTypes'])
             ->get();
 
-
-        // $policies = Policy::join('insurer_policies', 'policies.id', '=', 'insurer_policies.policy_id')
-        //     ->join('policy_types', 'policies.policy_type_id', '=', 'policy_types.id')
-        //     ->join('policy_sub_types', 'policies.policy_sub_type_id', '=', 'policy_sub_types.id')
-        //     ->where('insurer_policies.insurer_id', $insurer_id)
-        //     ->where('insurer_policies.status', 'active')
-        //     ->select('policies.id', 'policies.policy_name', 'policy_types.name as policy_type', 'policy_types.id as policyTypeId', 'policy_sub_types.name as policySubType', 'policy_sub_types.id as policySubTypeId')
-        //     ->get();
-
         return response()->json($policies);
     }
 
@@ -160,18 +151,18 @@ class AssignPolicyController extends Controller
 
                 if ($request->hasFile('document_path')) {
                     foreach ($request->file('document_path') as $file) {
-                        $documentName = $file->getClientOriginalName();
-                        $documentPath = $file->store('assignment_documents', 'public');
-
-                        $assignmentDocument = new AssignmentDocument();
-                        $assignmentDocument->policy_assignment_id = $clientPolicy->id;
-                        $assignmentDocument->document_name = $documentName;
-                        $assignmentDocument->document_path = $documentPath;
-                        $assignmentDocument->document_type = $file->getClientMimeType();
-                        $assignmentDocument->created_by = Auth::user()->name;
-                        $assignmentDocument->updated_by = Auth::user()->name;
-                        $assignmentDocument->save();
+                        $documents[] = [
+                            'policy_assignment_id' => $clientPolicy->id,
+                            'document_name' => $file->getClientOriginalName(),
+                            'document_path' => $file->store('assignment_documents', 'public'),
+                            'document_type' => $file->getClientMimeType(),
+                            'created_by' => Auth::user()->name,
+                            'updated_by' => Auth::user()->name,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
                     }
+                    AssignmentDocument::insert($documents);
                 }
             }
 

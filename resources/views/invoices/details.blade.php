@@ -95,7 +95,7 @@
                                     <tbody>
                                         @if ($invoice->invoiceable_type == \App\Models\PolicyAssignment::class)
                                             <tr>
-                                                <td>{{ $invoice->policy->name . ' (' . $invoice->policy->number . ' )' }}
+                                                <td>{{ $invoice->policy->policy_name . ' (' . $invoice->policy->number . ' )' }}
                                                 </td>
                                                 <td>{{ $invoice->policy->description }}</td>
                                                 <td>{{ $invoice->total_amount }}</td>
