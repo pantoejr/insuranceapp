@@ -15,7 +15,7 @@ class CheckPolicyExpiry extends Command
      *
      * @var string
      */
-    protected $signature = 'app:check-policy-expiry';
+    protected $signature = 'check:policy-expiry';
 
     /**
      * The console command description.
@@ -39,7 +39,7 @@ class CheckPolicyExpiry extends Command
 
         foreach ($policies as $policy) {
             $client = $policy->client;
-            SmsHelper::sendSms($client->phone, 'Dear ' . $client->fullname . ', We would like to inform you that your policy ' .  $policy->policy_number  . ' is set to expire on ' .
+            SmsHelper::sendSms($client->phone, 'Dear ' . $client->fullname . ', We would like to inform you that your policy ' .  $policy->policy_name  . ' is set to expire on ' .
                 $policy->policy_duration_end);
             Mail::send('emails.policy_expiry', compact('client', 'policy'), function ($message) use ($client) {
                 $message->to($client->email)

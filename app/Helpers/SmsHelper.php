@@ -42,7 +42,7 @@ class SmsHelper
                     'phone_number' => $to,
                     'message' => $message,
                     'status' => 'sent',
-                    'created_by' => Auth::user()->name,
+                    'created_by' => 'system',
                ]);
           } catch (\Exception $e) {
 
@@ -50,7 +50,7 @@ class SmsHelper
                     'phone_number' => $to,
                     'message' => $message,
                     'status' => 'failed',
-                    'created_by' => Auth::user()->name,
+                    'created_by' => 'system',
                ]);
 
                throw new \Exception("Error sending SMS: " . $e->getMessage());

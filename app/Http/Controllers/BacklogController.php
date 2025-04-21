@@ -188,6 +188,66 @@ class BacklogController extends Controller
         ]);
     }
 
+
+    public function updatePolicyAssignment(Request $request, $id)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            $validatedData = $request->validate([
+                'policy_type_id' => 'required|exists:policy_types,id',
+                'policy_sub_type_id' => 'nullable|exists:policy_sub_types,id',
+                'client_id' => 'required|exists:clients,id',
+                'policy_id' => 'required|exists:policies,id',
+                'insurer_id' => 'required|exists:insurers,id',
+                'cost' => 'required|numeric|min:0',
+                'currency' => 'required|in:usd,lrd',
+                'is_discounted' => 'nullable|boolean',
+                'discount_type' => 'nullable|in:percentage,fixed',
+                'discount' => 'nullable|numeric|min:0',
+                'policy_duration_start' => 'required|date',
+                'policy_duration_end' => 'required|date|after_or_equal:policy_duration_start',
+                'vehicle_make' => 'nullable|string|max:255',
+                'vehicle_year' => 'nullable|integer|min:1900|max:' . (date('Y') + 1),
+                'vehicle_VIN' => 'nullable|string|max:255',
+                'vehicle_reg_number' => 'nullable|string|max:255',
+                'vehicle_use_type' => 'nullable|in:personal,commercial,corporate',
+                'payment_method' => 'required|string|max:255',
+                'document_path.*' => 'nullable|file|mimes:pdf,jpg,png|max:2048',
+            ]);
+
+            $policyAssignment = PolicyAssignment::findOrFail($id);
+
+            // Update the policy assignment with validated data
+            $policyAssignment->update($validatedData);
+
+           if ($request->hasFile('document_path')) {
+                    foreach ($request->file('document_path') as $file) {
+                        $documents[] = [
+                            'policy_assignment_id' => $policyAssignment->id,
+                            'document_name' => $file->getClientOriginalName(),
+                            'document_path' => $file->store('assignment_documents', 'public'),
+                            'document_type' => $file->getClientMimeType(),
+                            'created_by' => Auth::user()->name,
+                            'updated_by' => Auth::user()->name,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+                    }
+                    AssignmentDocument::insert($documents);
+                }
+
+            // Redirect back with success message
+            return redirect()->route('backlog.policyAssignments')
+                ->with('msg', 'Policy Assignment updated successfully.')
+                ->with('flag','success');
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return back()->with('msg', 'Error: ' . $ex->getMessage())
+                ->with('flag', 'danger');
+        }
+    }
     public function deletePolicyAssignment($id)
     {
         $policyAssignment = PolicyAssignment::findOrFail($id);
@@ -195,5 +255,16 @@ class BacklogController extends Controller
         return to_route('backlog.policyAssignments')
             ->with('msg', 'Policy deleted successfully')
             ->with('flag', 'success');
+    }
+
+    public function policyAssignmentDetails($id){
+        $policyAssignment = PolicyAssignment::with(['client', 'insurer', 'policy', 'policyType', 'policySubType'])
+            ->where('id', $id)
+            ->first();
+
+        return view('backlog.policy_assignment_details', [
+            'title' => 'Policy Assignment Details',
+            'policyAssignment' => $policyAssignment,
+        ]);
     }
 }

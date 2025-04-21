@@ -39,7 +39,7 @@ class InsurerController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'company_name' => 'required|string|max:255',
+            'company_name' => 'required|string|max:255|unique:insurers.company_name',
             'address' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:insurers',
             'phone' => 'required|string|max:255',

@@ -89,8 +89,9 @@ class PolicyAssignmentController extends Controller
             $clientPolicy->updated_by = Auth::user()->name;
             $clientPolicy->status = 'draft';
 
+            
             // Save vehicle details if policy type is "Motor Insurance"
-            if ($request->input('policy_type_name') === 'Auto Insurance') {
+            if (str_contains($request->input('policy_type_name'), "Auto Insurance") || str_contains($request->input('policy_type_name'), "Motor Insurance")) {
                 $clientPolicy->vehicle_make = $validatedData['vehicle_make'];
                 $clientPolicy->vehicle_year = $validatedData['vehicle_year'];
                 $clientPolicy->vehicle_VIN = $validatedData['vehicle_VIN'];
@@ -346,6 +347,12 @@ class PolicyAssignmentController extends Controller
             'status' => 'active'
         ])->get();
 
+
+        $directory = storage_path('app/public/policy_documents');
+        if (!file_exists($directory)) {
+            mkdir($directory, 0755, true);
+        }
+
         $isMotorPolicy = stripos($policyType->name, 'Auto') !== false
             || stripos($policyType->name, 'Auto') !== false;
 
@@ -369,7 +376,11 @@ class PolicyAssignmentController extends Controller
         }
         $policyAssignment->save();
 
-        // Generate PDF with all required data including policyAssignment
+        // Generate the PDF
+        $timestamp = now()->format('Ymd_His');
+        $fileName = $client->full_name . '_' . $timestamp . '.pdf';
+        $filePath = 'policy_documents/' . $fileName;
+
         $pdf = Pdf::loadView($pdfTemplate, [
             'insurer' => $insurer,
             'policyAssignment' => $policyAssignment,
@@ -381,8 +392,10 @@ class PolicyAssignmentController extends Controller
             'systemPhone' => $systemVariables['phone'],
         ]);
 
+        $pdf->save(storage_path('app/public/' . $filePath));
+
         // Send email with attachment
-        SmsHelper::sendSms($insurer->phone, 'Policy Submitted for your review. Please check your email for details.');
+        SmsHelper::sendSms($insurer->phone, 'Dear' . $insurer->key_contact_person . ',  A Policy Request has been sent to your team for review. Please check your email for details.');
         Mail::send('emails.policy_approved', [
             'client' => $client,
             'policyAssignment' => $policyAssignment,
@@ -390,8 +403,7 @@ class PolicyAssignmentController extends Controller
             'insurer' => $insurer,
         ], function ($message) use ($insurer, $pdf, $attachmentName, $policyType, $insurerAssignments) {
             $message->to($insurer->email)
-                ->cc($insurer->key_contact_email)
-                ->bcc($insurerAssignments->pluck('email')->toArray())
+                ->cc([$insurerAssignments->pluck('email')->toArray(), $insurer->key_contact_email])
                 ->subject($policyType->name . ' Request')
                 ->attachData($pdf->output(), $attachmentName);
         });
@@ -436,7 +448,7 @@ class PolicyAssignmentController extends Controller
         ]);
 
         // Send email with attachment
-        SmsHelper::sendSms($client->phone, 'Dear ' . $client->name .  ', Your insurance policy is now complete—thank you for choosing SAFE Insurance Brokers! Kindly visit us on 2nd Street, Sinkor (adjacent Monroe Chicken) or call 0888669090 / 0775061697 to arrange document delivery.');
+        SmsHelper::sendSms($client->phone, 'Dear ' . $client->full_name .  ', Your insurance policy is now complete—thank you for choosing SAFE Insurance Brokers! Kindly visit us on 2nd Street, Sinkor (adjacent Monroe Chicken) or call 0888669090 / 0775061697 to arrange document delivery.');
         Mail::send('emails.policy_completed', [
             'client' => $client,
             'policyAssignment' => $policyAssignment,

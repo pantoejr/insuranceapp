@@ -25,11 +25,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Event::listen(
-            PolicyAssignmentSubmitted::class,
-            NotifyInsurerAssignmentUsers::class
-        );
-
         Policy::observe(PolicyObserver::class);
     }
 }

@@ -40,8 +40,8 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="policy_id" class="form-label">Policy</label>
-                                <input type="text" class="form-control" value="{{ $policyAssignment->policy->policy_name }}"
-                                    readonly>
+                                <input type="text" class="form-control"
+                                    value="{{ $policyAssignment->policy->policy_name }}" readonly>
                             </div>
                         </div>
                     </div>
@@ -157,20 +157,28 @@
                                 <input type="hidden" name="status" id="status" value="">
                                 <input type="text" name="id" value="{{ $policyAssignment->id }}" hidden>
                                 @if ($policyAssignment->status === 'draft')
-                                    <button type="button" id="confirmButton" class="btn btn-primary"><i
-                                            class="bi bi-check-circle"></i>
-                                        Confirm</button>
+                                    @can('submit-policy')
+                                        <button type="button" id="confirmButton" class="btn btn-primary"><i
+                                                class="bi bi-check-circle"></i>
+                                            Confirm</button>
+                                    @endcan
                                 @elseif ($policyAssignment->status === 'submitted' || $policyAssignment->status === 'pending')
-                                    <button type="button" id="approveButton" class="btn btn-success"><i
-                                            class="bi bi-check-circle"></i>
-                                        Approve</button>
-                                    <button type="button" id="rejectButton" class="btn btn-danger"><i
-                                            class="bi bi-x-circle"></i>
-                                        Reject</button>
+                                    @can('approve-policy')
+                                        <button type="button" id="approveButton" class="btn btn-success"><i
+                                                class="bi bi-check-circle"></i>
+                                            Approve</button>
+                                    @endcan
+                                    @can('reject-policy')
+                                        <button type="button" id="rejectButton" class="btn btn-danger"><i
+                                                class="bi bi-x-circle"></i>
+                                            Reject</button>
+                                    @endcan
                                 @elseif ($policyAssignment->status === 'approved')
-                                    <button type="button" id="completedButton" class="btn btn-success"><i
-                                            class="bi bi-check-circle"></i>
-                                        Mark As Done</button>
+                                    @can('complete-policy')
+                                        <button type="button" id="completedButton" class="btn btn-success"><i
+                                                class="bi bi-check-circle"></i>
+                                            Mark As Done</button>
+                                    @endcan
                                 @endif
                             </form>
                             <a href="{{ route('assign-policy.index') }}" class="btn btn-light">Back to List</a>

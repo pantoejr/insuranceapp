@@ -162,7 +162,8 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group mb-3">
-                                                        <label for="vehicle_VIN" class="form-label">VIN/Chassis Number</label>
+                                                        <label for="vehicle_VIN" class="form-label">VIN/Chassis
+                                                            Number</label>
                                                         <input type="text" name="vehicle_VIN" id="vehicle_VIN"
                                                             class="form-control"
                                                             value="{{ old('vehicle_VIN', $policyAssignment->vehicle_VIN) }}">
@@ -171,7 +172,7 @@
                                                         @enderror
                                                     </div>
                                                 </div>
-    
+
                                                 <div class="col-md-6">
                                                     <div class="form-group mb-3">
                                                         <label for="vehicle_reg_number" class="form-label">Registration
@@ -261,22 +262,22 @@
                                                 class="form-select @error('payment_method') is-invalid @enderror">
                                                 <option value="">Select Method</option>
                                                 <option value="Cash"
-                                                    {{ old('payment_method', $policyAssignment->payment_method) == 'Cash' ? 'selected' : '' }}>
+                                                    {{ old('payment_method', $policyAssignment->payment_method) === 'cash' ? 'selected' : '' }}>
                                                     Cash</option>
                                                 <option value="Cheque"
-                                                    {{ old('payment_method', $policyAssignment->payment_method) == 'Cheque' ? 'selected' : '' }}>
+                                                    {{ old('payment_method', $policyAssignment->payment_method) === 'cheque' ? 'selected' : '' }}>
                                                     Cheque</option>
                                                 <option value="Bank Transfer"
-                                                    {{ old('payment_method', $policyAssignment->payment_method) == 'Bank Transfer' ? 'selected' : '' }}>
+                                                    {{ old('payment_method', $policyAssignment->payment_method) === 'bank transfer' ? 'selected' : '' }}>
                                                     Bank Transfer</option>
                                                 <option value="Credit Card"
-                                                    {{ old('payment_method', $policyAssignment->payment_method) == 'Credit Card' ? 'selected' : '' }}>
+                                                    {{ old('payment_method', $policyAssignment->payment_method) === 'credit card' ? 'selected' : '' }}>
                                                     Credit Card</option>
                                                 <option value="Debit Card"
-                                                    {{ old('payment_method', $policyAssignment->payment_method) == 'Debit Card' ? 'selected' : '' }}>
+                                                    {{ old('payment_method', $policyAssignment->payment_method) === 'debit card' ? 'selected' : '' }}>
                                                     Debit Card</option>
                                                 <option value="Deferred"
-                                                    {{ old('payment_method', $policyAssignment->payment_method) == 'Deferred' ? 'selected' : '' }}>
+                                                    {{ old('payment_method', $policyAssignment->payment_method) === 'deferred' ? 'selected' : '' }}>
                                                     Deferred</option>
                                             </select>
                                             @error('payment_method')
@@ -396,11 +397,13 @@
                                         <a href="{{ route('backlog.policyAssignments') }}"
                                             class="btn btn-danger w-100">Cancel</a>
                                     </div>
-                                    <div>
-                                        <button type="submit" class="btn btn-primary me-2">
-                                            <i class="fas fa-save me-1"></i> Update Policy Assignment
-                                        </button>
-                                    </div>
+                                    @can('update-backlog-policy-assignment')
+                                        <div>
+                                            <button type="submit" class="btn btn-primary me-2">
+                                                <i class="fas fa-save me-1"></i> Update Policy Assignment
+                                            </button>
+                                        </div>
+                                    @endcan
                                 </div>
                             </div>
                         </form>
@@ -480,7 +483,7 @@
                                     icon: "error",
                                 });
                                 showAlert('Error loading policies. Please try again.',
-                                'danger');
+                                    'danger');
                             }
                         });
                     } else {

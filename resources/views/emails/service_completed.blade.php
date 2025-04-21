@@ -6,7 +6,7 @@
 </head>
 
 <body>
-    <p>Dear {{ $client->name }},</p>
+    <p>Dear {{ $client->full_name }},</p>
     <p>We are pleased to inform you that your service request for "{{ $serviceName }}" has been successfully completed.
     </p>
     <p>If you have any questions, feel free to contact us.</p>

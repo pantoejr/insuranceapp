@@ -1,5 +1,6 @@
 <?php
 
+use App\Console\Commands\BirthdayAlerts;
 use App\Console\Commands\CheckPolicyExpiry;
 use Illuminate\Foundation\Console\ClosureCommand;
 use Illuminate\Foundation\Inspiring;
@@ -11,4 +12,5 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command(CheckPolicyExpiry::class)->daily();
+Schedule::command(CheckPolicyExpiry::class)->everyMinute();
+Schedule::command(BirthdayAlerts::class)->everyMinute();
