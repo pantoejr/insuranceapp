@@ -12,7 +12,6 @@
                         <form action="{{ route('backlog.updatePolicyAssignment', $policyAssignment->id) }}" method="POST"
                             enctype="multipart/form-data">
                             @csrf
-                            @method('PUT')
                             <input type="hidden" name="policy_type_name" id="policy_type_name"
                                 value="{{ $policyAssignment->policyType->name ?? '' }}">
                             <input type="hidden" name="policy_type_id" id="policy_type_id"
@@ -225,8 +224,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="policy_duration_end" class="form-label">End Date</label>
-                                                    <input type="date" name="policy_duration_end" required
-                                                        class="form-control @error('policy_duration_end') is-invalid @enderror"
+                                                    <input type="date" name="policy_duration_end" class="form-control @error('policy_duration_end') is-invalid @enderror"
                                                         value="{{ $policyAssignment->policy_duration_end }}" />
                                                     @error('policy_duration_end')
                                                         <div class="text-danger">{{ $message }}</div>

@@ -2,6 +2,7 @@
 
 use App\Console\Commands\BirthdayAlerts;
 use App\Console\Commands\CheckPolicyExpiry;
+use App\Console\Commands\UpdateExpiredPolicies;
 use Illuminate\Foundation\Console\ClosureCommand;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
@@ -13,4 +14,5 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command(CheckPolicyExpiry::class)->everyMinute();
-Schedule::command(BirthdayAlerts::class)->everyMinute();
+Schedule::command(BirthdayAlerts::class)->daily();
+Schedule::command(UpdateExpiredPolicies::class)->daily();

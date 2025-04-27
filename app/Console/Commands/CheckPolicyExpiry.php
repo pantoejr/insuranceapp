@@ -33,19 +33,28 @@ class CheckPolicyExpiry extends Command
      */
     public function handle()
     {
+
         $policies = PolicyAssignment::where('policy_duration_end', '<=', Carbon::now()->addMonth())
-            ->where('policy_duration_end', '>', Carbon::now())
+            ->where('policy_duration_end', '>', Carbon::now()->subMonths(1))
             ->get();
 
         foreach ($policies as $policy) {
             $client = $policy->client;
-            SmsHelper::sendSms($client->phone, 'Dear ' . $client->fullname . ', We would like to inform you that your policy ' .  $policy->policy_name  . ' is set to expire on ' .
-                $policy->policy_duration_end);
-            Mail::send('emails.policy_expiry', compact('client', 'policy'), function ($message) use ($client) {
+
+            // Parse the policy_duration_end as Carbon before calling isPast()
+            $policyEndDate = Carbon::parse($policy->policy_duration_end);
+            $isExpired = $policyEndDate->isPast();
+
+            $message = 'Dear ' . $client->fullname . ', We would like to inform you that your policy ' . $policy->policyType->name .
+                ($isExpired ? ' expired on ' : ' is set to expire on ') .
+                $policyEndDate->format('d M Y') . '.';
+
+            SmsHelper::sendSms($client->phone, $message);
+
+            Mail::send('emails.policy_expiry', compact('client', 'policy', 'isExpired'), function ($message) use ($client) {
                 $message->to($client->email)
                     ->subject('Policy Expiry Notification');
             });
-            $this->info('Email sent to ' . $client->email);
         }
 
         return 0;

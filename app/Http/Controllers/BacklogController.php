@@ -217,10 +217,29 @@ class BacklogController extends Controller
                 'document_path.*' => 'nullable|file|mimes:pdf,jpg,png|max:2048',
             ]);
 
+            $isDiscounted = $request->has('is_discounted') ? true : false;
             $policyAssignment = PolicyAssignment::findOrFail($id);
 
-            // Update the policy assignment with validated data
-            $policyAssignment->update($validatedData);
+            $policyAssignment->update([
+                'policy_type_id' => $validatedData['policy_type_id'],
+                'policy_sub_type_id' => $validatedData['policy_sub_type_id'],
+                'client_id' => $validatedData['client_id'],
+                'policy_id' => $validatedData['policy_id'],
+                'insurer_id' => $validatedData['insurer_id'],
+                'cost' => $validatedData['cost'],
+                'currency' => $validatedData['currency'],
+                'is_discounted' => $isDiscounted,
+                'discount_type' => $validatedData['discount_type'],
+                'discount' => $validatedData['discount'] ?? 0,
+                'policy_duration_start' => $validatedData['policy_duration_start'],
+                'policy_duration_end' => $validatedData['policy_duration_end'],
+                'vehicle_make' => $validatedData['vehicle_make'],
+                'vehicle_year' => $validatedData['vehicle_year'],
+                'vehicle_VIN' => $validatedData['vehicle_VIN'],
+                'vehicle_reg_number' => $validatedData['vehicle_reg_number'],
+                'vehicle_use_type' => $validatedData['vehicle_use_type'],
+                'payment_method' => $validatedData['payment_method'],
+            ]);
 
            if ($request->hasFile('document_path')) {
                     foreach ($request->file('document_path') as $file) {
@@ -238,7 +257,8 @@ class BacklogController extends Controller
                     AssignmentDocument::insert($documents);
                 }
 
-            // Redirect back with success message
+            DB::commit();
+            
             return redirect()->route('backlog.policyAssignments')
                 ->with('msg', 'Policy Assignment updated successfully.')
                 ->with('flag','success');

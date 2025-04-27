@@ -108,10 +108,10 @@
                     <table>
                         <tr>
                             <td>
-                                {{ strtoupper($systemName) }}<br>
-                                {{ $systemAddress }} <br>
-                                {{ $systemEmail }} <br>
-                                {{ $systemPhone }}
+                                {{ strtoupper(env('APP_NAME')) }}<br>
+                                {{ env('APP_LOCATION') }} <br>
+                                {{ env('APP_EMAIL') }} <br>
+                                {{ env('APP_PHONE') }}
                             </td>
                             <td>
                                 <b>Bill To:</b><br>

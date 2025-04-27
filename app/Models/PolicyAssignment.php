@@ -31,6 +31,7 @@ class PolicyAssignment extends Model
         'status',
         'created_by',
         'updated_by',
+        'notification_sent_at'
     ];
 
     public function policy()

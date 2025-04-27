@@ -79,7 +79,7 @@
                 <p><span class="highlight">To:</span> {{ $insurer->company_name }}</p>
             </div>
             <div>
-                <p><span class="highlight">From:</span> {{ $systemName }}</p>
+                <p><span class="highlight">From:</span> {{ env('APP_NAME') }}</p>
                 <p><span class="highlight">Subject:</span> Bind Cover Third Party Motor Insurance Policy</p>
             </div>
         </div>

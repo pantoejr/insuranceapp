@@ -57,7 +57,7 @@ class PolicyController extends Controller
             $policy = Policy::create([
                 'policy_name' => $request->policy_name,
                 'policy_type_id' => $request->policy_type_id,
-                'number' => $request->number ?? Str::random(6),
+                'number' => filled($request->number) ? $request->number : 'SIB' . Str::random(6),
                 'description' => $request->description,
                 'coverage_details' => $request->coverage_details,
                 'premium_amount' => $request->premium_amount,

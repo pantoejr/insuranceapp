@@ -22,6 +22,7 @@ class SmsHelper
           $sid = env('TWILIO_SID');
           $token = env('TWILIO_AUTH_TOKEN');
           $from = env('TWILIO_PHONE_NUMBER');
+          
           if (empty($sid) || empty($token) || empty($from)) {
                throw new \Exception("Twilio credentials are not set in the environment file.");
           }
@@ -34,7 +35,7 @@ class SmsHelper
                     $to,
                     [
                          'from' => $from,
-                         'body' => $message
+                         'body' => $message . ' - Safe Insurance Brokers'
                     ]
                );
 
