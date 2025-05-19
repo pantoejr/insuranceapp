@@ -26,6 +26,7 @@ class PolicyAssignment extends Model
         'vehicle_year',
         'vehicle_VIN',
         'vehicle_reg_number',
+        'sum_insured',
         'vehicle_use_type',
         'payment_method',
         'status',

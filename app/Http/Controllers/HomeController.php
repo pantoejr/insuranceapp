@@ -33,6 +33,7 @@ class HomeController extends BaseController
         $pendingClaims = Claim::where('status', 'Pending Review')->count();
         $approvedClaims = Claim::where('status', 'Approved')->count();
         $rejectedClaims = Claim::where('status', 'Rejected')->count();
+        $processedClaims = Claim::where('status', 'Processed')->count();
 
         // Policy renewals due this month
         $renewalsDue = PolicyAssignment::whereBetween('policy_duration_end', [
@@ -64,6 +65,7 @@ class HomeController extends BaseController
             'pendingClaims' => $pendingClaims,
             'approvedClaims' => $approvedClaims,
             'rejectedClaims' => $rejectedClaims,
+            'processedClaims' => $processedClaims,
             'renewalsDue' => $renewalsDue,
             'activeInsurers' => $activeInsurers,
             'monthlyPolicies' => $allMonths,

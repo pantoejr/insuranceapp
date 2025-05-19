@@ -47,37 +47,43 @@ class ClaimController extends Controller
             'claim_document.*' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
         ]);
 
-        $validatedData['created_by'] = Auth::user()->name;
-        $validatedData['updated_by'] = Auth::user()->name;
-        $validatedData['status'] = 'Pending Review';
+        try {
 
-        $claim = Claim::create([
-            'client_id' => $validatedData['client_id'],
-            'policy_id' => $validatedData['policy_id'],
-            'amount' => $validatedData['amount'],
-            'currency' => $validatedData['currency'],
-            'claim_type' => $validatedData['claim_type'],
-            'description' => $validatedData['description'],
-            'status' => $validatedData['status'],
-            'created_by' => $validatedData['created_by'],
-            'updated_by' => $validatedData['updated_by'],
-        ]);
+            $validatedData['created_by'] = Auth::user()->name;
+            $validatedData['updated_by'] = Auth::user()->name;
+            $validatedData['status'] = 'Pending Review';
 
-        if ($request->hasFile('claim_document')) {
-            foreach ($request->file('claim_document') as $file) {
-                $filePath = $file->store('attachments', 'public');
-                $fileType = mime_content_type($file->getPathname());
+            $claim = Claim::create([
+                'client_id' => $validatedData['client_id'],
+                'policy_id' => $validatedData['policy_id'],
+                'amount' => $validatedData['amount'],
+                'currency' => $validatedData['currency'],
+                'claim_type' => $validatedData['claim_type'],
+                'description' => $validatedData['description'],
+                'status' => $validatedData['status'],
+                'created_by' => $validatedData['created_by'],
+                'updated_by' => $validatedData['updated_by'],
+            ]);
 
-                $attachment = new Attachment([
-                    'file_name' => $file->getClientOriginalName(),
-                    'file_path' => $filePath,
-                    'file_type' => $fileType,
-                    'created_by' => Auth::user()->name,
-                    'updated_by' => Auth::user()->name,
-                ]);
+            if ($request->hasFile('claim_document')) {
+                foreach ($request->file('claim_document') as $file) {
+                    $filePath = $file->store('attachments', 'public');
+                    $fileType = mime_content_type($file->getPathname());
 
-                $claim->attachments()->save($attachment);
+                    $attachment = new Attachment([
+                        'file_name' => $file->getClientOriginalName(),
+                        'file_path' => $filePath,
+                        'file_type' => $fileType,
+                        'created_by' => Auth::user()->name,
+                        'updated_by' => Auth::user()->name,
+                    ]);
+
+                    $claim->attachments()->save($attachment);
+                }
             }
+        } catch (Exception $ex) {
+            return back()->with('msg', 'Error: ' . $ex->getMessage())
+                ->with('flag', 'danger');
         }
 
         return redirect()->route('clients.details', ['id' => $client])
@@ -181,7 +187,7 @@ class ClaimController extends Controller
 
                 $claim->status = 'Processed';
             } elseif ($status === 'reject') {
-                $claim->status = 'rejected';
+                $claim->status = 'Rejected';
             }
             $claim->save();
 

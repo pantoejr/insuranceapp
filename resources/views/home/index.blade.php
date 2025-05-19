@@ -65,7 +65,7 @@
         <!-- Main Content Area -->
         <div class="row g-4">
             <!-- Left Column -->
-            <div class="col-lg-8">
+            <div class="col-lg-6">
                 <!-- Policy Analytics -->
                 <div class="card border-0 shadow-sm">
                     <div class="card-header d-flex justify-content-between align-items-center bg-white py-3">
@@ -84,7 +84,7 @@
             </div>
 
             <!-- Right Column -->
-            <div class="col-lg-4">
+            <div class="col-lg-6">
                 <!-- Claims Overview -->
                 <div class="card shadow-sm border-0">
                     <div class="card-header bg-white py-3">
@@ -95,15 +95,19 @@
                             <canvas id="claimsChart"></canvas>
                         </div>
                         <div class="row text-center mt-3">
-                            <div class="col-4">
+                            <div class="col-3">
+                                <h4 class="text-secondary mb-0">{{ $processedClaims }}</h4>
+                                <small class="text-muted">Processed</small>
+                            </div>
+                            <div class="col-3">
                                 <h4 class="text-primary mb-0">{{ $pendingClaims }}</h4>
                                 <small class="text-muted">Pending</small>
                             </div>
-                            <div class="col-4">
+                            <div class="col-3">
                                 <h4 class="text-success mb-0">{{ $approvedClaims }}</h4>
                                 <small class="text-muted">Approved</small>
                             </div>
-                            <div class="col-4">
+                            <div class="col-3">
                                 <h4 class="text-danger mb-0">{{ $rejectedClaims }}</h4>
                                 <small class="text-muted">Rejected</small>
                             </div>
@@ -183,10 +187,10 @@
         const claimsChart = new Chart(claimsCtx, {
             type: 'doughnut',
             data: {
-                labels: ['Pending', 'Approved', 'Rejected'],
+                labels: ['Processed', 'Pending', 'Approved', 'Rejected'],
                 datasets: [{
-                    data: [{{ $pendingClaims }}, {{ $approvedClaims }}, {{ $rejectedClaims }}],
-                    backgroundColor: ['#4e73df', '#1cc88a', '#e74a3b'],
+                    data: [{{ $processedClaims }}, {{ $pendingClaims }}, {{ $approvedClaims }}, {{ $rejectedClaims }}],
+                    backgroundColor: ['#000000', '#4e73df', '#1cc88a', '#e74a3b'],
                     borderWidth: 0,
                 }],
             },

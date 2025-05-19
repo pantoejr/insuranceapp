@@ -22,6 +22,7 @@ use App\Http\Controllers\PolicyAssignmentController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\PolicySubTypeController;
 use App\Http\Controllers\PolicyTypeController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SmsLogController;
@@ -319,6 +320,10 @@ Route::controller(BacklogController::class)->group(function(){
 }); 
 
 
+Route::controller(ReportController::class)->group(function(){
+    Route::get('/reports/policies','policies')->name('reports.policies')->can('generate-policies-report');
+});
+
 Route::get('/generate-permissions', function () {
     $permissions = [
         'delete-backlog-policy-assignment',
@@ -475,6 +480,8 @@ Route::get('/generate-permissions', function () {
         'reject-payment',
         'backlogs',
         'expired-policies',
+        'view-reports',
+        'generate-policies-report',
     ];
 
     foreach ($permissions as $permission) {

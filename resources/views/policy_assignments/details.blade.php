@@ -279,7 +279,7 @@
             });
 
             $('#rejectButton').on('click', function() {
-                $('#status').val('reject');
+                $('#status').val('rejected');
                 $('#statusForm').submit();
             });
 

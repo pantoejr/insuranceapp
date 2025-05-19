@@ -103,47 +103,6 @@
                                 </a>
                             </li>
                         @endcan
-                        {{-- @can('requests')
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="nav-icon bi bi-patch-question-fill"></i>
-                                    <p>
-                                        Requests
-                                        <i class="nav-arrow bi bi-chevron-right"></i>
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview">
-                                    @can('view-policies')
-                                        <li class="nav-item">
-                                            <a href="{{ route('sms-logs.index') }}" class="nav-link">
-                                                <i class="nav-icon bi bi-card-text"></i>
-                                                <p>Policies</p>
-                                            </a>
-                                        </li>
-                                    @endcan
-                                    @can('view-claims')
-                                        <li class="nav-item">
-                                            <a href="{{ route('system-variables.index') }}" class="nav-link">
-                                                <i class="nav-icon bi bi-journal-text"></i>
-                                                <p>
-                                                    Claims
-                                                </p>
-                                            </a>
-                                        </li>
-                                    @endcan
-                                    @can('view-services')
-                                        <li class="nav-item">
-                                            <a href="{{ route('system-variables.index') }}" class="nav-link">
-                                                <i class="nav-icon bi bi-gear"></i>
-                                                <p>
-                                                    Services
-                                                </p>
-                                            </a>
-                                        </li>
-                                    @endcan
-                                </ul>
-                            </li>
-                        @endcan --}}
                         @can('policies')
                             <li class="nav-item">
                                 <a href="{{ route('policies.index') }}" class="nav-link">
@@ -295,6 +254,47 @@
                                                 <i class="nav-icon bi bi-code-slash"></i>
                                                 <p>
                                                     Variables
+                                                </p>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                </ul>
+                            </li>
+                        @endcan
+                        @can('requests')
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon bi bi-book-fill"></i>
+                                    <p>
+                                        Reports
+                                        <i class="nav-arrow bi bi-chevron-right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    @can('view-policies')
+                                        <li class="nav-item">
+                                            <a href="{{ route('reports.policies') }}" class="nav-link">
+                                                <i class="nav-icon bi bi-card-text"></i>
+                                                <p>Policies</p>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('view-claims')
+                                        <li class="nav-item">
+                                            <a href="{{ route('system-variables.index') }}" class="nav-link">
+                                                <i class="nav-icon bi bi-journal-text"></i>
+                                                <p>
+                                                    Claims
+                                                </p>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('view-services')
+                                        <li class="nav-item">
+                                            <a href="{{ route('system-variables.index') }}" class="nav-link">
+                                                <i class="nav-icon bi bi-gear"></i>
+                                                <p>
+                                                    Services
                                                 </p>
                                             </a>
                                         </li>

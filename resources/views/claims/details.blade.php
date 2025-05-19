@@ -12,7 +12,7 @@
                         <div class="col-md-6">
                             <div class="form-group mb-3">
                                 <label for="policy" class="form-label">Policy</label>
-                                <input type="text" readonly class="form-control" value="{{ $claim->policy->name }}">
+                                <input type="text" readonly class="form-control" value="{{ $claim->policy->policy_name }}">
                             </div>
                         </div>
                         <div class="col-md-6">
